@@ -1,4 +1,4 @@
-FROM microsoft/dotnet-nightly:sdk
+FROM microsoft/dotnet-nightly:rel-1.0.0-sdk
 
 RUN mkdir -p /dotnetapp
 WORKDIR /dotnetapp

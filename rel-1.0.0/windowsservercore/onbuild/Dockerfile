@@ -1,4 +1,4 @@
-FROM microsoft/dotnet-nightly:windowsservercore
+FROM microsoft/dotnet-nightly:rel-1.0.0-windowsservercore-sdk
 
 RUN mkdir dotnetapp
 WORKDIR dotnetapp

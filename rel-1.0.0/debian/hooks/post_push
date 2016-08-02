@@ -19,7 +19,11 @@ docker tag $IMAGE_NAME $latestImageName
 docker push $latestImageName
 
 
-echo "Pushing onbuild image"
+echo "Pushing onbuild images"
+versionedImageName=$repoName":rel-1.0.0-onbuild"
+docker tag onbuild $versionedImageName
+docker push $versionedImageName
+
 latestImageName=$repoName":onbuild"
 docker tag onbuild $latestImageName
 docker push $latestImageName

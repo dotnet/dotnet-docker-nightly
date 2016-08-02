@@ -1,4 +1,4 @@
-FROM microsoft/dotnet-nightly:nanoserver
+FROM microsoft/dotnet-nightly:rel-1.0.0-nanoserver-sdk
 
 RUN mkdir dotnetapp
 WORKDIR dotnetapp

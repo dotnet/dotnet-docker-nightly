@@ -1,4 +1,4 @@
-FROM microsoft/dotnet-nightly:core-deps
+FROM microsoft/dotnet-nightly:rel-1.0.0-core-deps
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
