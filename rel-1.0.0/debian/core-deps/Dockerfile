@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:jessie1
 
 # Install .NET Core dependencies
 RUN apt-get update \
