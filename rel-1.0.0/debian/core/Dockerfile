@@ -13,5 +13,5 @@ ENV DOTNET_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/preview/B
 RUN curl -SL $DOTNET_DOWNLOAD_URL --output dotnet.tar.gz \
     && mkdir -p /usr/share/dotnet \
     && tar -zxf dotnet.tar.gz -C /usr/share/dotnet \
-    && rm dotnet.tar.gz \
-    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
+    && rm dotnet.tar.gz
+#    && ln -s /usr/share/dotnet/dotnet /usr/bin/dotnet
