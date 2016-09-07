@@ -1,7 +1,7 @@
 FROM microsoft/nanoserver:10.0.14300.1030
 
 # Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 1.0.0-preview3-003555
+ENV DOTNET_SDK_VERSION 1.0.0-preview3-003585
 ENV DOTNET_SDK_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-dev-win-x64.$DOTNET_SDK_VERSION.zip
 
 RUN powershell -NoProfile -Command \
