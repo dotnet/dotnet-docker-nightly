@@ -11,6 +11,8 @@ $dockerRepo="microsoft/dotnet-nightly"
 pushd $PSScriptRoot
 
 docker --version
+docker ps
+docker images
 
 Get-ChildItem -Recurse -Filter Dockerfile | where DirectoryName -like "*\$OS*" | sort DirectoryName | foreach {
     $tag = "$($dockerRepo):" + $_.DirectoryName.Replace($PSScriptRoot, '').TrimStart('\').Replace('\', '-') -replace "${OS}$", "${OS}-sdk"
