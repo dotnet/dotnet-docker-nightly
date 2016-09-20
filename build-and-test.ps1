@@ -11,7 +11,7 @@ $dockerRepo="microsoft/dotnet-nightly"
 pushd $PSScriptRoot
 
 docker --version
-docker ps
+docker ps -a
 docker images
 
 docker rm -f $(docker ps -a -q)
