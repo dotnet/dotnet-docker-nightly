@@ -14,6 +14,9 @@ docker --version
 docker ps
 docker images
 
+docker rm -f $(docker ps -a -q)
+docker rmi -f $(docker images -q)
+
 Get-ChildItem -Recurse -Filter Dockerfile | where DirectoryName -like "*\$OS*" | sort DirectoryName | foreach {
     $tag = "$($dockerRepo):" + $_.DirectoryName.Replace($PSScriptRoot, '').TrimStart('\').Replace('\', '-') -replace "${OS}$", "${OS}-sdk"
     Write-Host "----- Building $tag -----"
