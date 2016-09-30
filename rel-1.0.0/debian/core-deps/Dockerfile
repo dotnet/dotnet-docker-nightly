@@ -3,6 +3,7 @@ FROM debian:jessie
 # Install .NET Core dependencies
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
+        ca-certificates \
         libc6 \
         libcurl3 \
         libgcc1 \
