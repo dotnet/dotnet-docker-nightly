@@ -1,7 +1,8 @@
 FROM microsoft/dotnet-nightly:rel-1.0.0-core-deps
 
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends curl \
+    && apt-get install -y --no-install-recommends \
+        curl \
     && rm -rf /var/lib/apt/lists/*
 
 # Install .NET Core
