@@ -20,11 +20,18 @@ You can find samples, documentation, and getting started instructions for .NET C
 -       [`rel-1.0.0-nanoserver-sdk`, `nanoserver` (*rel-1.0.0/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/Dockerfile)
 -       [`rel-1.0.0-onbuild`, `onbuild` (*rel-1.0.0/debian/onbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/onbuild/Dockerfile)
 -       [`rel-1.0.0-nanoserver-onbuild`, `nanoserver-onbuild` (*rel-1.0.0/nanoserver/onbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/onbuild/Dockerfile)
+-       [`rel-1.0.0-preview2.1-sdk` (*rel-1.0.0-preview2.1/debian/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/Dockerfile)
+-       [`rel-1.0.0-preview2.1-nanoserver-sdk` (*rel-1.0.0-preview2.1/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/Dockerfile)
+-       [`rel-1.0.0-preview2.1-onbuild` (*rel-1.0.0-preview2.1/debian/onbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/onbuild/Dockerfile)
+-       [`rel-1.0.0-preview2.1-nanoserver-onbuild` (*rel-1.0.0-preview2.1/nanoserver/onbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/onbuild/Dockerfile)
 
 ### Runtime images
 -       [`rel-1.0.0-core`, `core` (*rel-1.0.0/debian/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/core/Dockerfile)
 -       [`rel-1.0.0-nanoserver-core`, `nanoserver-core` (*rel-1.0.0/nanoserver/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/core/Dockerfile)
 -       [`rel-1.0.0-core-deps`, `core-deps` (*rel-1.0.0/debian/core-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/core-deps/Dockerfile)
+-       [`rel-1.0.0-preview2.1-core` (*rel-1.0.0-preview2.1/debian/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/core/Dockerfile)
+-       [`rel-1.0.0-preview2.1-nanoserver-core` (*rel-1.0.0-preview2.1/nanoserver/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/core/Dockerfile)
+-       [`rel-1.0.0-preview2.1-core-deps` (*rel-1.0.0-preview2.1/debian/core-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/core-deps/Dockerfile)
 
 ## Image variants
 

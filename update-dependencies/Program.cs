@@ -98,7 +98,8 @@ namespace Dotnet.Docker.Nightly
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters()
         {
-            return Directory.GetFiles(s_repoRoot, "Dockerfile", SearchOption.AllDirectories)
+            string branchRoot = Path.Combine(s_repoRoot, s_config.CliBranch.Replace('/', '-'));
+            return Directory.GetFiles(branchRoot, "Dockerfile", SearchOption.AllDirectories)
                 .Select(path => CreateRegexUpdater(path, "Microsoft.DotNet.Cli.Utils"));
         }
 

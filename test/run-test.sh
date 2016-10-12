@@ -39,7 +39,7 @@ for development_image_version in $( find . -path './.*' -prune -o -path '*/debia
     mkdir -p "${app_dir}"
 
     echo "----- Testing ${development_tag_base}-sdk -----"
-    docker run -t ${optional_docker_run_args} -v "${app_dir}:/${app_name}" -v "${repo_root}/test:/test" --name "sdk-test-${app_name}" --entrypoint /test/create-run-publish-app.sh "${development_tag_base}-sdk" "${app_name}"
+    docker run -t ${optional_docker_run_args} -v "${app_dir}:/${app_name}" -v "${repo_root}/test:/test" --name "sdk-test-${app_name}" --entrypoint /test/create-run-publish-app.sh "${development_tag_base}-sdk" "${app_name}" "${development_image_version}"
 
     echo "----- Testing ${runtime_tag_base}-core -----"
     docker run -t ${optional_docker_run_args} -v "${app_dir}:/${app_name}" --name "core-test-${app_name}" --entrypoint dotnet "${runtime_tag_base}-core" "/${app_name}/publish/framework-dependent/${app_name}.dll"
