@@ -11,7 +11,7 @@ if [[ $DOCKERCFG == {\"auths\":* ]]; then
 fi
 
 
-echo "Pushing onbuild images"
+echo "Pushing onbuild image"
 versionedImageName=$repoName":rel-1.0.0-preview2.1-onbuild"
 docker tag onbuild $versionedImageName
 docker push $versionedImageName
