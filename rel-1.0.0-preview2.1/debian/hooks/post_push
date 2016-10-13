@@ -12,6 +12,8 @@ fi
 
 
 echo "Pushing onbuild image"
+tagStartIndex=$(expr index "$IMAGE_NAME" :)
+repoName=${IMAGE_NAME:0:tagStartIndex - 1}
 versionedImageName=$repoName":rel-1.0.0-preview2.1-onbuild"
 docker tag onbuild $versionedImageName
 docker push $versionedImageName
