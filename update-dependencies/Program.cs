@@ -81,16 +81,16 @@ namespace Dotnet.Docker.Nightly
 
         private static Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
-            string commitMessage = $"Update SDK to {updateResults.UsedBuildInfos.Single().LatestReleaseVersion}";
+            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {updateResults.UsedBuildInfos.Single().LatestReleaseVersion}";
 
             GitHubAuth gitHubAuth = new GitHubAuth(s_config.Password, s_config.UserName, s_config.Email);
 
             PullRequestCreator prCreator = new PullRequestCreator(
                 gitHubAuth,
-                s_config.GitHubProject,
-                s_config.GitHubUpstreamOwner,
-                s_config.GitHubUpstreamBranch,
-                s_config.UserName
+                new GitHubProject(s_config.GitHubProject, gitHubAuth.User),
+                new GitHubBranch(s_config.GitHubUpstreamBranch, new GitHubProject(s_config.GitHubProject, s_config.GitHubUpstreamOwner)),
+                s_config.UserName,
+                new SingleBranchNamingStrategy($"UpdateDependencies-{s_config.BranchTagPrefix}")
             );
 
             return prCreator.CreateOrUpdateAsync(commitMessage, commitMessage, string.Empty);
@@ -98,7 +98,7 @@ namespace Dotnet.Docker.Nightly
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters()
         {
-            string branchRoot = Path.Combine(s_repoRoot, s_config.CliBranch.Replace('/', '-'));
+            string branchRoot = Path.Combine(s_repoRoot, s_config.BranchTagPrefix);
             return Directory.GetFiles(branchRoot, "Dockerfile", SearchOption.AllDirectories)
                 .Select(path => CreateRegexUpdater(path, "Microsoft.DotNet.Cli.Utils"));
         }

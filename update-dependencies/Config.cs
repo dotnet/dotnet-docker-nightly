@@ -30,6 +30,7 @@ namespace Dotnet.Docker.Nightly
         public string Password => _password.Value;
         public string CliBranch => _cliBranch.Value;
         public string CliVersionUrl => $"https://raw.githubusercontent.com/dotnet/versions/master/build-info/dotnet/cli/{CliBranch}";
+        public string BranchTagPrefix => CliBranch.Replace('/', '-');
         public string GitHubUpstreamOwner => _gitHubUpstreamOwner.Value;
         public string GitHubProject => _gitHubProject.Value;
         public string GitHubUpstreamBranch => _gitHubUpstreamBranch.Value;
