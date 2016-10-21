@@ -81,16 +81,15 @@ namespace Dotnet.Docker.Nightly
 
         private static Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
-            string commitMessage = $"Update SDK to {updateResults.UsedBuildInfos.Single().LatestReleaseVersion}";
+            string commitMessage = $"Update {s_config.CliBranch.Replace('/', '-')} SDK to {updateResults.UsedBuildInfos.Single().LatestReleaseVersion}";
 
             GitHubAuth gitHubAuth = new GitHubAuth(s_config.Password, s_config.UserName, s_config.Email);
 
             PullRequestCreator prCreator = new PullRequestCreator(
                 gitHubAuth,
-                s_config.GitHubProject,
-                s_config.GitHubUpstreamOwner,
-                s_config.GitHubUpstreamBranch,
-                s_config.UserName
+                new GitHubProject(s_config.GitHubProject, gitHubAuth.User)
+                new GitHubBranch(s_config.GitHubUpstreamBranch, new GitHubProject(s_config.GitHubProject, s_config.GitHubUpstreamOwner))
+                new SingleBranchNamingStrategy($"UpdateDependencies-{s_config.CliBranch.Replace('/', '-')}")
             );
 
             return prCreator.CreateOrUpdateAsync(commitMessage, commitMessage, string.Empty);
