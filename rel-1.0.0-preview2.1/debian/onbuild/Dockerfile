@@ -1,9 +1,10 @@
 FROM microsoft/dotnet-nightly:rel-1.0.0-preview2.1-sdk
 
-RUN mkdir -p /dotnetapp
 WORKDIR /dotnetapp
 
-ENTRYPOINT ["dotnet", "run"]
+ENTRYPOINT ["dotnet", "out/dotnetapp.dll"]
 
-ONBUILD COPY . /dotnetapp
+ONBUILD COPY project.json ./
 ONBUILD RUN dotnet restore
+ONBUILD COPY . ./
+ONBUILD RUN dotnet publish -c Release -o out

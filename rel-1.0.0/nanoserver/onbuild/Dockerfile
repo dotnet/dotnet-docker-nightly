@@ -1,9 +1,10 @@
 FROM microsoft/dotnet-nightly:rel-1.0.0-nanoserver-sdk
 
-RUN mkdir dotnetapp
-WORKDIR dotnetapp
+WORKDIR /dotnetapp
 
-ENTRYPOINT ["dotnet", "run"]
+ENTRYPOINT ["dotnet", "out/dotnetapp.dll"]
 
-ONBUILD COPY . .
+ONBUILD COPY project.json ./
 ONBUILD RUN dotnet restore
+ONBUILD COPY . ./
+ONBUILD RUN dotnet publish -c Release -o out
