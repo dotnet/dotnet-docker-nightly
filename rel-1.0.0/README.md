@@ -26,12 +26,12 @@ You can find samples, documentation, and getting started instructions for .NET C
 -       [`rel-1.0.0-preview2.1-nanoserver-onbuild` (*rel-1.0.0-preview2.1/nanoserver/onbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/onbuild/Dockerfile)
 
 ### Runtime images
--       [`rel-1.0.0-core`, `core` (*rel-1.0.0/debian/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/core/Dockerfile)
--       [`rel-1.0.0-nanoserver-core`, `nanoserver-core` (*rel-1.0.0/nanoserver/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/core/Dockerfile)
--       [`rel-1.0.0-core-deps`, `core-deps` (*rel-1.0.0/debian/core-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/core-deps/Dockerfile)
--       [`rel-1.0.0-preview2.1-core` (*rel-1.0.0-preview2.1/debian/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/core/Dockerfile)
--       [`rel-1.0.0-preview2.1-nanoserver-core` (*rel-1.0.0-preview2.1/nanoserver/core/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/core/Dockerfile)
--       [`rel-1.0.0-preview2.1-core-deps` (*rel-1.0.0-preview2.1/debian/core-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/core-deps/Dockerfile)
+-       [`rel-1.0.0-runtime`, `runtime` (*rel-1.0.0/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/runtime/Dockerfile)
+-       [`rel-1.0.0-nanoserver-runtime`, `nanoserver-runtime` (*rel-1.0.0/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/runtime/Dockerfile)
+-       [`rel-1.0.0-runtime-deps`, `runtime-deps` (*rel-1.0.0/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/runtime-deps/Dockerfile)
+-       [`rel-1.0.0-preview2.1-runtime` (*rel-1.0.0-preview2.1/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/runtime/Dockerfile)
+-       [`rel-1.0.0-preview2.1-nanoserver-runtime` (*rel-1.0.0-preview2.1/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/runtime/Dockerfile)
+-       [`rel-1.0.0-preview2.1-runtime-deps` (*rel-1.0.0-preview2.1/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/runtime-deps/Dockerfile)
 
 ## Image variants
 
@@ -68,11 +68,11 @@ $ docker build -t my-dotnet-app .
 $ docker run -it --rm --name my-running-app my-dotnet-app
 ```
 
-### `microsoft/dotnet-nightly:<version>-core`
+### `microsoft/dotnet-nightly:<version>-runtime`
 
-This image contains only .NET Core (runtime and libraries) and it is optimized for running [framework-dependent .NET Core applications](https://docs.microsoft.com/dotnet/articles/core/deploying/index). If you wish to run self-contained applications, please use the `core-deps` image described below. 
+This image contains only .NET Core (runtime and libraries) and it is optimized for running [framework-dependent .NET Core applications](https://docs.microsoft.com/dotnet/articles/core/deploying/index). If you wish to run self-contained applications, please use the `runtime-deps` image described below. 
 
-### `microsoft/dotnet-nightly:<version>-core-deps`
+### `microsoft/dotnet-nightly:<version>-runtime-deps`
 
 This image contains the operating system with all of the native dependencies needed by .NET Core. Use this image to:
 
@@ -85,4 +85,4 @@ Windows Containers images use the `microsoft/nanoserver` base OS image from Wind
 
 -       `rel-1.0.0-nanoserver-sdk`
 -       `rel-1.0.0-nanoserver-onbuild`
--       `rel-1.0.0-nanoserver-core`
+-       `rel-1.0.0-nanoserver-runtime`

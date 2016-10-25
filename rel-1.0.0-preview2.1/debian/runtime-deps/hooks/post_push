@@ -11,19 +11,9 @@ if [[ $DOCKERCFG == {\"auths\":* ]]; then
 fi
 
 
-echo "Pushing latest core-deps image"
+echo "Pushing runtime image"
 tagStartIndex=$(expr index "$IMAGE_NAME" :)
 repoName=${IMAGE_NAME:0:tagStartIndex - 1}
-latestImageName=$repoName":core-deps"
-docker tag $IMAGE_NAME $latestImageName
-docker push $latestImageName
-
-
-echo "Pushing core images"
-versionedImageName=$repoName":rel-1.0.0-core"
-docker tag core $versionedImageName
+versionedImageName=$repoName":rel-1.0.0-preview2.1-runtime"
+docker tag runtime $versionedImageName
 docker push $versionedImageName
-
-latestImageName=$repoName":core"
-docker tag core $latestImageName
-docker push $latestImageName
