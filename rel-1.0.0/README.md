@@ -16,10 +16,10 @@ You can find samples, documentation, and getting started instructions for .NET C
 ## Supported tags
 
 ### Development images
--       [`rel-1.0.0-sdk`, `latest` (*rel-1.0.0/debian/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/Dockerfile)
--       [`rel-1.0.0-nanoserver-sdk`, `nanoserver` (*rel-1.0.0/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/Dockerfile)
--       [`rel-1.0.0-preview2.1-sdk` (*rel-1.0.0-preview2.1/debian/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/Dockerfile)
--       [`rel-1.0.0-preview2.1-nanoserver-sdk` (*rel-1.0.0-preview2.1/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/Dockerfile)
+-       [`rel-1.0.0-sdk`, `latest` (*rel-1.0.0/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/sdk/Dockerfile)
+-       [`rel-1.0.0-nanoserver-sdk`, `nanoserver` (*rel-1.0.0/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/sdk/Dockerfile)
+-       [`rel-1.0.0-preview2.1-sdk` (*rel-1.0.0-preview2.1/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/sdk/Dockerfile)
+-       [`rel-1.0.0-preview2.1-nanoserver-sdk` (*rel-1.0.0-preview2.1/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/sdk/Dockerfile)
 
 ### Runtime images
 -       [`rel-1.0.0-runtime`, `runtime` (*rel-1.0.0/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/runtime/Dockerfile)
