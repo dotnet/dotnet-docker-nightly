@@ -46,28 +46,6 @@ Get-ChildItem -Recurse -Filter Dockerfile | where DirectoryName -like "*\nanoser
     if (-NOT $?) {
         throw  "Testing $runtimeTagBase-runtime failed"
     }
-
-    Write-Host "----- Testing $developmentTagBase-onbuild -----"
-    pushd $appDir
-    $onbuildTag = "$appName-onbuild".ToLowerInvariant()
-    New-Item -Name Dockerfile -Value "FROM $developmentTagBase-onbuild" | Out-Null
-    docker build -t $onbuildTag .
-    popd
-    if (-NOT $?) {
-        throw  "Failed building $onbuildTag"
-    }
-
-    docker run -t $optionalDockerRunArgs --name "onbuild-test-$appName" $onbuildTag
-    if (-NOT $?) {
-        throw "Testing $developmentTagBase-onbuild failed"
-    }
-
-    if ($env:DEBUGTEST -eq $null) {
-        docker rmi $onbuildTag
-        if (-NOT $?) {
-            throw "Failed to delete $onbuildTag image"
-        }
-    }
 }
 
 popd

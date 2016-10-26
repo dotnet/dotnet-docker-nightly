@@ -46,17 +46,6 @@ for development_image_version in $( find . -path './.*' -prune -o -path '*/debia
 
     echo "----- Testing ${runtime_tag_base}-runtime-deps -----"
     docker run -t ${optional_docker_run_args} -v "${app_dir}:/${app_name}" --name "runtime-deps-test-${app_name}" --entrypoint "/${app_name}/publish/self-contained/${app_name}" "${runtime_tag_base}-runtime-deps"
-
-    echo "----- Testing ${development_tag_base}-onbuild -----"
-    pushd "${app_dir}" > /dev/null
-    echo "FROM ${development_tag_base}-onbuild" > Dockerfile
-    docker build -t "${app_name}-onbuild" .
-    popd > /dev/null
-    docker run -t ${optional_docker_run_args} --name "onbuild-test-${app_name}" "${app_name}-onbuild"
-
-    if [ -z "${DEBUGTEST}" ]; then
-        docker rmi "${app_name}-onbuild"
-    fi
 done
 
 popd > /dev/null
