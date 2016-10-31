@@ -16,8 +16,8 @@ You can find samples, documentation, and getting started instructions for .NET C
 ## Supported tags
 
 ### Development images
--       [`rel-1.0.0-sdk`, `latest` (*rel-1.0.0/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/sdk/Dockerfile)
--       [`rel-1.0.0-nanoserver-sdk`, `nanoserver` (*rel-1.0.0/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/sdk/Dockerfile)
+-       [`rel-1.0.0-sdk`, `sdk`, `latest` (*rel-1.0.0/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/debian/sdk/Dockerfile)
+-       [`rel-1.0.0-nanoserver-sdk`, `nanoserver-sdk`, `nanoserver` (*rel-1.0.0/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0/nanoserver/sdk/Dockerfile)
 -       [`rel-1.0.0-preview2.1-sdk` (*rel-1.0.0-preview2.1/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/debian/sdk/Dockerfile)
 -       [`rel-1.0.0-preview2.1-nanoserver-sdk` (*rel-1.0.0-preview2.1/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/rel-1.0.0-preview2.1/nanoserver/sdk/Dockerfile)
 
