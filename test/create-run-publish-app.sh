@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e 	# Exit immediately upon failure
+set -e  # Exit immediately upon failure
 
 : ${1?"Need to pass sandbox directory as argument"}
 : ${2?"Need to pass sdk image version as argument"}
@@ -8,17 +8,9 @@ cd $1
 
 echo "Testing framework-dependent deployment"
 dotnet new
-
-if [ "rel-1.0.0-preview2.1" == "${2}" ]; then
-    dotnet restore
-    dotnet run
-    dotnet publish -o publish/framework-dependent
-else
-    dotnet restore3
-    dotnet run3
-    dotnet publish3 -o publish/framework-dependent
-fi
-
+dotnet restore
+dotnet run
+dotnet publish -o publish/framework-dependent
 
 echo "Testing self-contained deployment"
 
@@ -33,5 +25,8 @@ if [ "rel-1.0.0-preview2.1" == "${2}" ]; then
     dotnet run
     dotnet publish -o publish/self-contained
 else
-    dotnet publish3 -r debian.8-x64 -o publish/self-contained
+    sed -i '/<PropertyGroup>/a \    <RuntimeIdentifiers>debian.8-x64<\/RuntimeIdentifiers>' ./${1}.csproj
+
+    dotnet restore
+    dotnet publish -r debian.8-x64 -o publish/self-contained
 fi
