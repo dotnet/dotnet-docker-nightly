@@ -25,7 +25,7 @@ if [ "rel-1.0.0-preview2.1" == "${2}" ]; then
     dotnet run
     dotnet publish -o publish/self-contained
 else
-    sed -i '/<PropertyGroup>/a \    <RuntimeIdentifiers>debian.8-x64<\/RuntimeIdentifiers>' ./${1}.csproj
+    sed -i '/<PropertyGroup>/a \    <RuntimeIdentifiers>debian.8-x64<\/RuntimeIdentifiers>' ./${PWD##*/}.csproj
 
     dotnet restore
     dotnet publish -r debian.8-x64 -o publish/self-contained
