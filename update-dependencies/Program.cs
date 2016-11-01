@@ -100,7 +100,7 @@ namespace Dotnet.Docker.Nightly
         {
             string branchRoot = Path.Combine(s_repoRoot, s_config.BranchTagPrefix);
             return Directory.GetFiles(branchRoot, "Dockerfile", SearchOption.AllDirectories)
-                .Select(path => CreateRegexUpdater(path, "Microsoft.DotNet.Cli.Utils"));
+                .Select(path => CreateRegexUpdater(path, s_config.CliDependentPackageId));
         }
 
         private static IDependencyUpdater CreateRegexUpdater(string path, string packageId)
