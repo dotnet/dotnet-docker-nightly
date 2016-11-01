@@ -42,24 +42,26 @@ if (!(Test-Path "$RepoRoot\artifacts"))
 $DOTNET_INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/dotnet/cli/$CliBranch/scripts/obtain/dotnet-install.ps1"
 Invoke-WebRequest $DOTNET_INSTALL_SCRIPT_URL -OutFile "$RepoRoot\artifacts\dotnet-install.ps1"
 
-& "$RepoRoot\artifacts\dotnet-install.ps1" -Architecture $Architecture -InstallDir $DotnetInstallDir
+& "$RepoRoot\artifacts\dotnet-install.ps1" -Channel "rel-1.0.0" -Version "1.0.0-preview3-003981" -Architecture $Architecture -InstallDir $DotnetInstallDir
 if($LASTEXITCODE -ne 0) { throw "Failed to install the .NET Core SDK" }
 
- # Restore the app 
-Write-Host "Restoring app $AppPath..."
 pushd "$AppPath"
+
+ # Restore the app
+Write-Host "Restoring app $AppPath..."
 dotnet restore
 if($LASTEXITCODE -ne 0) { throw "Failed to restore" }
-popd
 
 # Publish the app
 Write-Host "Compiling app..."
-dotnet publish "$AppPath" -o "$AppPath\bin" --framework netcoreapp1.0
+dotnet publish -o "$AppPath\bin" -c Release
 if($LASTEXITCODE -ne 0) { throw "Failed to compile" }
 
+popd
+
 # Run the app
-Write-Host "Invoking app: $AppPath\bin\update-dependencies.exe $EnvVars"
+Write-Host "Invoking app: dotnet $AppPath\bin\update-dependencies.dll $EnvVars"
 pushd $RepoRoot
-& "$AppPath\bin\update-dependencies.exe" @EnvVars
+& dotnet "$AppPath\bin\update-dependencies.dll" @EnvVars
 if($LASTEXITCODE -ne 0) { throw "App execution failed" }
 popd
