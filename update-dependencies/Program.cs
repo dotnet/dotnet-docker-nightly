@@ -75,6 +75,10 @@ namespace Dotnet.Docker.Nightly
             IEnumerable<BuildInfo> buildInfos = new[] { BuildInfo.Get("Cli", s_config.CliVersionUrl, fetchLatestReleaseFile: false) };
             IEnumerable<IDependencyUpdater> updaters = GetUpdaters();
 
+foreach (BuildInfo bi in buildInfos)
+{
+    Console.WriteLine(bi.Name);
+}
             DependencyUpdater updater = new DependencyUpdater();
             return updater.Update(updaters, buildInfos);
         }
@@ -100,15 +104,15 @@ namespace Dotnet.Docker.Nightly
         {
             string branchRoot = Path.Combine(s_repoRoot, s_config.BranchTagPrefix);
             return Directory.GetFiles(branchRoot, "Dockerfile", SearchOption.AllDirectories)
-                .Select(path => CreateRegexUpdater(path, s_config.CliDependentPackageId));
+                .Select(path => CreateDependencyUpdater(path));
         }
 
-        private static IDependencyUpdater CreateRegexUpdater(string path, string packageId)
+        private static IDependencyUpdater CreateDependencyUpdater(string path)
         {
-            return new FileRegexPackageUpdater()
+            return new FileRegexReleaseUpdater()
             {
                 Path = path,
-                PackageId = packageId,
+                BuildInfoName = "Cli",
                 Regex = new Regex($@"ENV DOTNET_SDK_VERSION (?<version>[^\r\n]*)"),
                 VersionGroupName = "version"
             };
