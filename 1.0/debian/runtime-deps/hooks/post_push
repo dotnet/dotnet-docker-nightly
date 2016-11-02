@@ -11,9 +11,19 @@ if [[ $DOCKERCFG == {\"auths\":* ]]; then
 fi
 
 
-echo "Pushing runtime image"
+echo "Pushing runtime-deps images"
 tagStartIndex=$(expr index "$IMAGE_NAME" :)
 repoName=${IMAGE_NAME:0:tagStartIndex - 1}
-versionedImageName=$repoName":rel-1.0.0-preview2.1-runtime"
-docker tag runtime $versionedImageName
-docker push $versionedImageName
+
+imageName=$repoName":1.0.2-runtime-deps"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
+
+echo "Pushing runtime images"
+imageName=$repoName":1.0.2-runtime"
+docker tag runtime $imageName
+docker push $imageName
+
+imageName=$repoName":1.0-runtime"
+docker tag runtime $imageName
+docker push $imageName

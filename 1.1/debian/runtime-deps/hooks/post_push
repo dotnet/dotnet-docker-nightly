@@ -1,0 +1,46 @@
+#!/bin/bash
+
+set -e
+
+# Issue - https://github.com/docker/hub-feedback/issues/384#issuecomment-214508878
+# Docker Hub emits an invalid .dockercfg.  Remove the outer auths element.
+if [[ $DOCKERCFG == {\"auths\":* ]]; then
+    jsonStartIndex=$(expr index "$DOCKERCFG" :)
+    length=$((${#DOCKERCFG} - $jsonStartIndex - 1))
+    echo ${DOCKERCFG:jsonStartIndex:length} > /root/.dockercfg
+fi
+
+
+echo "Pushing runtime-deps images"
+tagStartIndex=$(expr index "$IMAGE_NAME" :)
+repoName=${IMAGE_NAME:0:tagStartIndex - 1}
+
+imageName=$repoName":1.1.0-runtime-deps"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
+
+imageName=$repoName":1-runtime-deps"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
+
+imageName=$repoName":runtime-deps"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
+
+
+echo "Pushing runtime images"
+imageName=$repoName":1.1.0-runtime"
+docker tag runtime $imageName
+docker push $imageName
+
+imageName=$repoName":1.1-runtime"
+docker tag runtime $imageName
+docker push $imageName
+
+imageName=$repoName":1-runtime"
+docker tag runtime $imageName
+docker push $imageName
+
+imageName=$repoName":runtime"
+docker tag runtime $imageName
+docker push $imageName
