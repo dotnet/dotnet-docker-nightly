@@ -13,18 +13,11 @@ if (-NOT $?) {
     throw  "Failed to create project"
 }
 
-cp c:\test\NuGet.Config .
+if ($SdkTag.StartsWith("1.1")) {
+    (Get-Content project.json).replace("1.0.1", "1.1.0") | Set-Content project.json
 
-$cliVersion="1.0.1"
-
-if ($SdkTag.StartsWith("1.0")) {
-    $runtimeVersion="1.0.2"
+    cp c:\test\NuGet.Config .    
 }
-else {
-    $runtimeVersion="1.1.0"
-}
-
-(Get-Content project.json).replace($cliVersion, $runtimeVersion) | Set-Content project.json
 
 dotnet restore
 if (-NOT $?) {

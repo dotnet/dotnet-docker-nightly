@@ -9,20 +9,16 @@ cd $1
 echo "Testing framework-dependent deployment"
 dotnet new
 
-cp /test/NuGet.Config .
+if [[ $2 == "1.1"* ]]; then
+    replacement_arg="s/1.0.1/1.1.0/"
 
-cli_version="1.0.1"
+    if [[ $2 == *"projectjson"* ]]; then
+        sed -i ${replacement_arg} ./project.json
+    else
+        sed -i ${replacement_arg} ./${PWD##*/}.csproj
+    fi
 
-if [[ $2 == "1.0"* ]]; then
-    runtime_version="1.0.2"
-else
-    runtime_version="1.1.0"
-fi
-
-if [[ $2 == *"projectjson"* ]]; then
-    sed -i "s/${cli_version}/${runtime_version}/" ./project.json
-else
-    sed -i "s/${cli_version}/${runtime_version}/" ./${PWD##*/}.csproj
+    cp /test/NuGet.Config .    
 fi
 
 dotnet restore

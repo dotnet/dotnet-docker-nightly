@@ -15,16 +15,16 @@ You can find samples, documentation, and getting started instructions for .NET C
 
 ## Supported tags
 
--       ['1.0.2-runtime', '1.0-runtime' (*1.0/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/runtime/Dockerfile)
--       ['1.0.2-runtime-nanoserver', '1.0-runtime-nanoserver' (*1.0/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/nanoserver/runtime/Dockerfile)
--       ['1.0.2-runtime-deps', '1.0-runtime-deps' (*1.0/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/runtime-deps/Dockerfile)
+-       ['1.0.1-runtime', '1.0-runtime' (*1.0/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/runtime/Dockerfile)
+-       ['1.0.1-runtime-nanoserver', '1.0-runtime-nanoserver' (*1.0/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/nanoserver/runtime/Dockerfile)
+-       ['1.0.1-runtime-deps', '1.0-runtime-deps' (*1.0/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/runtime-deps/Dockerfile)
 -       ['1.1.0-runtime', '1.1-runtime', '1-runtime', 'runtime' (*1.1/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/debian/runtime/Dockerfile)
 -       ['1.1.0-runtime-nanoserver', '1.1-runtime-nanoserver', '1-runtime-nanoserver', 'runtime-nanoserver' (*1.1/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/nanoserver/runtime/Dockerfile)
 -       ['1.1.0-runtime-deps', '1.1-runtime-deps', '1-runtime-deps', 'runtime-deps' (*1.1/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/debian/runtime-deps/Dockerfile)
--       ['1.0.2-sdk-projectjson', '1.0-sdk-projectjson', 'latest' (*1.0/debian/sdk/projectjson/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/sdk/projectjson/Dockerfile)
--       ['1.0.2-sdk-projectjson-nanoserver', '1.0-sdk-projectjson' (*1.0/nanoserver/sdk/projectjson/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/nanoserver/sdk/projectjson/Dockerfile)
--       ['1.0.2-sdk-msbuild', '1.0-sdk' (*1.0/debian/sdk/msbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/sdk/msbuild/Dockerfile)
--       ['1.0.2-sdk-msbuild-nanoserver', '1.0-sdk-nanoserver' (*1.0/nanoserver/sdk/msbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/nanoserver/sdk/msbuild/Dockerfile)
+-       ['1.0.1-sdk-projectjson', '1.0-sdk-projectjson', 'latest' (*1.0/debian/sdk/projectjson/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/sdk/projectjson/Dockerfile)
+-       ['1.0.1-sdk-projectjson-nanoserver', '1.0-sdk-projectjson' (*1.0/nanoserver/sdk/projectjson/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/nanoserver/sdk/projectjson/Dockerfile)
+-       ['1.0.1-sdk-msbuild', '1.0-sdk' (*1.0/debian/sdk/msbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/debian/sdk/msbuild/Dockerfile)
+-       ['1.0.1-sdk-msbuild-nanoserver', '1.0-sdk-nanoserver' (*1.0/nanoserver/sdk/msbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/nanoserver/sdk/msbuild/Dockerfile)
 -       ['1.1.0-sdk-projectjson', '1.1-sdk-projectjson' (*1.1/debian/sdk/projectjson/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/debian/sdk/projectjson/Dockerfile)
 -       ['1.1.0-sdk-projectjson-nanoserver', '1.1-sdk-projectjson-nanoserver' (*1.1/nanoserver/sdk/projectjson/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/nanoserver/sdk/projectjson/Dockerfile)
 -       ['1.1.0-sdk-msbuild', '1.1-sdk' (*1.1/debian/sdk/msbuild/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/debian/sdk/msbuild/Dockerfile)
