@@ -17,8 +17,6 @@ if [[ $2 == "1.1"* ]]; then
     else
         sed -i ${replacement_arg} ./${PWD##*/}.csproj
     fi
-
-    cp /test/NuGet.Config .    
 fi
 
 dotnet restore
@@ -32,12 +30,14 @@ if [[ $2 == *"projectjson"* ]]; then
     sed -i '/"type": "platform"/d' ./project.json
     sed -i "s/^  }$/${runtimes_section}/" ./project.json
 
-    dotnet restore
+    # Need to use myget cache because 1.1 hasn't released.
+    dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
     dotnet run
     dotnet publish -o publish/self-contained
 else
     sed -i '/<PropertyGroup>/a \    <RuntimeIdentifiers>debian.8-x64<\/RuntimeIdentifiers>' ./${PWD##*/}.csproj
 
-    dotnet restore
+    # Need to use myget cache because 1.1 hasn't released.
+    dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
     dotnet publish -r debian.8-x64 -o publish/self-contained
 fi

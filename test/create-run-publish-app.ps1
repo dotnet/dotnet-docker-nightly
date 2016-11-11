@@ -15,8 +15,6 @@ if (-NOT $?) {
 
 if ($SdkTag.StartsWith("1.1")) {
     (Get-Content project.json).replace("1.0.1", "1.1.0") | Set-Content project.json
-
-    cp c:\test\NuGet.Config .    
 }
 
 dotnet restore
