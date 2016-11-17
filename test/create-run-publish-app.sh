@@ -9,14 +9,8 @@ cd $1
 echo "Testing framework-dependent deployment"
 dotnet new
 
-if [[ $2 == "1.1"* ]]; then
-    replacement_arg="s/1.0.1/1.1.0/"
-
-    if [[ $2 == *"projectjson"* ]]; then
-        sed -i ${replacement_arg} ./project.json
-    else
-        sed -i ${replacement_arg} ./${PWD##*/}.csproj
-    fi
+if [[ $2 == "1.1-sdk-msbuild" ]]; then
+    sed -i "s/1.0.1/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./${PWD##*/}.csproj
 fi
 
 dotnet restore
@@ -30,14 +24,12 @@ if [[ $2 == *"projectjson"* ]]; then
     sed -i '/"type": "platform"/d' ./project.json
     sed -i "s/^  }$/${runtimes_section}/" ./project.json
 
-    # Need to use myget cache because 1.1 hasn't released.
-    dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
+    dotnet restore
     dotnet run
     dotnet publish -o publish/self-contained
 else
     sed -i '/<PropertyGroup>/a \    <RuntimeIdentifiers>debian.8-x64<\/RuntimeIdentifiers>' ./${PWD##*/}.csproj
 
-    # Need to use myget cache because 1.1 hasn't released.
-    dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json
+    dotnet restore
     dotnet publish -r debian.8-x64 -o publish/self-contained
 fi

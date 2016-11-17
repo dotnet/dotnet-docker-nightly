@@ -29,8 +29,7 @@ RUN mkdir warmup \
     && cd warmup \
     && dotnet new \
     # .NET Core SDK preview3 targets 1.0, replace with 1.1 to populate cache
-    && powershell -NoProfile -Command "(Get-Content project.json).replace('1.0.1', '1.1.0') | Set-Content project.json" \
-    # Need to use myget cache because 1.1 hasn't released
-    && dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json \
+    && powershell -NoProfile -Command "(Get-Content project.json).replace('1.0.1', '1.1.0').replace('netcoreapp1.0', 'netcoreapp1.1') | Set-Content project.json" \
+    && dotnet restore \
     && cd .. \
     && rmdir /q/s warmup

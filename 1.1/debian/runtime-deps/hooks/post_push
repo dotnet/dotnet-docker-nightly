@@ -27,6 +27,15 @@ imageName=$repoName":runtime-deps"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
+# Existing core-deps tags are obsolete but being preserved for through the 1* release
+imageName=$repoName":1-core-deps"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
+
+latestImageName=$repoName":core-deps"
+docker tag $IMAGE_NAME $latestImageName
+docker push $latestImageName
+
 
 echo "Pushing runtime images"
 imageName=$repoName":1.1.0-runtime"
@@ -44,3 +53,12 @@ docker push $imageName
 imageName=$repoName":runtime"
 docker tag runtime $imageName
 docker push $imageName
+
+# Existing core tags are obsolete but being preserved for through the 1* release
+imageName=$repoName":1-core"
+docker tag runtime $imageName
+docker push $imageName
+
+latestImageName=$repoName":core"
+docker tag runtime $latestImageName
+docker push $latestImageName
