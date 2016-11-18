@@ -108,7 +108,7 @@ namespace Dotnet.Docker.Nightly
             {
                 Path = path,
                 BuildInfoName = "Cli",
-                Regex = new Regex($@"ENV DOTNET_SDK_VERSION [\d\.]*-(?<version>{s_config.CliReleaseMoniker}-[\d]*$)"),
+                Regex = new Regex($@"ENV DOTNET_SDK_VERSION [\d\.]*-(?<version>{s_config.CliReleaseMoniker}-[^\r\n]*)"),
                 VersionGroupName = "version"
             };
         }
