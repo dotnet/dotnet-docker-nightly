@@ -15,12 +15,12 @@ echo "Pushing runtime-deps images"
 tagStartIndex=$(expr index "$IMAGE_NAME" :)
 repoName=${IMAGE_NAME:0:tagStartIndex - 1}
 
-imageName=$repoName":1.0.1-runtime-deps"
+imageName=$repoName":1.0.3-runtime-deps"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
 # Existing core-deps tags are obsolete but being preserved for through the 1* release
-imageName=$repoName":1.0.1-core-deps"
+imageName=$repoName":1.0.3-core-deps"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
@@ -30,7 +30,7 @@ docker push $imageName
 
 
 echo "Pushing runtime images"
-imageName=$repoName":1.0.1-runtime"
+imageName=$repoName":1.0.3-runtime"
 docker tag runtime $imageName
 docker push $imageName
 
@@ -39,7 +39,7 @@ docker tag runtime $imageName
 docker push $imageName
 
 # Existing core tags are obsolete but being preserved for through the 1* release
-imageName=$repoName":1.0.1-core"
+imageName=$repoName":1.0.3-core"
 docker tag runtime $imageName
 docker push $imageName
 
