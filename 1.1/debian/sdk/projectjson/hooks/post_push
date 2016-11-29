@@ -2,27 +2,15 @@
 
 set -e
 
-# Issue - https://github.com/docker/hub-feedback/issues/384#issuecomment-214508878
-# Docker Hub emits an invalid .dockercfg.  Remove the outer auths element.
-if [[ $DOCKERCFG == {\"auths\":* ]]; then
-    jsonStartIndex=$(expr index "$DOCKERCFG" :)
-    length=$((${#DOCKERCFG} - $jsonStartIndex - 1))
-    echo ${DOCKERCFG:jsonStartIndex:length} > /root/.dockercfg
-fi
-
-
-echo "Pushing sdk-projectjson images"
-tagStartIndex=$(expr index "$IMAGE_NAME" :)
-repoName=${IMAGE_NAME:0:tagStartIndex - 1}
-
-imageName=$repoName":1.1.0-sdk-projectjson"
+echo "Pushing additional sdk-projectjson tags"
+imageName=$DOCKER_REPO":1.1.0-sdk-projectjson"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
-imageName=$repoName":sdk"
+imageName=$DOCKER_REPO":sdk"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
-imageName=$repoName":latest"
+imageName=$DOCKER_REPO":latest"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
