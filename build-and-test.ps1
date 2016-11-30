@@ -3,7 +3,7 @@ param(
     [Parameter(Mandatory=$true)]
     [ValidateSet("win", "linux")]
     [string]$Platform,
-    [switch]$UseImageCache=$false
+    [switch]$UseImageCache
 )
 
 Set-StrictMode -Version Latest

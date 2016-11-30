@@ -53,7 +53,7 @@ Get-ChildItem -Recurse -Filter Dockerfile |
         New-Item $appDir -type directory | Out-Null
 
         Write-Host "----- Testing $fullSdkTag -----"
-        docker run -it --rm `
+        docker run -t --rm `
             -v "${appDir}:${containerRoot}${appName}" `
             -v "${repoRoot}${dirSeparator}test:${containerRoot}test" `
             --name "sdk-test-$appName" `
@@ -70,18 +70,18 @@ Get-ChildItem -Recurse -Filter Dockerfile |
             "$baseTag-runtime$tagSuffix" `
             "${containerRoot}${appName}${dirSeparator}publish${dirSeparator}framework-dependent${dirSeparator}${appName}.dll"
         if (-NOT $?) {
-            throw  "Testing $baseTag-runtime failed"
+            throw  "Testing $baseTag-runtime$tagSuffix failed"
         }
 
         if ($Platform -eq "linux") {
-            Write-Host "----- Testing $baseTag-runtime-deps with $sdkTag app -----"
+            Write-Host "----- Testing $baseTag-runtime-deps$tagSuffix with $sdkTag app -----"
             docker run -t --rm `
                 -v "${appDir}:${containerRoot}${appName}" `
                 --name "runtime-deps-test-$appName" `
                 --entrypoint "${containerRoot}${appName}${dirSeparator}publish${dirSeparator}self-contained${dirSeparator}${appName}" `
-                "$baseTag-runtime-deps"
+                "$baseTag-runtime-deps$tagSuffix"
             if (-NOT $?) {
-                throw  "Testing $baseTag-runtime-deps failed"
+                throw  "Testing $baseTag-runtime-deps$tagSuffix failed"
             }
         }
     }
