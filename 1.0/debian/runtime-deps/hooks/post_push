@@ -17,7 +17,7 @@ docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
 
-echo "Pushing additional runtime tags"
+echo "Pushing runtime tags"
 imageName=$DOCKER_REPO":1.0.3-runtime"
 docker tag runtime $imageName
 docker push $imageName
