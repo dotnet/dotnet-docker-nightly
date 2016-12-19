@@ -40,10 +40,9 @@ ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE true
 RUN mkdir warmup \
     && cd warmup \
     && dotnet new \
-    # Projects created with .NET Core SDK preview3 target 1.0.1, replace with 1.0.3 to populate cache
+    # Projects created with .NET Core SDK preview5 target 1.0.1, replace with 1.0.3 to populate cache
     && sed -i "s/1.0.1/1.0.3/" ./warmup.csproj \
-    # Need to use myget cache because 1.0.3 hasn't been released
-    && dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json \
+    && dotnet restore \
     && cd .. \
     && rm -rf warmup \
     && rm -rf /tmp/NuGetScratch

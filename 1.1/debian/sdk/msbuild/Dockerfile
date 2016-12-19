@@ -40,7 +40,7 @@ ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE true
 RUN mkdir warmup \
     && cd warmup \
     && dotnet new \
-    # Projects created with .NET Core SDK preview3 target 1.0, replace with 1.1 to populate cache
+    # Projects created with .NET Core SDK preview5 target 1.0, replace with 1.1 to populate cache
     && sed -i "s/1.0.1/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./warmup.csproj \
     && dotnet restore \
     && cd .. \

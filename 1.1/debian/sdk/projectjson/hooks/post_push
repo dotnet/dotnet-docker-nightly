@@ -3,7 +3,7 @@
 set -e
 
 echo "Pushing additional sdk-projectjson tags"
-imageName=$DOCKER_REPO":1.1.0-sdk-projectjson"
+imageName=$DOCKER_REPO":1.1.1-sdk-projectjson"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
