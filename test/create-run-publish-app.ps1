@@ -15,7 +15,7 @@ if (-NOT $?) {
 
 if ($SdkTag -eq "1.1-sdk-msbuild-nanoserver") {
     $projectName = "$($pwd.path | Split-Path -Leaf).csproj"
-    (Get-Content $projectName).replace("1.0.1", "1.1.0").replace("netcoreapp1.0", "netcoreapp1.1") | Set-Content $projectName
+    (Get-Content $projectName).replace("1.0.3", "1.1.0").replace("netcoreapp1.0", "netcoreapp1.1") | Set-Content $projectName
 }
 
 dotnet restore

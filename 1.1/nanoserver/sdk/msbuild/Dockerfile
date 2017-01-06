@@ -29,7 +29,7 @@ RUN mkdir warmup \
     && cd warmup \
     && dotnet new \
     # Projects created with .NET Core SDK preview5 target 1.0, replace with 1.1 to populate cache
-    && powershell -NoProfile -Command "(Get-Content warmup.csproj).replace('1.0.1', '1.1.0').replace('netcoreapp1.0', 'netcoreapp1.1') | Set-Content warmup.csproj" \
+    && powershell -NoProfile -Command "(Get-Content warmup.csproj).replace('1.0.3', '1.1.0').replace('netcoreapp1.0', 'netcoreapp1.1') | Set-Content warmup.csproj" \
     && dotnet restore \
     && cd .. \
     && rmdir /q/s warmup

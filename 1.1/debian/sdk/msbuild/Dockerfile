@@ -41,7 +41,7 @@ RUN mkdir warmup \
     && cd warmup \
     && dotnet new \
     # Projects created with .NET Core SDK preview5 target 1.0, replace with 1.1 to populate cache
-    && sed -i "s/1.0.1/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./warmup.csproj \
+    && sed -i "s/1.0.3/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./warmup.csproj \
     && dotnet restore \
     && cd .. \
     && rm -rf warmup \

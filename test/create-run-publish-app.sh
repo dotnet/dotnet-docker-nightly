@@ -10,7 +10,7 @@ echo "Testing framework-dependent deployment"
 dotnet new
 
 if [[ $2 == "1.1-sdk-msbuild" ]]; then
-    sed -i "s/1.0.1/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./${PWD##*/}.csproj
+    sed -i "s/1.0.3/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./${PWD##*/}.csproj
 fi
 
 dotnet restore
