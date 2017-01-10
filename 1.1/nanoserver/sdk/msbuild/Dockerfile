@@ -13,7 +13,7 @@ RUN powershell -NoProfile -Command \
 RUN setx /M PATH "%PATH%;%ProgramFiles%\dotnet"
 
 # Install .NET Core SDK
-ENV DOTNET_SDK_VERSION 1.0.0-preview5-004432
+ENV DOTNET_SDK_VERSION 1.0.0-preview5-004468
 ENV DOTNET_SDK_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Sdk/$DOTNET_SDK_VERSION/dotnet-dev-win-x64.$DOTNET_SDK_VERSION.zip
 
 RUN powershell -NoProfile -Command \
