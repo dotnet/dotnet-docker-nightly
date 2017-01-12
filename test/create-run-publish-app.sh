@@ -7,10 +7,10 @@ set -e  # Exit immediately upon failure
 cd $1
 
 echo "Testing framework-dependent deployment"
-dotnet new
-
 if [[ $2 == "1.1-sdk-msbuild" ]]; then
-    sed -i "s/1.0.3/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./${PWD##*/}.csproj
+    dotnet new -t Console1.1
+else
+    dotnet new
 fi
 
 dotnet restore

@@ -28,13 +28,9 @@ RUN curl -SL $DOTNET_SDK_DOWNLOAD_URL --output dotnet.tar.gz \
 
 # Trigger the population of the local package cache
 ENV NUGET_XMLDOC_MODE skip
-ENV DOTNET_SKIP_FIRST_TIME_EXPERIENCE true
 RUN mkdir warmup \
     && cd warmup \
     && dotnet new \
-    # Projects created with .NET Core SDK rc3 target 1.0, replace with 1.1 to populate cache
-    && sed -i "s/1.0.3/1.1.0/;s/netcoreapp1.0/netcoreapp1.1/" ./warmup.csproj \
-    && dotnet restore \
     && cd .. \
     && rm -rf warmup \
     && rm -rf /tmp/NuGetScratch
