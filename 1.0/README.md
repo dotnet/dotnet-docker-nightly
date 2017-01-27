@@ -21,9 +21,6 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 
 For more information about these images and their history, please see [the relevant Dockerfile (`dotnet/dotnet-docker-nightly`)](https://github.com/dotnet/dotnet-docker-nightly/search?utf8=%E2%9C%93&q=FROM&type=Code). These images are updated via [pull requests to the `dotnet/dotnet-docker-nightly` GitHub repo](https://github.com/dotnet/dotnet-docker-nightly/pulls?utf8=%E2%9C%93&q=).
 
-[![Downloads from Docker Hub](https://img.shields.io/docker/pulls/microsoft/dotnet-nightly.svg)](https://hub.docker.com/r/microsoft/dotnet-nightly)
-[![Stars on Docker Hub](https://img.shields.io/docker/stars/microsoft/dotnet-nightly.svg)](https://hub.docker.com/r/microsoft/dotnet-nightly)
-
 # What is .NET Core?
 
 .NET Core is a general purpose development platform maintained by Microsoft and the .NET community on [GitHub](https://github.com/dotnet/core). It is cross-platform, supporting Windows, macOS and Linux, and can be used in device, cloud, and embedded/IoT scenarios.
