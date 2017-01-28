@@ -13,6 +13,9 @@ function build_dockerfiles {
     done
 }
 
+docker version
+docker info
+
 pushd "${repo_root}" > /dev/null
 
 build_dockerfiles "$( find . -path './.*' -prune -o -name 'Dockerfile' -a -path '*/*-deps/*' -print0 | xargs -0 -n1 dirname )"
