@@ -10,3 +10,11 @@ docker push $imageName
 imageName=$DOCKER_REPO":1-sdk-msbuild"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
+
+imageName=$DOCKER_REPO":sdk"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
+
+imageName=$DOCKER_REPO":latest"
+docker tag $IMAGE_NAME $imageName
+docker push $imageName
