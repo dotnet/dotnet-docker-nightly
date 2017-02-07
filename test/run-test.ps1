@@ -132,7 +132,7 @@ Get-ChildItem -Recurse -Filter Dockerfile |
                 }
 
                 if ($sdkTag -like "*2.0-sdk") {
-                    # Temporary workaround for https://github.com/Microsoft/msbuild/issues/1676
+                    # Temporary workaround https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/dogfooding.md#option-2-self-contained
                     exec { docker run --rm `
                         -v ${selfContainedVol}":${containerRoot}volume" `
                         $selfContainedImage `
