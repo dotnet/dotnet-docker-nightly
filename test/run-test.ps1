@@ -42,7 +42,7 @@ pushd $repoRoot
 
 # Loop through each sdk Dockerfile in the repo and test the sdk and runtime images.
 Get-ChildItem -Recurse -Filter Dockerfile |
-    where DirectoryName -like "*${dirSeparator}${imageOs}${dirSeparator}sdk${dirSeparator}*" |
+    where DirectoryName -like "*${dirSeparator}${imageOs}${dirSeparator}sdk*" |
     foreach {
         $sdkTag = $_.DirectoryName.
                 Replace("$repoRoot$dirSeparator", '').
@@ -128,6 +128,15 @@ Get-ChildItem -Recurse -Filter Dockerfile |
                         --entrypoint dotnet `
                         $selfContainedImage `
                         publish -r debian.8-x64 -o ${containerRoot}volume
+                    }
+                }
+
+                if ($sdkTag -like "*2.0-sdk") {
+                    # Temporary workaround for https://github.com/Microsoft/msbuild/issues/1676
+                    exec { docker run --rm `
+                        -v ${selfContainedVol}":${containerRoot}volume" `
+                        $selfContainedImage `
+                        chmod u+x ${containerRoot}volume${platformDirSeparator}test
                     }
                 }
 
