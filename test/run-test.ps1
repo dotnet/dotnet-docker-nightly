@@ -20,9 +20,10 @@ else {
     $optionalDockerBuildArgs = "--no-cache"
 }
 
-$dockerRepo="microsoft/dotnet-nightly"
+$dockerRepo = "microsoft/dotnet-nightly"
 $dirSeparator = [IO.Path]::DirectorySeparatorChar
 $repoRoot = Split-Path -Parent $PSScriptRoot
+$testFilesPath = "$PSScriptRoot$dirSeparator"
 $platform = docker version -f "{{ .Server.Os }}"
 
 if ($platform -eq "windows") {
@@ -38,10 +39,8 @@ else {
     $platformDirSeparator = '/'
 }
 
-pushd $repoRoot
-
 # Loop through each sdk Dockerfile in the repo and test the sdk and runtime images.
-Get-ChildItem -Recurse -Filter Dockerfile |
+Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
     where DirectoryName -like "*${dirSeparator}${imageOs}${dirSeparator}sdk" |
     foreach {
         $sdkTag = $_.DirectoryName.
@@ -49,25 +48,16 @@ Get-ChildItem -Recurse -Filter Dockerfile |
                 Replace("$dirSeparator$imageOs", '').
                 Replace($dirSeparator, '-') +
             $tagSuffix
-
-        $fullSdkTag="${dockerRepo}:${sdkTag}"
-        $baseTag=$fullSdkTag.TrimEnd($tagSuffix).TrimEnd("-sdk")
+        $fullSdkTag = "${dockerRepo}:${sdkTag}"
+        $baseTag = $fullSdkTag.TrimEnd($tagSuffix).TrimEnd("-sdk")
 
         $timeStamp = Get-Date -Format FileDateTime
-        $appName="app$timeStamp".ToLower()
-
+        $appName = "app$timeStamp".ToLower()
         $buildImage = "sdk-build-$appName"
-        $dotnetNewParam = ""
-        if ($sdkTag -like "*1.1-sdk*") {
-            $dotnetNewParam = "console --framework netcoreapp1.1"
-        }
-        elseif ($sdkTag -like "*1.0-sdk*") {
-            $dotnetNewParam = "console --framework netcoreapp1.0"
-        }
-        $dockerFilesPath = "${repoRoot}${dirSeparator}test${dirSeparator}"
+        $dotnetNewParam = "console --framework netcoreapp$($sdkTag.Split('-')[0])"
 
         Write-Host "----- Testing create, restore and build with $fullSdkTag with image $buildImage -----"
-        exec { (Get-Content ${dockerFilesPath}Dockerfile.test).Replace("{image}", $fullSdkTag).Replace("{dotnetNewParam}", $dotnetNewParam) `
+        exec { (Get-Content ${testFilesPath}Dockerfile.test).Replace("{image}", $fullSdkTag).Replace("{dotnetNewParam}", $dotnetNewParam) `
             | docker build $optionalDockerBuildArgs -t $buildImage -
         }
 
@@ -86,9 +76,8 @@ Get-ChildItem -Recurse -Filter Dockerfile |
             Write-Host "----- Testing on $baseTag-runtime$tagSuffix with $sdkTag framework-dependent app -----"
             exec { docker run --rm `
                 -v ${framworkDepVol}":${containerRoot}volume" `
-                --entrypoint dotnet `
                 "$baseTag-runtime$tagSuffix" `
-                "${containerRoot}volume${platformDirSeparator}test.dll"
+                dotnet "${containerRoot}volume${platformDirSeparator}test.dll"
             }
         }
         Finally {
@@ -98,9 +87,8 @@ Get-ChildItem -Recurse -Filter Dockerfile |
         if ($platform -eq "linux") {
             $selfContainedImage = "self-contained-build-${buildImage}"
             Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
-            exec {
-                (Get-Content ${dockerFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage) `
-                    | docker build $optionalDockerBuildArgs -t $selfContainedImage -
+            exec {(Get-Content ${testFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage) `
+                | docker build $optionalDockerBuildArgs -t $selfContainedImage -
             }
 
             Try {
@@ -108,9 +96,8 @@ Get-ChildItem -Recurse -Filter Dockerfile |
                 Write-Host "----- Publishing self-contained published app built on $fullSdkTag to volume $selfContainedVol using image $selfContainedImage -----"
                 exec { docker run --rm `
                     -v ${selfContainedVol}":${containerRoot}volume" `
-                    --entrypoint dotnet `
                     $selfContainedImage `
-                    publish -r debian.8-x64 -o ${containerRoot}volume
+                    dotnet publish -r debian.8-x64 -o ${containerRoot}volume
                 }
 
                 if ($sdkTag -like "*2.0-sdk") {
@@ -134,5 +121,3 @@ Get-ChildItem -Recurse -Filter Dockerfile |
             }
         }
     }
-
-popd
