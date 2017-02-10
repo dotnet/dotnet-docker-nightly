@@ -87,7 +87,7 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
         if ($platform -eq "linux") {
             $selfContainedImage = "self-contained-build-${buildImage}"
             Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
-            exec {(Get-Content ${testFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage) `
+            exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage) `
                 | docker build $optionalDockerBuildArgs -t $selfContainedImage -
             }
 
