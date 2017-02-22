@@ -3,6 +3,6 @@
 set -e
 
 echo "Pushing additional sdk tags"
-imageName=$DOCKER_REPO":1.0.3-sdk-rc4"
+imageName=$DOCKER_REPO":1.0.4-sdk-rc4"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
