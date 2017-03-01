@@ -57,73 +57,83 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
         $dotnetNewParam = "console --framework netcoreapp$($sdkTag.Split('-')[0])"
 
         Write-Host "----- Testing create, restore and build with $fullSdkTag with image $buildImage -----"
-        exec { (Get-Content ${testFilesPath}Dockerfile.test).Replace("{image}", $fullSdkTag).Replace("{dotnetNewParam}", $dotnetNewParam) `
-            | docker build $optionalDockerBuildArgs -t $buildImage -
-        }
-
-        Write-Host "----- Running app built on $fullSdkTag -----"
-        exec { docker run --rm $buildImage dotnet run }
-
         Try {
+            exec { (Get-Content ${testFilesPath}Dockerfile.test).Replace("{image}", $fullSdkTag).Replace("{dotnetNewParam}", $dotnetNewParam) `
+                | docker build $optionalDockerBuildArgs -t $buildImage -
+            }
+
+            Write-Host "----- Running app built on $fullSdkTag -----"
+            exec { docker run --rm $buildImage dotnet run }
+
             $framworkDepVol = "framework-dep-publish-$appName"
             Write-Host "----- Publishing framework-dependant app built on $fullSdkTag to volume $framworkDepVol -----"
-            exec { docker run --rm `
-                -v ${framworkDepVol}:"${containerRoot}volume" `
-                $buildImage `
-                dotnet publish -o ${containerRoot}volume 
-            }
-
-            Write-Host "----- Testing on $baseTag-runtime$tagSuffix with $sdkTag framework-dependent app -----"
-            exec { docker run --rm `
-                -v ${framworkDepVol}":${containerRoot}volume" `
-                "$baseTag-runtime$tagSuffix" `
-                dotnet "${containerRoot}volume${platformDirSeparator}test.dll"
-            }
-        }
-        Finally {
-            docker volume rm $framworkDepVol
-        }
-
-        if ($platform -eq "linux") {
-            $selfContainedImage = "self-contained-build-${buildImage}"
-            $optionalRestoreParams = ""
-            if ($sdkTag -like "*1.1-sdk") {
-                # Temporary workaround until 1.1.1 packages are released on NuGet.org
-                $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
-            }
-
-            Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
-            exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage).Replace("{optionalRestoreParams}", $optionalRestoreParams) `
-                | docker build $optionalDockerBuildArgs -t $selfContainedImage -
-            }
-
             Try {
-                $selfContainedVol = "self-contained-publish-$appName"
-                Write-Host "----- Publishing self-contained published app built on $fullSdkTag to volume $selfContainedVol using image $selfContainedImage -----"
                 exec { docker run --rm `
-                    -v ${selfContainedVol}":${containerRoot}volume" `
-                    $selfContainedImage `
-                    dotnet publish -r debian.8-x64 -o ${containerRoot}volume
+                    -v ${framworkDepVol}:"${containerRoot}volume" `
+                    $buildImage `
+                    dotnet publish -o ${containerRoot}volume 
                 }
 
-                if ($sdkTag -like "*2.0-sdk") {
-                    # Temporary workaround https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/dogfooding.md#option-2-self-contained
-                    exec { docker run --rm `
-                        -v ${selfContainedVol}":${containerRoot}volume" `
-                        $selfContainedImage `
-                        chmod u+x ${containerRoot}volume${platformDirSeparator}test
-                    }
-                }
-
-                Write-Host "----- Testing $baseTag-runtime-deps$tagSuffix with $sdkTag self-contained app -----"
-                exec { docker run -t --rm `
-                    -v ${selfContainedVol}":${containerRoot}volume" `
-                    ${baseTag}-runtime-deps$tagSuffix `
-                    ${containerRoot}volume${platformDirSeparator}test 
+                Write-Host "----- Testing on $baseTag-runtime$tagSuffix with $sdkTag framework-dependent app -----"
+                exec { docker run --rm `
+                    -v ${framworkDepVol}":${containerRoot}volume" `
+                    "$baseTag-runtime$tagSuffix" `
+                    dotnet "${containerRoot}volume${platformDirSeparator}test.dll"
                 }
             }
             Finally {
-                docker volume rm $selfContainedVol
+                docker volume rm $framworkDepVol
             }
+
+            if ($platform -eq "linux") {
+                $selfContainedImage = "self-contained-build-${buildImage}"
+                $optionalRestoreParams = ""
+                if ($sdkTag -like "*1.1-sdk") {
+                    # Temporary workaround until 1.1.1 packages are released on NuGet.org
+                    $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
+                }
+
+                Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
+                Try {
+                    exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage).Replace("{optionalRestoreParams}", $optionalRestoreParams) `
+                        | docker build $optionalDockerBuildArgs -t $selfContainedImage -
+                    }
+
+                    $selfContainedVol = "self-contained-publish-$appName"
+                    Write-Host "----- Publishing self-contained published app built on $fullSdkTag to volume $selfContainedVol using image $selfContainedImage -----"
+                    Try {
+                        exec { docker run --rm `
+                            -v ${selfContainedVol}":${containerRoot}volume" `
+                            $selfContainedImage `
+                            dotnet publish -r debian.8-x64 -o ${containerRoot}volume
+                        }
+
+                        if ($sdkTag -like "*2.0-sdk") {
+                            # Temporary workaround https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/dogfooding.md#option-2-self-contained
+                            exec { docker run --rm `
+                                -v ${selfContainedVol}":${containerRoot}volume" `
+                                $selfContainedImage `
+                                chmod u+x ${containerRoot}volume${platformDirSeparator}test
+                            }
+                        }
+
+                        Write-Host "----- Testing $baseTag-runtime-deps$tagSuffix with $sdkTag self-contained app -----"
+                        exec { docker run -t --rm `
+                            -v ${selfContainedVol}":${containerRoot}volume" `
+                            ${baseTag}-runtime-deps$tagSuffix `
+                            ${containerRoot}volume${platformDirSeparator}test
+                        }
+                    }
+                    Finally {
+                        docker volume rm $selfContainedVol
+                    }
+                }
+                Finally {
+                    docker image rm $selfContainedImage
+                }
+            }
+        }
+        Finally {
+            docker image rm $buildImage
         }
     }
