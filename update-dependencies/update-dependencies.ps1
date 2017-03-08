@@ -4,7 +4,7 @@
 #
 
 param(
-    [string]$CliBranch="rel/1.0.0",
+    [string]$CliBranch="rel/1.0.1",
     [string]$DotnetInstallDir,
     [string[]]$EnvVars=@(),
     [switch]$Help)
@@ -42,7 +42,7 @@ if (!(Test-Path "$RepoRoot\artifacts"))
 $DOTNET_INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/dotnet/cli/$CliBranch/scripts/obtain/dotnet-install.ps1"
 Invoke-WebRequest $DOTNET_INSTALL_SCRIPT_URL -OutFile "$RepoRoot\artifacts\dotnet-install.ps1"
 
-& "$RepoRoot\artifacts\dotnet-install.ps1" -Channel "rel-1.0.0" -Version "1.0.0-preview3-003981" -Architecture $Architecture -InstallDir $DotnetInstallDir
+& "$RepoRoot\artifacts\dotnet-install.ps1" -Channel "rel-1.0.1" -Version "1.0.1" -Architecture $Architecture -InstallDir $DotnetInstallDir
 if($LASTEXITCODE -ne 0) { throw "Failed to install the .NET Core SDK" }
 
 pushd "$AppPath"
