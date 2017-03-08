@@ -104,11 +104,21 @@ namespace Dotnet.Docker.Nightly
 
         private static IDependencyUpdater CreateDependencyUpdater(string path)
         {
+            string versionRegex;
+            if (string.IsNullOrEmpty(s_config.CliReleaseMoniker))
+            {
+                versionRegex = $@"{s_config.CliReleasePrefix}-(?<version>[^\r\n]*)";
+            }
+            else
+            {
+                versionRegex = $@"[\d\.]*-(?<version>{s_config.CliReleaseMoniker}-\d+)\r\n";
+            }
+
             return new FileRegexReleaseUpdater()
             {
                 Path = path,
                 BuildInfoName = "Cli",
-                Regex = new Regex($@"ENV DOTNET_SDK_VERSION [\d\.]*-(?<version>{s_config.CliReleaseMoniker}-\d+)\r\n"),
+                Regex = new Regex($"ENV DOTNET_SDK_VERSION {versionRegex}"),
                 VersionGroupName = "version"
             };
         }
