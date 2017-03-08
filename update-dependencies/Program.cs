@@ -107,7 +107,7 @@ namespace Dotnet.Docker.Nightly
             string versionRegex;
             if (string.IsNullOrEmpty(s_config.CliReleaseMoniker))
             {
-                versionRegex = $@"(?<version>[^\r\n]*)";
+                versionRegex = $@"{s_config.CliReleasePrefix}-(?<version>[^\r\n]*)";
             }
             else
             {
