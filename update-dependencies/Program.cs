@@ -16,6 +16,8 @@ namespace Dotnet.Docker.Nightly
 {
     public static class Program
     {
+        private const string CliBuildInfoName = "Cli";
+        private const string SharedFrameworkBuildInfoName = "SharedFramework";
         private static readonly string s_repoRoot = Directory.GetCurrentDirectory();
         private static readonly Config s_config = Config.s_Instance;
         private static bool s_updateOnly = false;
@@ -34,7 +36,7 @@ namespace Dotnet.Docker.Nightly
                 }
             }
         }
-        
+
         private static bool ParseArgs(string[] args)
         {
             foreach (string arg in args)
@@ -63,25 +65,35 @@ namespace Dotnet.Docker.Nightly
 
         private static DependencyUpdateResults UpdateFiles()
         {
-            // The BuildInfo does not contain the CLI product version, so the version is retrieved from a
-            // particular CLI package (e.g. Microsoft.DotNet.Cli.Utils). Once the BuildInfo includes the
-            // product version, it should be utilized.
-            //
-            // This app does not update the version of the .NET Core runtime/framework in the Dockerfiles
-            // because the infrastructure is not in place to retrieve the version on which the SDK depends.
-            // This version is infrequently updated, so this is acceptable for now, but once the
-            // infrastructure is in place, this app should update the runtime/framework version also.
+            // Ideally this logic would depend on the CLI produces and consumes metadata.  Since it doesn't
+            // exist various version information is inspected to obtain the latest CLI version along with
+            // the runtime (e.g. shared framework) it depends on.
 
-            IEnumerable<BuildInfo> buildInfos = new[] { BuildInfo.Get("Cli", s_config.CliVersionUrl, fetchLatestReleaseFile: false) };
+            BuildInfo cliBuildInfo = BuildInfo.Get(CliBuildInfoName, s_config.CliVersionUrl, fetchLatestReleaseFile: false);
+            string sharedFrameworkVersion = CliDependencyHelper.GetSharedFrameworkVersion(
+                $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}");
+
+            IEnumerable<DependencyBuildInfo> buildInfos = new[]
+                {
+                    new DependencyBuildInfo(cliBuildInfo, false, Enumerable.Empty<string>()),
+                    new DependencyBuildInfo(
+                        new BuildInfo() {
+                            Name = SharedFrameworkBuildInfoName,
+                            LatestReleaseVersion = sharedFrameworkVersion,
+                            LatestPackages = new Dictionary<string, string>()
+                            },
+                        false,
+                        Enumerable.Empty<string>()),
+                };
             IEnumerable<IDependencyUpdater> updaters = GetUpdaters();
 
-            DependencyUpdater updater = new DependencyUpdater();
-            return updater.Update(updaters, buildInfos);
+            return DependencyUpdateUtils.Update(updaters, buildInfos);
         }
 
         private static Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
-            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {updateResults.UsedBuildInfos.Single().LatestReleaseVersion}";
+            string cliVersion = updateResults.UsedBuildInfos.First(bi => bi.Name == CliBuildInfoName).LatestReleaseVersion;
+            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {s_config.CliReleasePrefix}-{cliVersion}";
 
             GitHubAuth gitHubAuth = new GitHubAuth(s_config.Password, s_config.UserName, s_config.Email);
 
@@ -98,11 +110,12 @@ namespace Dotnet.Docker.Nightly
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters()
         {
-            return Directory.GetFiles(s_repoRoot, "Dockerfile", SearchOption.AllDirectories)
-                .Select(path => CreateDependencyUpdater(path));
+            string[] dockerfiles = Directory.GetFiles(s_repoRoot, "Dockerfile", SearchOption.AllDirectories);
+            return dockerfiles.Select(path => CreateSdkUpdater(path))
+                .Union(dockerfiles.Select(path => CreateRuntimeUpdater(path)));
         }
 
-        private static IDependencyUpdater CreateDependencyUpdater(string path)
+        private static IDependencyUpdater CreateSdkUpdater(string path)
         {
             string versionRegex;
             if (string.IsNullOrEmpty(s_config.CliReleaseMoniker))
@@ -117,8 +130,19 @@ namespace Dotnet.Docker.Nightly
             return new FileRegexReleaseUpdater()
             {
                 Path = path,
-                BuildInfoName = "Cli",
+                BuildInfoName = CliBuildInfoName,
                 Regex = new Regex($"ENV DOTNET_SDK_VERSION {versionRegex}"),
+                VersionGroupName = "version"
+            };
+        }
+
+        private static IDependencyUpdater CreateRuntimeUpdater(string path)
+        {
+            return new FileRegexReleaseUpdater()
+            {
+                Path = path,
+                BuildInfoName = SharedFrameworkBuildInfoName,
+                Regex = new Regex($@"ENV DOTNET_VERSION (?<version>{s_config.RuntimeReleasePrefix}-[^\r\n]*)"),
                 VersionGroupName = "version"
             };
         }

@@ -22,6 +22,7 @@ namespace Dotnet.Docker.Nightly
         private Lazy<string[]> _gitHubPullRequestNotifications = new Lazy<string[]>(() =>
                                                 GetEnvironmentVariable("GITHUB_PULL_REQUEST_NOTIFICATIONS", "")
                                                     .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries));
+        private Lazy<string> _runtimeReleasePrefix = new Lazy<string>(() => Environment.GetEnvironmentVariable("RUNTIME_RELEASE_PREFIX"));
 
         private Config()
         {
@@ -39,6 +40,7 @@ namespace Dotnet.Docker.Nightly
         public string GitHubProject => _gitHubProject.Value;
         public string GitHubUpstreamBranch => _gitHubUpstreamBranch.Value;
         public string[] GitHubPullRequestNotifications => _gitHubPullRequestNotifications.Value;
+        public string RuntimeReleasePrefix => _runtimeReleasePrefix.Value ?? CliReleasePrefix;
 
         private static string GetEnvironmentVariable(string name, string defaultValue = null)
         {

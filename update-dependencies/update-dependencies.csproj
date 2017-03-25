@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.DotNet.VersionTools" Version="1.0.26-prerelease-00708-05" />
+    <PackageReference Include="Microsoft.DotNet.VersionTools" Version="1.0.27-prerelease-01428-01" />
     <PackageReference Include="System.Diagnostics.TextWriterTraceListener" Version="4.0.0" />
+    <PackageReference Include="NuGet.Packaging.Core.Types" Version="4.0.0" />
+    <PackageReference Include="NuGet.Packaging" Version="4.0.0" />
   </ItemGroup>
 </Project>
