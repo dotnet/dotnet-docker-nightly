@@ -74,17 +74,18 @@ namespace Dotnet.Docker.Nightly
                 $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}");
 
             IEnumerable<DependencyBuildInfo> buildInfos = new[]
-                {
-                    new DependencyBuildInfo(cliBuildInfo, false, Enumerable.Empty<string>()),
-                    new DependencyBuildInfo(
-                        new BuildInfo() {
-                            Name = SharedFrameworkBuildInfoName,
-                            LatestReleaseVersion = sharedFrameworkVersion,
-                            LatestPackages = new Dictionary<string, string>()
-                            },
-                        false,
-                        Enumerable.Empty<string>()),
-                };
+            {
+                new DependencyBuildInfo(cliBuildInfo, false, Enumerable.Empty<string>()),
+                new DependencyBuildInfo(
+                    new BuildInfo() 
+                    {
+                        Name = SharedFrameworkBuildInfoName,
+                        LatestReleaseVersion = sharedFrameworkVersion,
+                        LatestPackages = new Dictionary<string, string>()
+                    },
+                    false,
+                    Enumerable.Empty<string>()),
+            };
             IEnumerable<IDependencyUpdater> updaters = GetUpdaters();
 
             return DependencyUpdateUtils.Update(updaters, buildInfos);
@@ -112,7 +113,7 @@ namespace Dotnet.Docker.Nightly
         {
             string[] dockerfiles = Directory.GetFiles(s_repoRoot, "Dockerfile", SearchOption.AllDirectories);
             return dockerfiles.Select(path => CreateSdkUpdater(path))
-                .Union(dockerfiles.Select(path => CreateRuntimeUpdater(path)));
+                .Concat(dockerfiles.Select(path => CreateRuntimeUpdater(path)));
         }
 
         private static IDependencyUpdater CreateSdkUpdater(string path)

@@ -21,7 +21,7 @@ namespace Dotnet.Docker.Nightly
 
             string cliCommitHash = GetCommitHash(cliVersion);
             XDocument depVersions = DownloadDependencyVersions(cliCommitHash).Result;
-            XNamespace msbuildNamespace = "http://schemas.microsoft.com/developer/msbuild/2003";
+            XNamespace msbuildNamespace = depVersions.Document.Root.GetDefaultNamespace();
             string sharedFrameworkVersion = depVersions.Document.Root
                 .Element(msbuildNamespace + "PropertyGroup")
                 ?.Element(msbuildNamespace + "CLI_SharedFrameworkVersion")
