@@ -14,11 +14,11 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`1.1.1-runtime-deps`, `1.1-runtime-deps`, `1-runtime-deps`, `runtime-deps` (*1.1/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/debian/runtime-deps/Dockerfile)
 - [`1.1.1-sdk`, `1.1-sdk`, `1-sdk`, `sdk`, `latest` (*1.1/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/debian/sdk/Dockerfile)
 - [`1.1.1-sdk-nanoserver`, `1.1-sdk-nanoserver`, `1-sdk-nanoserver`, `sdk-nanoserver`, `nanoserver` (*1.1/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/nanoserver/sdk/Dockerfile)
-- [`2.0.0-beta-runtime`, `2.0-runtime`, `2-runtime` (*2.0/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/debian/runtime/Dockerfile)
-- [`2.0.0-beta-runtime-nanoserver`, `2.0-runtime-nanoserver`, `2-runtime-nanoserver` (*2.0/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/nanoserver/runtime/Dockerfile)
-- [`2.0.0-beta-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps` (*2.0/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/debian/runtime-deps/Dockerfile)
-- [`2.0.0-beta-sdk`, `2.0-sdk`, `2-sdk` (*2.0/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/debian/sdk/Dockerfile)
-- [`2.0.0-beta-sdk-nanoserver`, `2.0-sdk-nanoserver`, `2-sdk-nanoserver` (*2.0/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/nanoserver/sdk/Dockerfile)
+- [`2.0.0-preview1-runtime`, `2.0-runtime`, `2-runtime` (*2.0/debian/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/debian/runtime/Dockerfile)
+- [`2.0.0-preview1-runtime-nanoserver`, `2.0-runtime-nanoserver`, `2-runtime-nanoserver` (*2.0/nanoserver/runtime/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/nanoserver/runtime/Dockerfile)
+- [`2.0.0-preview1-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps` (*2.0/debian/runtime-deps/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/debian/runtime-deps/Dockerfile)
+- [`2.0.0-preview1-sdk`, `2.0-sdk`, `2-sdk` (*2.0/debian/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/debian/sdk/Dockerfile)
+- [`2.0.0-preview1-sdk-nanoserver`, `2.0-sdk-nanoserver`, `2-sdk-nanoserver` (*2.0/nanoserver/sdk/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/nanoserver/sdk/Dockerfile)
 
 For more information about these images and their history, please see [the relevant Dockerfile (`dotnet/dotnet-docker-nightly`)](https://github.com/dotnet/dotnet-docker-nightly/search?utf8=%E2%9C%93&q=FROM&type=Code). These images are updated via [pull requests to the `dotnet/dotnet-docker-nightly` GitHub repo](https://github.com/dotnet/dotnet-docker-nightly/pulls?utf8=%E2%9C%93&q=).
 

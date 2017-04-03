@@ -3,7 +3,7 @@
 set -e
 
 echo "Pushing additional runtime-deps tags"
-imageName=$DOCKER_REPO":2.0.0-beta-runtime-deps"
+imageName=$DOCKER_REPO":2.0.0-preview1-runtime-deps"
 docker tag $IMAGE_NAME $imageName
 docker push $imageName
 
@@ -13,7 +13,7 @@ docker push $imageName
 
 
 echo "Pushing runtime tags"
-imageName=$DOCKER_REPO":2.0.0-beta-runtime"
+imageName=$DOCKER_REPO":2.0.0-preview1-runtime"
 docker tag runtime $imageName
 docker push $imageName
 
