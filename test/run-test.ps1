@@ -28,28 +28,24 @@ $platform = docker version -f "{{ .Server.Os }}"
 
 if ($platform -eq "windows") {
     $imageOs = "nanoserver"
-    $tagSuffix = "-nanoserver"
     $containerRoot = "C:\"
     $platformDirSeparator = '\'
 }
 else {
-    $imageOs = "debian"
-    $tagSuffix = ""
+    $imageOs = "jessie"
     $containerRoot = "/"
     $platformDirSeparator = '/'
 }
 
 # Loop through each sdk Dockerfile in the repo and test the sdk and runtime images.
 Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
-    where DirectoryName -like "*${dirSeparator}${imageOs}${dirSeparator}sdk" |
+    where DirectoryName -like "*${dirSeparator}sdk${dirSeparator}${imageOs}" |
     foreach {
         $sdkTag = $_.DirectoryName.
                 Replace("$repoRoot$dirSeparator", '').
                 Replace("$dirSeparator$imageOs", '').
-                Replace($dirSeparator, '-') +
-            $tagSuffix
+                Replace($dirSeparator, '-')
         $fullSdkTag = "${dockerRepo}:${sdkTag}"
-        $baseTag = $fullSdkTag.TrimEnd($tagSuffix).TrimEnd("-sdk")
 
         $timeStamp = Get-Date -Format FileDateTime
         $appName = "app$timeStamp".ToLower()
@@ -74,10 +70,11 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
                     dotnet publish -o ${containerRoot}volume
                 }
 
-                Write-Host "----- Testing on $baseTag-runtime$tagSuffix with $sdkTag framework-dependent app -----"
+                $runtimeTag = $fullSdkTag.Replace("sdk", "runtime")
+                Write-Host "----- Testing on $runtimeTag with $sdkTag framework-dependent app -----"
                 exec { docker run --rm `
                     -v ${framworkDepVol}":${containerRoot}volume" `
-                    "$baseTag-runtime$tagSuffix" `
+                    "$runtimeTag" `
                     dotnet "${containerRoot}volume${platformDirSeparator}test.dll"
                 }
             }
@@ -103,7 +100,7 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
                             dotnet publish -r debian.8-x64 -o ${containerRoot}volume
                         }
 
-                        if ($sdkTag -like "*2.0-sdk") {
+                        if ($sdkTag -like "2.0-sdk") {
                             # Temporary workaround https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/dogfooding.md#option-2-self-contained
                             exec { docker run --rm `
                                 -v ${selfContainedVol}":${containerRoot}volume" `
@@ -112,10 +109,11 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
                             }
                         }
 
-                        Write-Host "----- Testing $baseTag-runtime-deps$tagSuffix with $sdkTag self-contained app -----"
+                        $runtimeDepsTag = $fullSdkTag.Replace("sdk", "runtime-deps")
+                        Write-Host "----- Testing $runtimeDepsTag with $sdkTag self-contained app -----"
                         exec { docker run -t --rm `
                             -v ${selfContainedVol}":${containerRoot}volume" `
-                            ${baseTag}-runtime-deps$tagSuffix `
+                            $runtimeDepsTag `
                             ${containerRoot}volume${platformDirSeparator}test
                         }
                     }
