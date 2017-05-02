@@ -1,47 +1,47 @@
 {
-    "Repository": "dotnet-docker-nightly",
-    "Definitions": {
-        "Path": ".",
-        "Type": "VSTS",
-        "BaseUrl":  "https://devdiv.visualstudio.com/DefaultCollection"
-    },
-    "Pipelines": [
+  "Repository": "dotnet-docker-nightly",
+  "Definitions": {
+    "Path": ".",
+    "Type": "VSTS",
+    "BaseUrl": "https://devdiv.visualstudio.com/DefaultCollection"
+  },
+  "Pipelines": [
+    {
+      "Name": "Build Linux Images",
+      "Parameters": {
+        "TreatWarningsAsErrors": "false"
+      },
+      "Definitions": [
         {
-            "Name": "Build Linux Images",
-            "Parameters": {
-                "TreatWarningsAsErrors": "false"
-            },
-            "Definitions": [
-                {
-                    "Name": "dotnet-docker-nightly-linux-images"
-                }
-            ]
-        },
-        {
-            "Name": "Build Windows Images",
-            "Parameters": {
-                "TreatWarningsAsErrors": "false"
-            },
-            "Definitions": [
-                {
-                    "Name": "dotnet-docker-nightly-windows-images"
-                }
-            ]
-        },
-        {
-            "Name": "Publish Manifest",
-            "Parameters": {
-                "TreatWarningsAsErrors": "false"
-            },
-            "Definitions": [
-                {
-                    "Name": "dotnet-docker-nightly-manifest"
-                }
-            ],
-            "DependsOn": [
-                "Build Windows Images",
-                "Build Linux Images"
-            ]
+          "Name": "dotnet-docker-nightly-linux-images"
         }
-    ]
+      ]
+    },
+    {
+      "Name": "Build Windows Images",
+      "Parameters": {
+        "TreatWarningsAsErrors": "false"
+      },
+      "Definitions": [
+        {
+          "Name": "dotnet-docker-nightly-windows-images"
+        }
+      ]
+    },
+    {
+      "Name": "Publish Manifest",
+      "Parameters": {
+        "TreatWarningsAsErrors": "false"
+      },
+      "Definitions": [
+        {
+          "Name": "dotnet-docker-nightly-manifest"
+        }
+      ],
+      "DependsOn": [
+        "Build Windows Images",
+        "Build Linux Images"
+      ]
+    }
+  ]
 }

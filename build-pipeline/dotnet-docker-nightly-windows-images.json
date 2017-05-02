@@ -191,6 +191,10 @@
     },
     "image-builder.containerName": {
       "value": "dotnet-docker-nightly-linux-$(Build.BuildId)"
+    },
+    "PB.docker.password": {
+      "value": null,
+      "isSecret": true
     }
   },
   "demands": [
