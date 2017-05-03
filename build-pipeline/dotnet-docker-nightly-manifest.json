@@ -125,7 +125,7 @@
       "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie"
     },
     "image-builder.args": {
-      "value": "--command manifest --repo-info repo-info.json --username $(PB.docker.username) --password $(PB.docker.password)",
+      "value": "--command PublishManifest --manifest manifest.json --username $(PB.docker.username) --password $(PB.docker.password)",
       "allowOverride": true
     },
     "image-builder.containerName": {
