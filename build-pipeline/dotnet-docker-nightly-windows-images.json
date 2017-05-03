@@ -73,7 +73,7 @@
       },
       "inputs": {
         "filename": "docker ",
-        "arguments": "cp $(image-builder.containerName):/out $(Build.BinariesDirectory)/image-builder",
+        "arguments": "cp $(image-builder.containerName):/out $(Build.BinariesDirectory)/Microsoft.DotNet.ImageBuilder",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
@@ -110,7 +110,7 @@
         "definitionType": "task"
       },
       "inputs": {
-        "filename": "$(Build.BinariesDirectory)/image-builder/image-builder.exe",
+        "filename": "$(Build.BinariesDirectory)/Microsoft.DotNet.ImageBuilder/Microsoft.DotNet.ImageBuilder.exe",
         "arguments": "$(image-builder.args)",
         "workingFolder": "",
         "failOnStandardError": "false"
