@@ -84,10 +84,17 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
 
             if ($platform -eq "linux") {
                 $selfContainedImage = "self-contained-build-${buildImage}"
+                $optionalRestoreParams = ""
+                if ($sdkTag -like "2.0-sdk") {
+                    # Temporary workaround until 2.0 packages are released on NuGet.org
+                    $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
+                }
 
                 Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
                 Try {
-                    exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).Replace("{image}", $buildImage) `
+                    exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).
+                                Replace("{image}", $buildImage).
+                                Replace("{optionalRestoreParams}", $optionalRestoreParams) `
                         | docker build $optionalDockerBuildArgs -t $selfContainedImage -
                     }
 
