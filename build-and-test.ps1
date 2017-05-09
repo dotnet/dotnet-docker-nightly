@@ -20,11 +20,9 @@ $platform = docker version -f "{{ .Server.Os }}"
 
 if ($platform -eq "windows") {
     $imageOs = "nanoserver"
-    $tagSuffix = "-nanoserver"
 }
 else {
-    $imageOs = "debian"
-    $tagSuffix = ""
+    $imageOs = "jessie"
 }
 
 pushd $PSScriptRoot
@@ -39,8 +37,7 @@ Get-ChildItem -Recurse -Filter Dockerfile |
             $_.DirectoryName.
                 Replace("$PSScriptRoot$dirSeparator", '').
                 Replace("$dirSeparator$imageOs", '').
-                Replace($dirSeparator, '-') +
-            $tagSuffix
+                Replace($dirSeparator, '-')
         $tags.Add($tag) | Out-Null
         Write-Host "--- Building $tag from $($_.DirectoryName) ---"
         docker build $optionalDockerBuildArgs -t $tag $_.DirectoryName
