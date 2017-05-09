@@ -3,7 +3,8 @@
   "Definitions": {
     "Path": ".",
     "Type": "VSTS",
-    "BaseUrl": "https://devdiv.visualstudio.com/DefaultCollection"
+    "BaseUrl": "https://devdiv.visualstudio.com/DefaultCollection",
+    "SkipBranchAndVersionOverrides": "false"
   },
   "Pipelines": [
     {
@@ -29,13 +30,13 @@
       ]
     },
     {
-      "Name": "Publish Manifest",
+      "Name": "Post Image Build",
       "Parameters": {
         "TreatWarningsAsErrors": "false"
       },
       "Definitions": [
         {
-          "Name": "dotnet-docker-nightly-manifest"
+          "Name": "dotnet-docker-nightly-post-image-build"
         }
       ],
       "DependsOn": [

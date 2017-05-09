@@ -1,5 +1,6 @@
 {
   "DockerRepo": "microsoft/dotnet-nightly",
+  "ReadmePath": "README.md",
   "TestCommands": {
     "linux": [
       "docker build --rm -t testrunner -f ./test/Dockerfile.linux.testrunner .",
