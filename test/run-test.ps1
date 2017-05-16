@@ -22,9 +22,13 @@ else {
 
 $dirSeparator = [IO.Path]::DirectorySeparatorChar
 $repoRoot = Split-Path -Parent $PSScriptRoot
-$dockerRepo = (Get-Content "${repoRoot}${dirSeparator}manifest.json" | ConvertFrom-Json).DockerRepo
+$manifestPath = [IO.Path]::combine(${repoRoot}, "manifest.json")
+$dockerRepo = (Get-Content $manifestPath | ConvertFrom-Json).DockerRepo
 $testFilesPath = "$PSScriptRoot$dirSeparator"
 $platform = docker version -f "{{ .Server.Os }}"
+
+# update as appropriate (e.g. "2.0-sdk") whenever pre-release packages are referenced prior to being available on NuGet.org.
+$includePrereleasePackageSourceForSdkTag = $null
 
 if ($platform -eq "windows") {
     $imageOs = "nanoserver"
@@ -85,10 +89,9 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
             if ($platform -eq "linux") {
                 $selfContainedImage = "self-contained-build-${buildImage}"
                 $optionalRestoreParams = ""
-                # Enable and update as appropriate whenever pre-release packages are referenced prior to being available on NuGet.org.
-                # if ($sdkTag -like "<???>-sdk") {
-                #     $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
-                # }
+                if ($sdkTag -like $includePrereleasePackageSourceForSdkTag) {
+                    $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
+                }
 
                 Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
                 Try {
