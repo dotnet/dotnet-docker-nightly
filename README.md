@@ -59,21 +59,10 @@ docker run microsoft/dotnet-samples
 
 For production scenarios, you will want to deploy and run a pre-built application with a .NET Core Runtime image. This results in smaller Docker images compared to the SDK image. The SDK is not needed for production scenarios. You can try the instructions below or use the [dotnetapp-prod sample](https://github.com/dotnet/dotnet-docker-samples/tree/master/dotnetapp-prod) if you want to try a pre-made version that's ready go.
 
-You need to create a `Dockerfile`. Start by taking a dependency on a .NET Core runtime image by adding a `FROM` line to your `Dockerfile`:
+You need to create a `Dockerfile` with the following:
 
 ```dockerfile
 FROM microsoft/dotnet-nightly:runtime
-```
-
-For [Windows Containers][win-containers], you should instead include the following line in your `Dockerfile`:
-
-```dockerfile
-FROM microsoft/dotnet-nightly:runtime-nanoserver
-```
-
-Add the following additional lines to your Dockerfile.
-
-```dockerfile
 WORKDIR /dotnetapp
 COPY out .
 ENTRYPOINT ["dotnet", "dotnetapp.dll"]
@@ -99,21 +88,11 @@ The `Dockerfile` and the Docker commands assumes that your application is called
 
 You can use the .NET Core SDK Docker image as a build and runtime environment. It's a useful image for iterative development and the easiest way to get started using .NET Core with Docker. It isn't recommended for production since it's a bigger image than necessary, although it can work for that, too. You can try the instructions below or use the [dotnetapp-dev sample](https://github.com/dotnet/dotnet-docker-samples/tree/master/dotnetapp-dev) if you want to try a pre-made version that's ready go.
 
-In your Dockerfile, include the following line to reference the .NET Core SDK:
+Create a Dockerfile with following lines, which will both build and run your application in the container. This Dockerfile has been optimized (note the two `COPY` commands) to take advantage of Docker layering, resulting in faster image building for iterative development.
 
 ```dockerfile
 FROM microsoft/dotnet-nightly
-```
 
-For [Windows Containers](http://aka.ms/windowscontainers), you should instead include the Nanoserver version of the .NET Core SDK image:
-
-```dockerfile
-FROM microsoft/dotnet-nightly:nanoserver
-```
-
-Add the following additional lines to your Dockerfile, which will both build and run your application in the container. This Dockerfile has been optimized (note the two `COPY` commands) to take advantage of Docker layering, resulting in faster image building for iterative development.
-
-```dockerfile
 WORKDIR /dotnetapp
 
 # copy project.json and restore as distinct layers
@@ -154,11 +133,7 @@ dotnet out/app.dll
 exit
  ```
 
-The experience is very similar using [Windows Containers][win-containers]. The commands should be the same, with the exception of the `docker run` (specifically the image name), `ls` and the directory separators. Try the following `docker run` command, to replace the `docker run` command above:
-
-```console
-docker run -it --rm microsoft/dotnet-nightly:nanoserver
-```
+The experience is very similar using [Windows Containers][win-containers]. The commands should be the same, with the exception `ls` and the directory separators.
 
 The steps above are intended to show the basic functions of .NET Core tools. Try running `dotnet run` twice. You'll see that the second invocation skips compilation. The subsequent command after `dotnet run` demonstrates that you can run an application directly out of the bin folder, without the additional build logic that `dotnet run` adds. The last two commands demonstrate the publishing scenario, which prepares an app to be deployed on the same or other machine, with a requirement on only the .NET Core Runtime, not the larger SDK. Naturally, you don't have to exit immediately, but can continue to try out the product as long as you want.
 
@@ -189,10 +164,10 @@ exit
 
 After running `dotnet run` in the container, browse to `http://localhost:8000` in your host machine.
 
-The experience is very similar using [Windows Containers][win-containers]. The commands should be the same, with the exception of the `docker run` (specifically the image name). Replace the `docker run` command above with the following two commands:
+The experience is very similar using [Windows Containers][win-containers]. The commands should be the same, with the exception of the `docker run`. Replace the `docker run` command above with the following two commands:
 
  ```console
-docker run -e "ASPNETCORE_URLS=http://+:80" -it --rm microsoft/dotnet-nightly:nanoserver
+docker run -e "ASPNETCORE_URLS=http://+:80" -it --rm microsoft/dotnet-nightly
 ipconfig
  ```
 Copy the IP address from the output of `ipconfig`. After running `dotnet run` in the container, browse to that IP address in your browser on your host machine.
@@ -223,12 +198,6 @@ This image contains the .NET Core (runtime and libraries) and is optimized for r
 ### `microsoft/dotnet-nightly:<version>-runtime-deps`
 
 This image contains the operating system with all of the native dependencies needed by .NET Core. This is for  [self-contained](https://docs.microsoft.com/dotnet/articles/core/deploying/index) applications.
-
-### `microsoft/dotnet-nightly:<version>-nanoserver`
-
-There are multiple images for Windows Nanoserver, for .NET Core and Runtime distributions.
-
-For more information on Windows Containers and a getting started guide, please see: [Windows Containers Documentation](http://aka.ms/windowscontainers).
 
 ## More Examples using these Images
 
