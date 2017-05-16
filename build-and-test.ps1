@@ -6,8 +6,8 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$dockerRepo="microsoft/dotnet-nightly"
 $dirSeparator = [IO.Path]::DirectorySeparatorChar
+$dockerRepo = (Get-Content "manifest.json" | ConvertFrom-Json).DockerRepo
 
 if ($UseImageCache) {
     $optionalDockerBuildArgs = ""
