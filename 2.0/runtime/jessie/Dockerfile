@@ -6,8 +6,8 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 # Install .NET Core
-ENV DOTNET_VERSION 2.0.0-preview1-002111-00
-ENV DOTNET_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/release/2.0.0/Binaries/$DOTNET_VERSION/dotnet-linux-x64.$DOTNET_VERSION-portable.tar.gz
+ENV DOTNET_VERSION 2.0.0-preview2-25309-07
+ENV DOTNET_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/master/Binaries/$DOTNET_VERSION/dotnet-linux-x64.$DOTNET_VERSION.tar.gz
 
 RUN curl -SL $DOTNET_DOWNLOAD_URL --output dotnet.tar.gz \
     && mkdir -p /usr/share/dotnet \
