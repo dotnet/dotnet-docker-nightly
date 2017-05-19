@@ -28,7 +28,7 @@ $testFilesPath = "$PSScriptRoot$dirSeparator"
 $platform = docker version -f "{{ .Server.Os }}"
 
 # update as appropriate (e.g. "2.0-sdk") whenever pre-release packages are referenced prior to being available on NuGet.org.
-$includePrereleasePackageSourceForSdkTag = $null
+$includePrereleasePackageSourceForSdkTag = "2.0-sdk"
 
 if ($platform -eq "windows") {
     $imageOs = "nanoserver"
@@ -56,9 +56,17 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
         $buildImage = "sdk-build-$appName"
         $dotnetNewParam = "console --framework netcoreapp$($sdkTag.Split('-')[0])"
 
+        $optionalRestoreParams = ""
+        if ($sdkTag -like $includePrereleasePackageSourceForSdkTag) {
+            $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
+        }
+
         Write-Host "----- Testing create, restore and build with $fullSdkTag with image $buildImage -----"
         Try {
-            exec { (Get-Content ${testFilesPath}Dockerfile.test).Replace("{image}", $fullSdkTag).Replace("{dotnetNewParam}", $dotnetNewParam) `
+            exec { (Get-Content ${testFilesPath}Dockerfile.test).
+                    Replace("{image}", $fullSdkTag).
+                    Replace("{dotnetNewParam}", $dotnetNewParam).
+                    Replace("{optionalRestoreParams}", $optionalRestoreParams) `
                 | docker build $optionalDockerBuildArgs -t $buildImage -
             }
 
@@ -88,11 +96,6 @@ Get-ChildItem -Path $repoRoot -Recurse -Filter Dockerfile |
 
             if ($platform -eq "linux") {
                 $selfContainedImage = "self-contained-build-${buildImage}"
-                $optionalRestoreParams = ""
-                if ($sdkTag -like $includePrereleasePackageSourceForSdkTag) {
-                    $optionalRestoreParams = "-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json"
-                }
-
                 Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
                 Try {
                     exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).
