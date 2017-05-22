@@ -14,7 +14,7 @@
       },
       "Definitions": [
         {
-          "Name": "dotnet-docker-nightly-linux-images"
+          "Name": "dotnet-docker-linux-images"
         }
       ]
     },
@@ -25,7 +25,7 @@
       },
       "Definitions": [
         {
-          "Name": "dotnet-docker-nightly-windows-images"
+          "Name": "dotnet-docker-windows-images"
         }
       ]
     },
@@ -36,7 +36,7 @@
       },
       "Definitions": [
         {
-          "Name": "dotnet-docker-nightly-post-image-build"
+          "Name": "dotnet-docker-post-image-build"
         }
       ],
       "DependsOn": [
