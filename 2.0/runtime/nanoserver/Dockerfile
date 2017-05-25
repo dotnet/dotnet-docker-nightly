@@ -3,7 +3,7 @@ FROM microsoft/nanoserver:10.0.14393.1198
 SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPreference = 'SilentlyContinue';"]
 
 # Install .NET Core
-ENV DOTNET_VERSION 2.0.0-preview2-25319-02
+ENV DOTNET_VERSION 2.0.0-preview2-25324-03
 ENV DOTNET_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Runtime/$DOTNET_VERSION/dotnet-win-x64.$DOTNET_VERSION.zip
 
 RUN Invoke-WebRequest $Env:DOTNET_DOWNLOAD_URL -OutFile dotnet.zip; \
