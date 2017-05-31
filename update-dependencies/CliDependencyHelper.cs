@@ -64,7 +64,7 @@ namespace Dotnet.Docker.Nightly
 
         private static async Task<ZipArchive> DownloadCliInstaller(string version)
         {
-            string downloadUrl = $"https://dotnetcli.blob.core.windows.net/dotnet/Sdk/{version}/dotnet-dev-win-x64.{version}.zip";
+            string downloadUrl = $"https://dotnetcli.blob.core.windows.net/dotnet/Sdk/{version}/dotnet-dev-{version}-win-x64.zip";
             Stream nupkgStream = await DownloadClient.Value.GetStreamAsync(downloadUrl);
             return new ZipArchive(nupkgStream);
         }
