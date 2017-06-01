@@ -70,14 +70,15 @@ namespace Dotnet.Docker.Nightly
             // the runtime (e.g. shared framework) it depends on.
 
             BuildInfo cliBuildInfo = BuildInfo.Get(CliBuildInfoName, s_config.CliVersionUrl, fetchLatestReleaseFile: false);
-            string sharedFrameworkVersion = CliDependencyHelper.GetSharedFrameworkVersion(
-                $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}");
+            // Adjust the LatestReleaseVersion since it is not the full version and all consumers here need it to be.
+            cliBuildInfo.LatestReleaseVersion = $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}";
+            string sharedFrameworkVersion = CliDependencyHelper.GetSharedFrameworkVersion(cliBuildInfo.LatestReleaseVersion);
 
             IEnumerable<DependencyBuildInfo> buildInfos = new[]
             {
                 new DependencyBuildInfo(cliBuildInfo, false, Enumerable.Empty<string>()),
                 new DependencyBuildInfo(
-                    new BuildInfo() 
+                    new BuildInfo()
                     {
                         Name = SharedFrameworkBuildInfoName,
                         LatestReleaseVersion = sharedFrameworkVersion,
@@ -94,7 +95,7 @@ namespace Dotnet.Docker.Nightly
         private static Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
             string cliVersion = updateResults.UsedBuildInfos.First(bi => bi.Name == CliBuildInfoName).LatestReleaseVersion;
-            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {s_config.CliReleasePrefix}-{cliVersion}";
+            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {cliVersion}";
 
             GitHubAuth gitHubAuth = new GitHubAuth(s_config.Password, s_config.UserName, s_config.Email);
 
@@ -111,40 +112,25 @@ namespace Dotnet.Docker.Nightly
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters()
         {
-            string[] dockerfiles = Directory.GetFiles(s_repoRoot, "Dockerfile", SearchOption.AllDirectories);
-            return dockerfiles.Select(path => CreateSdkUpdater(path))
-                .Concat(dockerfiles.Select(path => CreateRuntimeUpdater(path)));
+            string majorMinorVersion = s_config.CliReleasePrefix.Substring(0, s_config.CliReleasePrefix.LastIndexOf('.'));
+            string searchFolder = Path.Combine(s_repoRoot, majorMinorVersion);
+            string[] dockerfiles = Directory.GetFiles(searchFolder, "Dockerfile", SearchOption.AllDirectories);
+            Trace.TraceInformation("Updating the following Dockerfiles:");
+            Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
+            return dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_SDK_VERSION", CliBuildInfoName))
+                .Concat(dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_VERSION", SharedFrameworkBuildInfoName)))
+                .Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
         }
 
-        private static IDependencyUpdater CreateSdkUpdater(string path)
-        {
-            string versionRegex;
-            if (string.IsNullOrEmpty(s_config.CliReleaseMoniker))
-            {
-                versionRegex = $@"{s_config.CliReleasePrefix}-(?<version>[^\r\n]*)";
-            }
-            else
-            {
-                versionRegex = $@"[\d\.]*-(?<version>{s_config.CliReleaseMoniker}-\d+)\r\n";
-            }
-
-            return new FileRegexReleaseUpdater()
-            {
-                Path = path,
-                BuildInfoName = CliBuildInfoName,
-                Regex = new Regex($"ENV DOTNET_SDK_VERSION {versionRegex}"),
-                VersionGroupName = "version"
-            };
-        }
-
-        private static IDependencyUpdater CreateRuntimeUpdater(string path)
+        private static IDependencyUpdater CreateDockerfileEnvUpdater(
+            string path, string envName, string buildInfoName)
         {
             return new FileRegexReleaseUpdater()
             {
                 Path = path,
-                BuildInfoName = SharedFrameworkBuildInfoName,
-                Regex = new Regex($@"ENV DOTNET_VERSION (?<version>{s_config.RuntimeReleasePrefix}-[^\r\n]*)"),
-                VersionGroupName = "version"
+                BuildInfoName = buildInfoName,
+                Regex = new Regex($"ENV {envName} (?<envValue>[^\r\n]*)"),
+                VersionGroupName = "envValue"
             };
         }
     }
