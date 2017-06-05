@@ -33,6 +33,7 @@ namespace Dotnet.Docker.Nightly
             string sha = null;
             usedBuildInfos = Enumerable.Empty<BuildInfo>();
 
+            Trace.TraceInformation($"DockerfileShaUpdater is processing '{Path}'.");
             string dockerfile = File.ReadAllText(Path);
 
             Regex versionRegex = new Regex($"ENV (?<name>DOTNET_[^\r\n]*VERSION) (?<value>[^\r\n]*)");
@@ -60,6 +61,14 @@ namespace Dotnet.Docker.Nightly
                         sha = reader.ReadToEnd();
                     }
                 }
+                else
+                {
+                    Trace.TraceInformation($"DockerfileShaUpdater no-op - checksum url not found.");
+                }
+            }
+            else
+            {
+                Trace.TraceInformation($"DockerfileShaUpdater no-op - dotnet url not found.");
             }
 
             return sha;
