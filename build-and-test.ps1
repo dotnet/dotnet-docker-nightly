@@ -6,9 +6,6 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$dirSeparator = [IO.Path]::DirectorySeparatorChar
-$dockerRepo = (Get-Content "manifest.json" | ConvertFrom-Json).Repos[0].Name
-
 if ($UseImageCache) {
     $optionalDockerBuildArgs = ""
 }
@@ -16,38 +13,38 @@ else {
     $optionalDockerBuildArgs = "--no-cache"
 }
 
+$manifest = Get-Content "manifest.json" | ConvertFrom-Json
+$manifestRepo = $manifest.Repos[0]
 $platform = docker version -f "{{ .Server.Os }}"
+$builtTags = [System.Collections.ArrayList]@()
 
-if ($platform -eq "windows") {
-    $imageOs = "nanoserver"
-}
-else {
-    $imageOs = "jessie"
-}
+$manifestRepo.Images |
+    ForEach-Object {
+        $images = $_
+        ForEach-Object {$_.Platforms} |
+            Where-Object {[bool]($_.PSobject.Properties.name -match $platform)} |
+            ForEach-Object {
+                $dockerfilePath = $_.$platform.dockerfile
+                $tags = $_.$platform.Tags
+                if ([bool]($images.PSobject.Properties.name -match "sharedTags")) {
+                    $tags += $images.sharedTags
+                }
 
-pushd $PSScriptRoot
+                $qualifiedTags = $tags | ForEach-Object {
+                    $_ = $manifestRepo.Name + ':' + $_.Replace('$(nanoServerVersion)', $manifest.TagVariables.NanoServerVersion)
+                    $_
+                }
+                $formattedTags = $qualifiedTags -join ', '
+                Write-Host "--- Building $formattedTags from $dockerfilePath ---"
+                Invoke-Expression "docker build $optionalDockerBuildArgs -t $($qualifiedTags -join ' -t ') $dockerfilePath"
+                if ($LastExitCode -ne 0) {
+                    throw "Failed building $formattedTags"
+                }
 
-$tags = [System.Collections.ArrayList]@()
-Get-ChildItem -Recurse -Filter Dockerfile |
-    where {$_.DirectoryName.TrimStart($PSScriptRoot) -like "*$dirSeparator$imageOs*"} |
-    # sort in descending order to ensure runtime-deps get built before runtime to satisfy dependency
-    Sort-Object {$_.DirectoryName} -Descending |
-    foreach {
-        $tag = "${dockerRepo}:" +
-            $_.DirectoryName.
-                Replace("$PSScriptRoot$dirSeparator", '').
-                Replace("$dirSeparator$imageOs", '').
-                Replace($dirSeparator, '-')
-        $tags.Add($tag) | Out-Null
-        Write-Host "--- Building $tag from $($_.DirectoryName) ---"
-        docker build $optionalDockerBuildArgs -t $tag $_.DirectoryName
-        if (-NOT $?) {
-            throw "Failed building $tag"
-        }
+                $builtTags.Add($formattedTags) | Out-Null
+            }
     }
-
-popd
 
 ./test/run-test.ps1 -UseImageCache:$UseImageCache
 
-Write-Host "Tags built and tested:`n$($tags | Out-String)"
+Write-Host "Tags built and tested:`n$($builtTags | Out-String)"

@@ -233,6 +233,42 @@
               ]
             }
           }
+        },
+        {
+          "platforms": {
+            "linux": {
+              "dockerfile": "2.0/runtime-deps/stretch",
+              "tags": [
+                "2.0.0-preview2-runtime-deps-stretch",
+                "2.0-runtime-deps-stretch",
+                "2-runtime-deps-stretch"
+              ]
+            }
+          }
+        },
+        {
+          "platforms": {
+            "linux": {
+              "dockerfile": "2.0/runtime/stretch",
+              "tags": [
+                "2.0.0-preview2-runtime-stretch",
+                "2.0-runtime-stretch",
+                "2-runtime-stretch"
+              ]
+            }
+          }
+        },
+        {
+          "platforms": {
+            "linux": {
+              "dockerfile": "2.0/sdk/stretch",
+              "tags": [
+                "2.0.0-preview2-sdk-stretch",
+                "2.0-sdk-stretch",
+                "2-sdk-stretch"
+              ]
+            }
+          }
         }
       ]
     }
