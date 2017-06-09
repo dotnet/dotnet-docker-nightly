@@ -16,12 +16,12 @@ else {
 $manifest = Get-Content "manifest.json" | ConvertFrom-Json
 $manifestRepo = $manifest.Repos[0]
 $platform = docker version -f "{{ .Server.Os }}"
-$builtTags = [System.Collections.ArrayList]@()
+$builtTags = @()
 
 $manifestRepo.Images |
     ForEach-Object {
         $images = $_
-        ForEach-Object {$_.Platforms} |
+        $_.Platforms |
             Where-Object {[bool]($_.PSobject.Properties.name -match $platform)} |
             ForEach-Object {
                 $dockerfilePath = $_.$platform.dockerfile
@@ -31,8 +31,7 @@ $manifestRepo.Images |
                 }
 
                 $qualifiedTags = $tags | ForEach-Object {
-                    $_ = $manifestRepo.Name + ':' + $_.Replace('$(nanoServerVersion)', $manifest.TagVariables.NanoServerVersion)
-                    $_
+                    $manifestRepo.Name + ':' + $_.Replace('$(nanoServerVersion)', $manifest.TagVariables.NanoServerVersion)
                 }
                 $formattedTags = $qualifiedTags -join ', '
                 Write-Host "--- Building $formattedTags from $dockerfilePath ---"
@@ -41,7 +40,7 @@ $manifestRepo.Images |
                     throw "Failed building $formattedTags"
                 }
 
-                $builtTags.Add($formattedTags) | Out-Null
+                $builtTags += $formattedTags
             }
     }
 
