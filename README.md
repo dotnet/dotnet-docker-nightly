@@ -21,16 +21,16 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
     - [`1.1.2-sdk-jessie` (*1.1/sdk/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/sdk/jessie/Dockerfile)
     - [`1.1.2-sdk-nanoserver` (*1.1/sdk/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/sdk/nanoserver/Dockerfile)
 - `2.0.0-preview2-runtime`, `2.0-runtime`, `2-runtime`:
-    - [`2.0.0-preview2-runtime-jessie` (*2.0/runtime/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/jessie/Dockerfile)
+    - [`2.0.0-preview2-runtime-stretch` (*2.0/runtime/stretch/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/stretch/Dockerfile)
     - [`2.0.0-preview2-runtime-nanoserver` (*2.0/runtime/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/nanoserver/Dockerfile)
-- [`2.0.0-preview2-runtime-stretch`, `2.0-runtime-stretch`, `2-runtime-stretch` (*2.0/runtime/stretch/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/stretch/Dockerfile)
+- [`2.0.0-preview2-runtime-jessie`, `2.0-runtime-jessie`, `2-runtime-jessie` (*2.0/runtime/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/jessie/Dockerfile)
 - `2.0.0-preview2-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps`:
-    - [`2.0.0-preview2-runtime-deps-jessie` (*2.0/runtime-deps/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/jessie/Dockerfile)
-- [`2.0.0-preview2-runtime-deps-stretch`, `2.0-runtime-deps-stretch`, `2-runtime-deps-stretch`  (*2.0/runtime-deps/stretch/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/stretch/Dockerfile)
+    - [`2.0.0-preview2-runtime-deps-stretch` (*2.0/runtime-deps/stretch/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/stretch/Dockerfile)
+- [`2.0.0-preview2-runtime-deps-jessie`, `2.0-runtime-deps-jessie`, `2-runtime-deps-jessie`  (*2.0/runtime-deps/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/jessie/Dockerfile)
 - `2.0.0-preview2-sdk`, `2.0-sdk`, `2-sdk`:
-    - [`2.0.0-preview2-sdk-jessie` (*2.0/sdk/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/jessie/Dockerfile)
+    - [`2.0.0-preview2-sdk-stretch` (*2.0/sdk/stretch/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/stretch/Dockerfile)
     - [`2.0.0-preview2-sdk-nanoserver` (*2.0/sdk/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver/Dockerfile)
-- [`2.0.0-preview2-sdk-stretch`, `2.0-sdk-stretch`, `2-sdk-stretch` (*2.0/sdk/stretch/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/stretch/Dockerfile)
+- [`2.0.0-preview2-sdk-jessie`, `2.0-sdk-jessie`, `2-sdk-jessie` (*2.0/sdk/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/jessie/Dockerfile)
 
 For more information about these images and their history, please see [the relevant Dockerfile (`dotnet/dotnet-docker-nightly`)](https://github.com/dotnet/dotnet-docker-nightly/search?utf8=%E2%9C%93&q=FROM&type=Code). These images are updated via [pull requests to the `dotnet/dotnet-docker-nightly` GitHub repo](https://github.com/dotnet/dotnet-docker-nightly/pulls?utf8=%E2%9C%93&q=).
 

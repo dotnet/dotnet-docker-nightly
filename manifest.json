@@ -175,9 +175,9 @@
           ],
           "platforms": {
             "linux": {
-              "dockerfile": "2.0/runtime-deps/jessie",
+              "dockerfile": "2.0/runtime-deps/stretch",
               "tags": [
-                "2.0.0-preview2-runtime-deps-jessie"
+                "2.0.0-preview2-runtime-deps-stretch"
               ]
             }
           }
@@ -190,9 +190,9 @@
           ],
           "platforms": {
             "linux": {
-              "dockerfile": "2.0/runtime/jessie",
+              "dockerfile": "2.0/runtime/stretch",
               "tags": [
-                "2.0.0-preview2-runtime-jessie"
+                "2.0.0-preview2-runtime-stretch"
               ]
             },
             "windows": {
@@ -216,9 +216,9 @@
           ],
           "platforms": {
             "linux": {
-              "dockerfile": "2.0/sdk/jessie",
+              "dockerfile": "2.0/sdk/stretch",
               "tags": [
-                "2.0.0-preview2-sdk-jessie"
+                "2.0.0-preview2-sdk-stretch"
               ]
             },
             "windows": {
@@ -237,11 +237,11 @@
         {
           "platforms": {
             "linux": {
-              "dockerfile": "2.0/runtime-deps/stretch",
+              "dockerfile": "2.0/runtime-deps/jessie",
               "tags": [
-                "2.0.0-preview2-runtime-deps-stretch",
-                "2.0-runtime-deps-stretch",
-                "2-runtime-deps-stretch"
+                "2.0.0-preview2-runtime-deps-jessie",
+                "2.0-runtime-deps-jessie",
+                "2-runtime-deps-jessie"
               ]
             }
           }
@@ -249,11 +249,11 @@
         {
           "platforms": {
             "linux": {
-              "dockerfile": "2.0/runtime/stretch",
+              "dockerfile": "2.0/runtime/jessie",
               "tags": [
-                "2.0.0-preview2-runtime-stretch",
-                "2.0-runtime-stretch",
-                "2-runtime-stretch"
+                "2.0.0-preview2-runtime-jessie",
+                "2.0-runtime-jessie",
+                "2-runtime-jessie"
               ]
             }
           }
@@ -261,11 +261,11 @@
         {
           "platforms": {
             "linux": {
-              "dockerfile": "2.0/sdk/stretch",
+              "dockerfile": "2.0/sdk/jessie",
               "tags": [
-                "2.0.0-preview2-sdk-stretch",
-                "2.0-sdk-stretch",
-                "2-sdk-stretch"
+                "2.0.0-preview2-sdk-jessie",
+                "2.0-sdk-jessie",
+                "2-sdk-jessie"
               ]
             }
           }
