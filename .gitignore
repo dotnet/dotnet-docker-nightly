@@ -2,15 +2,11 @@
 [Bb]in/
 [Oo]bj/
 
-# DNX
-project.lock.json
+# cache for misc downloads
 artifacts/
 
 # dotnet install directory
 .dotnet/
-
-# test assets
-.test-assets/
 
  # Visual Studio 2015 cache/options directory
 .vs/

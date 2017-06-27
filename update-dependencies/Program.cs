@@ -24,16 +24,23 @@ namespace Dotnet.Docker.Nightly
 
         public static void Main(string[] args)
         {
-            Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
-
-            if (ParseArgs(args))
+            try
             {
-                DependencyUpdateResults updateResults = UpdateFiles();
+                Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-                if (!s_updateOnly && updateResults.ChangesDetected())
+                if (ParseArgs(args))
                 {
-                    CreatePullRequest(updateResults).Wait();
+                    DependencyUpdateResults updateResults = UpdateFiles();
+
+                    if (!s_updateOnly && updateResults.ChangesDetected())
+                    {
+                        CreatePullRequest(updateResults).Wait();
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Console.Error.WriteLine($"Failed to update dependencies:{Environment.NewLine}{e.ToString()}");
             }
         }
 

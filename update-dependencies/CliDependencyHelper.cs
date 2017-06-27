@@ -39,7 +39,7 @@ namespace Dotnet.Docker.Nightly
         {
             using (ZipArchive archive = DownloadCliInstaller(cliVersion).Result)
             {
-                ZipArchiveEntry versionTxtEntry = archive.GetEntry($"sdk/{cliVersion}/.version");
+                ZipArchiveEntry versionTxtEntry = archive.GetEntry($"sdk\\{cliVersion}\\.version");
                 if (versionTxtEntry == null)
                 {
                     throw new InvalidOperationException("Can't find `.version` information in installer.");
