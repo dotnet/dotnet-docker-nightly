@@ -14,7 +14,7 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`2.0.0-preview3-runtime-jessie`, `2.0-runtime-jessie`, `2-runtime-jessie` (*2.0/runtime/jessie/Dockerfile*)](2.0/runtime/jessie/Dockerfile)
 - [`2.0.0-preview3-runtime-deps-stretch`, `2.0.0-preview3-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps` (*2.0/runtime-deps/stretch/amd64/Dockerfile*)](2.0/runtime-deps/stretch/amd64/Dockerfile)
 - [`2.0.0-preview3-runtime-deps-jessie`, `2.0-runtime-deps-jessie`, `2-runtime-deps-jessie` (*2.0/runtime-deps/jessie/Dockerfile*)](2.0/runtime-deps/jessie/Dockerfile)
-- [`2.0.0-preview3-sdk-stretch`, `2.0.0-preview3-sdk`, `2.0-sdk`, `2-sdk` (*2.0/sdk/stretch/amd64/Dockerfile*)](2.0/sdk/stretch/amd64/Dockerfile)
+- [`2.0.0-preview3-sdk-stretch`, `2.0.0-preview3-sdk`, `2.0-sdk`, `2-sdk` (*2.0/sdk/stretch/amd64/Dockerfile*)](2.0/sdk/stretch/Dockerfile)
 - [`2.0.0-preview3-sdk-jessie`, `2.0-sdk-jessie`, `2-sdk-jessie` (*2.0/sdk/jessie/Dockerfile*)](2.0/sdk/jessie/Dockerfile)
 
 # Supported Windows amd64 tags
