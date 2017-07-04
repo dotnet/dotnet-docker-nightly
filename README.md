@@ -24,7 +24,6 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`1.1.2-runtime-nanoserver`, `1.1.2-runtime`, `1.1-runtime`, `1-runtime`, `runtime` (*1.1/runtime/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/runtime/nanoserver/Dockerfile)
 - [`1.1.2-sdk-nanoserver`, `1.1.2-sdk`, `1.1-sdk`, `1-sdk`, `sdk`, `latest` (*1.1/sdk/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/sdk/nanoserver/Dockerfile)
 - [`2.0.0-preview3-runtime-nanoserver`, `2.0.0-preview3-runtime`, `2.0-runtime`, `2-runtime` (*2.0/runtime/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/nanoserver/Dockerfile)
-- [`2.0.0-preview3-runtime-deps-nanoserver`, `2.0.0-preview3-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps` (*2.0/runtime-deps/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/nanoserver/Dockerfile)
 - [`2.0.0-preview3-sdk-nanoserver`, `2.0.0-preview3-sdk`, `2.0-sdk`, `2-sdk` (*2.0/sdk/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver/Dockerfile)
 
 # Supported Linux arm32 tags
