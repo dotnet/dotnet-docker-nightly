@@ -298,6 +298,7 @@
             "2.0.0-preview3-sdk",
             "2.0-sdk",
             "2-sdk",
+            "sdk",
             "latest"
           ],
           "platforms": {

@@ -33,12 +33,13 @@ For production scenarios, you will want to deploy and run an application with a 
 You need to create a `Dockerfile` with the following:
 
 ```dockerfile
+# escape=`
 FROM microsoft/nanoserver-insider-dotnet:sdk AS build-env
 WORKDIR /dotnetapp
 
 # copy csproj and restore as distinct layers
 COPY *.csproj ./
-RUN dotnet restore
+RUN dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json
 
 # copy everything else and build
 COPY . ./
@@ -48,14 +49,14 @@ RUN dotnet publish -c Release -o out
 FROM microsoft/nanoserver-insider-dotnet:runtime 
 WORKDIR /dotnetapp
 COPY --from=build-env /dotnetapp/out ./
-ENTRYPOINT ["dotnet", "dotnetapp.dll"]
+ENTRYPOINT ["C:\\Program Files\\dotnet\\dotnet.exe", "dotnetapp.dll"]
 ```
 
 Build and run the Docker image:
 
 ```console
 docker build -t dotnetapp .
-docker run -it --rm dotnetapp
+docker run --rm dotnetapp
 ```
 
 The `Dockerfile` and the Docker commands assumes that your application is called `dotnetapp`. You can change the `Dockerfile` and the commands, as needed.
