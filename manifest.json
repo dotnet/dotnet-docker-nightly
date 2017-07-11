@@ -1,14 +1,14 @@
 {
   "tagVariables": {
-    "nanoServerVersion": "10.0.14393.1358"
+    "nanoServerVersion": "10.0.14393.1480"
   },
   "testCommands": {
     "linux": [
       "docker build --rm -t testrunner -f ./test/Dockerfile.linux.testrunner .",
-      "docker run -v /var/run/docker.sock:/var/run/docker.sock testrunner powershell -File ./test/run-test.ps1"
+      "docker run -v /var/run/docker.sock:/var/run/docker.sock testrunner powershell -File ./test/run-test.ps1 -Filter $(Filter)"
     ],
     "windows": [
-      "powershell -NoProfile -Command .\\test\\run-test.ps1"
+      "powershell -NoProfile -Command .\\test\\run-test.ps1 -Filter $(Filter)"
     ]
   },
   "repos": [
@@ -266,6 +266,47 @@
                 "2.0.0-preview3-sdk-jessie",
                 "2.0-sdk-jessie",
                 "2-sdk-jessie"
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "microsoft/nanoserver-insider-dotnet",
+      "readmePath": "2.0/runtime/nanoserver-insider/README.md",
+      "images": [
+        {
+          "sharedTags": [
+            "2.0.0-preview3-runtime",
+            "2.0-runtime",
+            "2-runtime",
+            "runtime"
+          ],
+          "platforms": {
+            "windows": {
+              "dockerfile": "2.0/runtime/nanoserver-insider",
+              "tags": [
+                "2.0.0-preview3-runtime-nanoserver",
+                "2.0.0-preview3-runtime-nanoserver-10.0.16237.1001"
+              ]
+            }
+          }
+        },
+        {
+          "sharedTags": [
+            "2.0.0-preview3-sdk",
+            "2.0-sdk",
+            "2-sdk",
+            "sdk",
+            "latest"
+          ],
+          "platforms": {
+            "windows": {
+              "dockerfile": "2.0/sdk/nanoserver-insider",
+              "tags": [
+                "2.0.0-preview3-sdk-nanoserver",
+                "2.0.0-preview3-sdk-nanoserver-10.0.16237.1001"
               ]
             }
           }
