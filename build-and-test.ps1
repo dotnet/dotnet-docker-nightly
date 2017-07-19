@@ -1,7 +1,8 @@
 [cmdletbinding()]
 param(
     [switch]$UseImageCache,
-    [string]$Filter
+    [string]$Filter,
+    [string]$Architecture
 )
 
 Set-StrictMode -Version Latest
@@ -16,18 +17,20 @@ else {
 
 $manifest = Get-Content "manifest.json" | ConvertFrom-Json
 $manifestRepo = $manifest.Repos[0]
-$platform = docker version -f "{{ .Server.Os }}"
+$activeOS = docker version -f "{{ .Server.Os }}"
 $builtTags = @()
 
 $manifestRepo.Images |
     ForEach-Object {
         $images = $_
         $_.Platforms |
-            Where-Object { [bool]($_.PSobject.Properties.name -match $platform) } |
-            Where-Object { [string]::IsNullOrEmpty($Filter) -or $_.$platform.dockerfile -like "$Filter*" } |
+            Where-Object { $_.os -eq "$activeOS" } |
+            Where-Object { [string]::IsNullOrEmpty($Filter) -or $_.dockerfile -like "$Filter*" } |
+            Where-Object { [string]::IsNullOrEmpty($Architecture) `
+                -or ( [bool]($_.PSobject.Properties.name -match "architecture") -and $_.architecture -eq "$Architecture" ) } |
             ForEach-Object {
-                $dockerfilePath = $_.$platform.dockerfile
-                $tags = $_.$platform.Tags
+                $dockerfilePath = $_.dockerfile
+                $tags = $_.Tags
                 if ([bool]($images.PSobject.Properties.name -match "sharedTags")) {
                     $tags += $images.sharedTags
                 }
