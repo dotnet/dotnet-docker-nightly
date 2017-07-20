@@ -26,7 +26,7 @@ $manifestRepo.Images |
         $_.Platforms |
             Where-Object { $_.os -eq "$activeOS" } |
             Where-Object { [string]::IsNullOrEmpty($Filter) -or $_.dockerfile -like "$Filter*" } |
-            Where-Object { [string]::IsNullOrEmpty($Architecture) `
+            Where-Object { ( [string]::IsNullOrEmpty($Architecture) -and -not [bool]($_.PSobject.Properties.name -match "architecture"))`
                 -or ( [bool]($_.PSobject.Properties.name -match "architecture") -and $_.architecture -eq "$Architecture" ) } |
             ForEach-Object {
                 $dockerfilePath = $_.dockerfile
