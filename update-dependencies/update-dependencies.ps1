@@ -4,7 +4,7 @@
 #
 
 param(
-    [string]$CliBranch="rel/1.0.1",
+    [string]$CliBranch="release/2.0.0",
     [string]$DotnetInstallDir,
     [string[]]$EnvVars=@(),
     [switch]$Help)
@@ -16,7 +16,7 @@ if($Help)
     Write-Host "Summary: Installs the .NET Core SDK and then compiles and runs update-dependencies.exe."
     Write-Host ""
     Write-Host "Options:"
-    Write-Host "  -CliBranch <branch_name>           The dotnet/cli branch to use for installing the .NET SDK. Defaults to 'rel/1.0.0'."
+    Write-Host "  -CliBranch <branch_name>           The dotnet/cli branch to use for installing the .NET SDK. Defaults to 'release/2.0.0'."
     Write-Host "  -DotnetInstallDir <path>           The directory in which to install the .NET SDK. Defaults to '`$RepoRoot\.dotnet\Windows\`$Architecture'."
     Write-Host "  -EnvVars <'V1=val1','V2=val2'...>  Comma separated list of environment variable name-value pairs"
     Write-Host "  -Help                              Display this help message"
@@ -42,7 +42,7 @@ if (!(Test-Path "$RepoRoot\artifacts"))
 $DOTNET_INSTALL_SCRIPT_URL="https://raw.githubusercontent.com/dotnet/cli/$CliBranch/scripts/obtain/dotnet-install.ps1"
 Invoke-WebRequest $DOTNET_INSTALL_SCRIPT_URL -OutFile "$RepoRoot\artifacts\dotnet-install.ps1"
 
-& "$RepoRoot\artifacts\dotnet-install.ps1" -Channel "rel-1.0.1" -Version "1.0.1" -Architecture $Architecture -InstallDir $DotnetInstallDir
+& "$RepoRoot\artifacts\dotnet-install.ps1" -Channel "release-2.0.0" -Version "2.0.0" -Architecture $Architecture -InstallDir $DotnetInstallDir
 if($LASTEXITCODE -ne 0) { throw "Failed to install the .NET Core SDK" }
 
 pushd "$AppPath"

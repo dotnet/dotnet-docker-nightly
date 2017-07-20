@@ -11,15 +11,29 @@ using System.Xml.Linq;
 
 namespace Dotnet.Docker.Nightly
 {
-    public static class CliDependencyHelper
+    public class CliDependencyHelper
     {
         private static readonly Lazy<HttpClient> DownloadClient = new Lazy<HttpClient>();
 
-        public static string GetSharedFrameworkVersion(string cliVersion)
-        {
-            Trace.TraceInformation($"Looking for the Shared Framework CLI '{cliVersion}' depends on.");
+        public string CliVersion { get; }
+        public int CliMajorVersion { get; }
 
-            string cliCommitHash = GetCommitHash(cliVersion);
+        public CliDependencyHelper(string cliVersion)
+        {
+            if (string.IsNullOrWhiteSpace(cliVersion))
+            {
+                throw new ArgumentNullException(nameof(cliVersion));
+            }
+
+            CliVersion = cliVersion;
+            CliMajorVersion = Int32.Parse(cliVersion.Substring(0, cliVersion.IndexOf('.')));
+        }
+
+        public string GetSharedFrameworkVersion()
+        {
+            Trace.TraceInformation($"Looking for the Shared Framework CLI '{CliVersion}' depends on.");
+
+            string cliCommitHash = GetCommitHash();
             XDocument depVersions = DownloadDependencyVersions(cliCommitHash).Result;
             XNamespace msbuildNamespace = depVersions.Document.Root.GetDefaultNamespace();
             string sharedFrameworkVersion = depVersions.Document.Root
@@ -35,11 +49,12 @@ namespace Dotnet.Docker.Nightly
             return sharedFrameworkVersion;
         }
 
-        private static string GetCommitHash(string cliVersion)
+        private string GetCommitHash()
         {
-            using (ZipArchive archive = DownloadCliInstaller(cliVersion).Result)
+            using (ZipArchive archive = DownloadCliInstaller().Result)
             {
-                ZipArchiveEntry versionTxtEntry = archive.GetEntry($"sdk\\{cliVersion}\\.version");
+                string zipEntryName = CliMajorVersion == 1 ? $"sdk/{CliVersion}/.version" : $"sdk\\{CliVersion}\\.version";
+                ZipArchiveEntry versionTxtEntry = archive.GetEntry(zipEntryName);
                 if (versionTxtEntry == null)
                 {
                     throw new InvalidOperationException("Can't find `.version` information in installer.");
@@ -55,16 +70,20 @@ namespace Dotnet.Docker.Nightly
             }
         }
 
-        private static async Task<XDocument> DownloadDependencyVersions(string cliHash)
+        private async Task<XDocument> DownloadDependencyVersions(string cliHash)
         {
-            string downloadUrl = $"https://raw.githubusercontent.com/dotnet-bot/cli/{cliHash}/build/DependencyVersions.props";
+            string dependenciesFileName = CliMajorVersion == 1 ? $"Microsoft.DotNet.Cli.DependencyVersions" : $"DependencyVersions";
+            string downloadUrl = $"https://raw.githubusercontent.com/dotnet-bot/cli/{cliHash}/build/{dependenciesFileName}.props";
+            Trace.TraceInformation($"Downloading `{downloadUrl}`");
             Stream stream = await DownloadClient.Value.GetStreamAsync(downloadUrl);
             return XDocument.Load(stream);
         }
 
-        private static async Task<ZipArchive> DownloadCliInstaller(string version)
+        private async Task<ZipArchive> DownloadCliInstaller()
         {
-            string downloadUrl = $"https://dotnetcli.blob.core.windows.net/dotnet/Sdk/{version}/dotnet-sdk-{version}-win-x64.zip";
+            string installerName = CliMajorVersion == 1 ? $"dotnet-dev-win-x64.{CliVersion}" : $"dotnet-sdk-{CliVersion}-win-x64";
+            string downloadUrl = $"https://dotnetcli.blob.core.windows.net/dotnet/Sdk/{CliVersion}/{installerName}.zip";
+            Trace.TraceInformation($"Downloading `{downloadUrl}`");
             Stream nupkgStream = await DownloadClient.Value.GetStreamAsync(downloadUrl);
             return new ZipArchive(nupkgStream);
         }

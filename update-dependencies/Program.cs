@@ -79,7 +79,8 @@ namespace Dotnet.Docker.Nightly
             BuildInfo cliBuildInfo = BuildInfo.Get(CliBuildInfoName, s_config.CliVersionUrl, fetchLatestReleaseFile: false);
             // Adjust the LatestReleaseVersion since it is not the full version and all consumers here need it to be.
             cliBuildInfo.LatestReleaseVersion = $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}";
-            string sharedFrameworkVersion = CliDependencyHelper.GetSharedFrameworkVersion(cliBuildInfo.LatestReleaseVersion);
+            CliDependencyHelper cliDependencyHelper = new CliDependencyHelper(cliBuildInfo.LatestReleaseVersion);
+            string sharedFrameworkVersion = cliDependencyHelper.GetSharedFrameworkVersion();
 
             IEnumerable<DependencyBuildInfo> buildInfos = new[]
             {
@@ -94,7 +95,7 @@ namespace Dotnet.Docker.Nightly
                     false,
                     Enumerable.Empty<string>()),
             };
-            IEnumerable<IDependencyUpdater> updaters = GetUpdaters();
+            IEnumerable<IDependencyUpdater> updaters = GetUpdaters(cliDependencyHelper);
 
             return DependencyUpdateUtils.Update(updaters, buildInfos);
         }
@@ -117,16 +118,33 @@ namespace Dotnet.Docker.Nightly
             return prCreator.CreateOrUpdateAsync(commitMessage, commitMessage, string.Empty);
         }
 
-        private static IEnumerable<IDependencyUpdater> GetUpdaters()
+        private static IEnumerable<IDependencyUpdater> GetUpdaters(CliDependencyHelper cliDependencyHelper)
         {
             string majorMinorVersion = s_config.CliReleasePrefix.Substring(0, s_config.CliReleasePrefix.LastIndexOf('.'));
-            string searchFolder = Path.Combine(s_repoRoot, majorMinorVersion);
-            string[] dockerfiles = Directory.GetFiles(searchFolder, "Dockerfile", SearchOption.AllDirectories);
+            string[] dockerfiles = GetDockerfiles(majorMinorVersion);
             Trace.TraceInformation("Updating the following Dockerfiles:");
             Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
-            return dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_SDK_VERSION", CliBuildInfoName))
-                .Concat(dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_VERSION", SharedFrameworkBuildInfoName)))
-                .Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
+            IEnumerable<IDependencyUpdater> updators = dockerfiles
+                .Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName))
+                .Concat(dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_VERSION", SharedFrameworkBuildInfoName)));
+
+            if (cliDependencyHelper.CliMajorVersion > 1)
+            {
+                updators = updators.Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
+            }
+            else if (s_config.CliReleasePrefix.StartsWith("1.1"))
+            {
+                dockerfiles = GetDockerfiles("1.0");
+                updators = updators.Concat(dockerfiles.Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName)));
+            }
+
+            return updators;
+        }
+
+        private static string[] GetDockerfiles(string version)
+        {
+            string searchFolder = Path.Combine(s_repoRoot, version);
+            return Directory.GetFiles(searchFolder, "Dockerfile", SearchOption.AllDirectories);
         }
 
         private static IDependencyUpdater CreateDockerfileEnvUpdater(
@@ -139,6 +157,11 @@ namespace Dotnet.Docker.Nightly
                 Regex = new Regex($"ENV {envName} (?<envValue>[^\r\n]*)"),
                 VersionGroupName = "envValue"
             };
+        }
+
+        private static IDependencyUpdater CreateSDKDockerfileEnvUpdater(string path, string buildInfoName)
+        {
+            return CreateDockerfileEnvUpdater(path, "DOTNET_SDK_VERSION", CliBuildInfoName);
         }
     }
 }
