@@ -49,6 +49,6 @@ $manifestRepo.Images |
             }
     }
 
-./test/run-test.ps1 -UseImageCache:$UseImageCache -Filter $Filter
+./test/run-test.ps1 -UseImageCache:$UseImageCache -Filter $Filter -Architecture $Architecture
 
 Write-Host "Tags built and tested:`n$($builtTags | Out-String)"
