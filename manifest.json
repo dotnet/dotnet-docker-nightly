@@ -196,7 +196,7 @@
               "dockerfile": "2.0/runtime-deps/stretch/arm32v7",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-runtime-deps-stretch-arm32v7",
+                "2.0.0-runtime-deps-stretch-arm32v7",
                 "2.0-runtime-deps-stretch-arm32v7",
                 "2-runtime-deps-stretch-arm32v7"
               ],
@@ -223,7 +223,7 @@
               "dockerfile": "2.0/runtime/stretch/arm32v7",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-runtime-stretch-arm32v7",
+                "2.0.0-runtime-stretch-arm32v7",
                 "2.0-runtime-stretch-arm32v7",
                 "2-runtime-stretch-arm32v7"
               ],
