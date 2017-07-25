@@ -122,18 +122,21 @@
       "allowOverride": true
     },
     "image-builder.imageName": {
-      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170720095714"
+      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170724144915"
     },
     "image-builder.args": {
-      "value": "--command build --manifest manifest.json --repo microsoft/dotnet-nightly --path $(PB.image-builder.path) --test-var Filter=$(PB.image-builder.path) --push --username $(PB.docker.username) --password $(PB.docker.password)",
+      "value": "--command build --manifest manifest.json --repo microsoft/dotnet-nightly --path $(PB.image-builder.path) --architecture arm --test-var Filter=$(PB.image-builder.path) --push --username $(PB.docker.username) --password $(PB.docker.password) $(PB.image-builder.customCommonArgs)",
       "allowOverride": true
     },
     "image-builder.containerName": {
-      "value": "dotnet-docker-nightly-linux-$(Build.BuildId)"
+      "value": "$(Build.DefinitionName)-$(Build.BuildId)"
     },
     "PB.docker.password": {
       "value": null,
       "isSecret": true
+    },
+    "PB.image-builder.customCommonArgs": {
+      "value": ""
     },
     "PB.image-builder.path": {
       "value": ""
@@ -194,7 +197,7 @@
     }
   },
   "id": 6214,
-  "name": "dotnet-docker-nightly-linux-images",
+  "name": "dotnet-docker-nightly-linux-arm32v7-images",
   "url": "https://devdiv.visualstudio.com/0bdbc590-a062-4c3f-b0f6-9383f67865ee/_apis/build/Definitions/6214",
   "path": "\\",
   "type": "build",
