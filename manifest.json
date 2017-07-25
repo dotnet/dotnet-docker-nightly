@@ -179,7 +179,7 @@
         },
         {
           "sharedTags": [
-            "2.0.0-preview3-runtime-deps",
+            "2.0.0-runtime-deps",
             "2.0-runtime-deps",
             "2-runtime-deps"
           ],
@@ -188,7 +188,7 @@
               "dockerfile": "2.0/runtime-deps/stretch/amd64",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-runtime-deps-stretch"
+                "2.0.0-runtime-deps-stretch"
               ]
             },
             {
@@ -206,7 +206,7 @@
         },
         {
           "sharedTags": [
-            "2.0.0-preview3-runtime",
+            "2.0.0-runtime",
             "2.0-runtime",
             "2-runtime"
           ],
@@ -215,7 +215,7 @@
               "dockerfile": "2.0/runtime/stretch/amd64",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-runtime-stretch"
+                "2.0.0-runtime-stretch"
               ]
             },
             {
@@ -233,8 +233,8 @@
               "dockerfile": "2.0/runtime/nanoserver/amd64",
               "os": "windows",
               "tags": [
-                "2.0.0-preview3-runtime-nanoserver",
-                "2.0.0-preview3-runtime-nanoserver-$(nanoServerVersion)",
+                "2.0.0-runtime-nanoserver",
+                "2.0.0-runtime-nanoserver-$(nanoServerVersion)",
                 "2.0-runtime-nanoserver",
                 "2.0-runtime-nanoserver-$(nanoServerVersion)",
                 "2-runtime-nanoserver",
@@ -245,7 +245,7 @@
         },
         {
           "sharedTags": [
-            "2.0.0-preview3-sdk",
+            "2.0.0-sdk",
             "2.0-sdk",
             "2-sdk"
           ],
@@ -254,15 +254,15 @@
               "dockerfile": "2.0/sdk/stretch/amd64",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-sdk-stretch"
+                "2.0.0-sdk-stretch"
               ]
             },
             {
               "dockerfile": "2.0/sdk/nanoserver/amd64",
               "os": "windows",
               "tags": [
-                "2.0.0-preview3-sdk-nanoserver",
-                "2.0.0-preview3-sdk-nanoserver-$(nanoServerVersion)",
+                "2.0.0-sdk-nanoserver",
+                "2.0.0-sdk-nanoserver-$(nanoServerVersion)",
                 "2.0-sdk-nanoserver",
                 "2.0-sdk-nanoserver-$(nanoServerVersion)",
                 "2-sdk-nanoserver",
@@ -277,7 +277,7 @@
               "dockerfile": "2.0/runtime-deps/jessie/amd64",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-runtime-deps-jessie",
+                "2.0.0-runtime-deps-jessie",
                 "2.0-runtime-deps-jessie",
                 "2-runtime-deps-jessie"
               ]
@@ -290,7 +290,7 @@
               "dockerfile": "2.0/runtime/jessie/amd64",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-runtime-jessie",
+                "2.0.0-runtime-jessie",
                 "2.0-runtime-jessie",
                 "2-runtime-jessie"
               ]
@@ -303,7 +303,7 @@
               "dockerfile": "2.0/sdk/jessie/amd64",
               "os": "linux",
               "tags": [
-                "2.0.0-preview3-sdk-jessie",
+                "2.0.0-sdk-jessie",
                 "2.0-sdk-jessie",
                 "2-sdk-jessie"
               ]
@@ -318,7 +318,7 @@
       "images": [
         {
           "sharedTags": [
-            "2.0.0-preview3-runtime",
+            "2.0.0-runtime",
             "2.0-runtime",
             "2-runtime",
             "runtime"
@@ -328,15 +328,15 @@
               "dockerfile": "2.0/runtime/nanoserver-insider/amd64",
               "os": "windows",
               "tags": [
-                "2.0.0-preview3-runtime-nanoserver",
-                "2.0.0-preview3-runtime-nanoserver-10.0.16237.1001"
+                "2.0.0-runtime-nanoserver",
+                "2.0.0-runtime-nanoserver-10.0.16237.1001"
               ]
             }
           ]
         },
         {
           "sharedTags": [
-            "2.0.0-preview3-sdk",
+            "2.0.0-sdk",
             "2.0-sdk",
             "2-sdk",
             "sdk",
@@ -347,8 +347,8 @@
               "dockerfile": "2.0/sdk/nanoserver-insider/amd64",
               "os": "windows",
               "tags": [
-                "2.0.0-preview3-sdk-nanoserver",
-                "2.0.0-preview3-sdk-nanoserver-10.0.16237.1001"
+                "2.0.0-sdk-nanoserver",
+                "2.0.0-sdk-nanoserver-10.0.16237.1001"
               ]
             }
           ]

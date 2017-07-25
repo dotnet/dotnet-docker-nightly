@@ -126,15 +126,6 @@ Get-ActivePlatformImages $manifestRepo $activeOS |
                             dotnet publish -r debian.8-x64 -o ${containerRoot}volume
                         }
 
-                        if ($sdkTag -like "2.0*-sdk*") {
-                            # Temporary workaround https://github.com/dotnet/corefx/blob/master/Documentation/project-docs/dogfooding.md#option-2-self-contained
-                            exec { docker run --rm `
-                                -v ${selfContainedVol}":${containerRoot}volume" `
-                                $selfContainedImage `
-                                chmod u+x ${containerRoot}volume${platformDirSeparator}test
-                            }
-                        }
-
                         $fullRuntimeDepsTag = Get-RuntimeTag $_.Dockerfile "runtime-deps" $activeOS $manifestRepo
                         Write-Host "----- Testing $fullRuntimeDepsTag with $sdkTag self-contained app -----"
                         exec { docker run -t --rm `
