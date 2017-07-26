@@ -7,8 +7,8 @@ Please be sure to use a build from either the [Windows Server Insider Preview](h
 Read more about the changes coming to Nano Server in future releases of Windows Server [here](https://docs.microsoft.com/en-us/windows-server/get-started/nano-in-semi-annual-channel).
 
 # Supported Windows tags
- - [`2.0.0-preview3-runtime-nanoserver`, `2.0.0-preview3-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/nanoserver-insider/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/nanoserver-insider/Dockerfile)
- - [`2.0.0-preview3-sdk-nanoserver`, `2.0.0-preview3-sdk`, `2.0-sdk`, `2-sdk`, `latest` (*2.0/sdk/nanoserver-insider/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver-insider/Dockerfile)
+ - [`2.0.0-runtime-nanoserver`, `2.0.0-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/nanoserver-insider/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/nanoserver-insider/Dockerfile)
+ - [`2.0.0-sdk-nanoserver`, `2.0.0-sdk`, `2.0-sdk`, `2-sdk`, `latest` (*2.0/sdk/nanoserver-insider/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver-insider/Dockerfile)
 
 # What is .NET Core?
 
