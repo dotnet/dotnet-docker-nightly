@@ -141,7 +141,7 @@
       "allowOverride": true
     },
     "image-builder.imageName": {
-      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170724144915"
+      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170728152008"
     },
     "image-builder.common.args": {
       "value": "--manifest manifest.json --repo microsoft/dotnet-nightly --username $(PB.docker.username) --password $(PB.docker.password) $(PB.image-builder.customCommonArgs)",

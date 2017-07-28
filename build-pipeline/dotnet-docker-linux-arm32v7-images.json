@@ -8,17 +8,15 @@
       "timeoutInMinutes": 0,
       "condition": "succeeded()",
       "task": {
-        "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+        "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
         "versionSpec": "1.*",
         "definitionType": "task"
       },
       "inputs": {
-        "scriptType": "inlineScript",
-        "scriptName": "",
-        "arguments": "",
+        "filename": "docker",
+        "arguments": "system prune -a -f",
         "workingFolder": "",
-        "inlineScript": "docker ps -a -q | %{docker rm -f $_}\n\ndocker images | where {-Not ($_.StartsWith(\"microsoft/nanoserver \") -Or $_.StartsWith(\"REPOSITORY \"))} | %{$_.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[2]} | select-object -unique | %{docker rmi -f $_}",
-        "failOnStandardError": "true"
+        "failOnStandardError": "false"
       }
     },
     {
@@ -103,23 +101,21 @@
     },
     {
       "enabled": true,
-      "continueOnError": true,
-      "alwaysRun": true,
+      "continueOnError": false,
+      "alwaysRun": false,
       "displayName": "Cleanup Docker",
       "timeoutInMinutes": 0,
-      "condition": "always()",
+      "condition": "succeeded()",
       "task": {
-        "id": "e213ff0f-5d5c-4791-802d-52ea3e7be1f1",
+        "id": "d9bafed4-0b18-4f58-968d-86655b4d2ce9",
         "versionSpec": "1.*",
         "definitionType": "task"
       },
       "inputs": {
-        "scriptType": "inlineScript",
-        "scriptName": "",
-        "arguments": "",
+        "filename": "docker",
+        "arguments": "system prune -a -f",
         "workingFolder": "",
-        "inlineScript": "docker ps -a -q | %{docker rm -f $_}\n\ndocker volume ls -q | %{docker volume rm -f $_}\n\ndocker images | where {-Not ($_.StartsWith(\"microsoft/nanoserver \") -Or $_.StartsWith(\"REPOSITORY \"))} | %{$_.Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[2]} | select-object -unique | %{docker rmi -f $_}",
-        "failOnStandardError": "true"
+        "failOnStandardError": "false"
       }
     }
   ],
@@ -168,7 +164,7 @@
       "allowOverride": true
     },
     "image-builder.imageName": {
-      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170724144915"
+      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170728152008"
     },
     "image-builder.args": {
       "value": "--command build --manifest manifest.json --repo microsoft/dotnet-nightly --path $(PB.image-builder.path) --architecture arm --test-var Filter=$(PB.image-builder.path) --push --username $(PB.docker.username) --password $(PB.docker.password) $(PB.image-builder.customCommonArgs)",
