@@ -143,7 +143,7 @@
     }
   },
   "demands": [
-    "Agent.OS -equals linux"
+    "Agent.Name -equals DDVSOWIN10AGE01"
   ],
   "retentionRules": [
     {
@@ -189,11 +189,11 @@
   "processParameters": {},
   "quality": "definition",
   "queue": {
-    "id": 36,
-    "name": "DotNet-Build",
+    "id": 159,
+    "name": "DotNetCore-Test",
     "pool": {
-      "id": 39,
-      "name": "DotNet-Build"
+      "id": 83,
+      "name": "DotNetCore-Test"
     }
   },
   "id": 6214,
