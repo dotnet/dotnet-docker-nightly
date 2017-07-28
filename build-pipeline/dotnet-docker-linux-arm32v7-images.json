@@ -58,7 +58,7 @@
       },
       "inputs": {
         "filename": "docker",
-        "arguments": "run --rm -v $(image-builder.VolumeName):/repo --name $(image-builder.containerName) buildpack-deps:stretch-scm git checkout $(Build.SourceVersion)
+        "arguments": "run --rm -v $(image-builder.VolumeName):/repo -w /repo --name $(image-builder.containerName) buildpack-deps:stretch-scm git checkout $(Build.SourceVersion)",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
