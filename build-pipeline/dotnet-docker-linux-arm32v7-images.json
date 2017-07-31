@@ -35,7 +35,7 @@
       },
       "inputs": {
         "filename": "docker",
-        "arguments": "run --rm -v $(image-builder.VolumeName):/repo --name $(image-builder.containerName) buildpack-deps:stretch-scm git clone https://$(PB.PAT.dn-bot-devdiv-build-rw-code-rw)@github.com/dotnet/dotnet-docker-nightly.git /repo",
+        "arguments": "run $(docker.commonRunArgs) $(docker.gitEnabledImageName) git clone https://$(PB.PAT.dn-bot-devdiv-build-rw-code-rw)@github.com/dotnet/dotnet-docker-nightly.git /repo",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
@@ -56,7 +56,7 @@
       },
       "inputs": {
         "filename": "docker",
-        "arguments": "run --rm -v $(image-builder.VolumeName):/repo -w /repo --name $(image-builder.containerName) buildpack-deps:stretch-scm git checkout $(Build.SourceVersion)",
+        "arguments": "run $(docker.commonRunArgs) $(docker.gitEnabledImageName) git checkout $(Build.SourceVersion)",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
@@ -94,7 +94,7 @@
       },
       "inputs": {
         "filename": "docker",
-        "arguments": "run --rm -v /var/run/docker.sock:/var/run/docker.sock -v $(image-builder.VolumeName):/repo -w /repo --name $(image-builder.containerName) $(image-builder.imageName) $(image-builder.args)",
+        "arguments": "run  $(docker.commonRunArgs) -v /var/run/docker.sock:/var/run/docker.sock $(image-builder.imageName) $(image-builder.args)",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
@@ -163,18 +163,24 @@
       "value": "false",
       "allowOverride": true
     },
+    "docker.commonRunArgs": {
+      "value": "--rm -v $(docker.volumeName):/repo -w /repo --name $(docker.containerName)"
+    },
+    "docker.containerName": {
+      "value": "$(Build.DefinitionName)-$(Build.BuildId)"
+    },
+    "docker.gitEnabledImageName": {
+      "value": "buildpack-deps:stretch-scm"
+    },
+    "docker.volumeName": {
+      "value": "$(Build.DefinitionName)-$(Build.BuildId)"
+    },
     "image-builder.imageName": {
       "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20170728152008"
     },
     "image-builder.args": {
       "value": "--command build --manifest manifest.json --repo microsoft/dotnet-nightly --path $(PB.image-builder.path) --architecture arm --test-var Filter=$(PB.image-builder.path) Architecture=arm --push --username $(PB.docker.username) --password $(PB.docker.password) $(PB.image-builder.customCommonArgs)",
       "allowOverride": true
-    },
-    "image-builder.containerName": {
-      "value": "$(Build.DefinitionName)-$(Build.BuildId)"
-    },
-    "image-builder.volumeName": {
-      "value": "$(Build.DefinitionName)-$(Build.BuildId)"
     },
     "PB.docker.password": {
       "value": null,
@@ -183,12 +189,12 @@
     "PB.image-builder.customCommonArgs": {
       "value": ""
     },
+    "PB.image-builder.path": {
+      "value": ""
+    },
     "PB.PAT.dn-bot-devdiv-build-rw-code-rw": {
       "value": null,
       "isSecret": true
-    },
-    "PB.image-builder.path": {
-      "value": ""
     }
   },
   "demands": [
