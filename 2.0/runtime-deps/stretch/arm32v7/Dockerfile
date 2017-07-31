@@ -16,3 +16,4 @@ RUN apt-get update \
         libunwind8 \
         libuuid1 \
         zlib1g \
+    && rm -rf /var/lib/apt/lists/*
