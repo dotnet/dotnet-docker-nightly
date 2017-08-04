@@ -27,7 +27,7 @@ function Get-RuntimeTag([string]$sdkDockerfilePath, [string]$runtimeType, [strin
     $runtimeDockerfilePath = $sdkDockerfilePath.Replace("sdk", $runtimeType)
     $platforms = Get-ActivePlatformImages $manifestRepo $activeOS |
         Where-Object { $_.Dockerfile -eq $runtimeDockerfilePath }
-    return $manifestRepo.Name + ':' + $platforms[0].Tags[0]
+    return $manifestRepo.Name + ':' + ([array]($_.Tags | ForEach-Object { $_.PSobject.Properties }))[0].Name
 }
 
 if ($UseImageCache) {
@@ -61,7 +61,7 @@ Get-ActivePlatformImages $manifestRepo $activeOS |
     Where-Object { [string]::IsNullOrEmpty($Filter) -or $_.dockerfile -like "$Filter*" } |
     Where-Object { $_.Dockerfile.Contains('sdk') } |
     ForEach-Object {
-        $sdkTag = $_.Tags[0]
+        $sdkTag = ([array]($_.Tags | ForEach-Object { $_.PSobject.Properties }))[0].Name
         $fullSdkTag = "$($manifestRepo.Name):${sdkTag}"
 
         $timeStamp = Get-Date -Format FileDateTime

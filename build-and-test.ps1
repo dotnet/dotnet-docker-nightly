@@ -30,13 +30,13 @@ $manifestRepo.Images |
                 -or ( [bool]($_.PSobject.Properties.name -match "architecture") -and $_.architecture -eq "$Architecture" ) } |
             ForEach-Object {
                 $dockerfilePath = $_.dockerfile
-                $tags = $_.Tags
-                if ([bool]($images.PSobject.Properties.name -match "sharedTags")) {
-                    $tags += $images.sharedTags
+                $tags = [array]($_.Tags | ForEach-Object { $_.PSobject.Properties })
+                if ([bool]($images.PSobject.Properties.name -match "sharedtags")) {
+                    $tags += [array]($images.sharedtags | ForEach-Object { $_.PSobject.Properties })
                 }
 
                 $qualifiedTags = $tags | ForEach-Object {
-                    $manifestRepo.Name + ':' + $_.Replace('$(nanoServerVersion)', $manifest.TagVariables.NanoServerVersion)
+                    $manifestRepo.Name + ':' + $_.name.Replace('$(nanoServerVersion)', $manifest.TagVariables.NanoServerVersion)
                 }
                 $formattedTags = $qualifiedTags -join ', '
                 Write-Host "--- Building $formattedTags from $dockerfilePath ---"
