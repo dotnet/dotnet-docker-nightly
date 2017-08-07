@@ -148,11 +148,11 @@
       "allowOverride": true
     },
     "image-builder.publishManifest.args": {
-      "value": "--command PublishManifest $(image-builder.common.args)",
+      "value": "publishManifest $(image-builder.common.args)",
       "allowOverride": true
     },
     "image-builder.updateReadme.args": {
-      "value": "--command UpdateReadme $(image-builder.common.args)",
+      "value": "updateReadme $(image-builder.common.args)",
       "allowOverride": true
     },
     "image-builder.containerName": {

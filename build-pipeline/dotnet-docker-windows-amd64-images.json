@@ -186,7 +186,7 @@
       "value": "microsoft/dotnet-buildtools-prereqs:image-builder-nanoserver-20170804091402"
     },
     "image-builder.args": {
-      "value": "--command build --manifest manifest.json --repo microsoft/dotnet-nightly --path $(PB.image-builder.path) --test-var Filter=$(PB.image-builder.path) Architecture=amd64 --push --username $(PB.docker.username) --password $(PB.docker.password) $(PB.image-builder.customCommonArgs)",
+      "value": "build --manifest manifest.json --repo microsoft/dotnet-nightly --path $(PB.image-builder.path) --test-var Filter=$(PB.image-builder.path) Architecture=amd64 --push --username $(PB.docker.username) --password $(PB.docker.password) $(PB.image-builder.customCommonArgs)",
       "allowOverride": true
     },
     "image-builder.containerName": {
