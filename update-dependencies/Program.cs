@@ -124,21 +124,21 @@ namespace Dotnet.Docker.Nightly
             string[] dockerfiles = GetDockerfiles(majorMinorVersion);
             Trace.TraceInformation("Updating the following Dockerfiles:");
             Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
-            IEnumerable<IDependencyUpdater> updators = dockerfiles
+            IEnumerable<IDependencyUpdater> updaters = dockerfiles
                 .Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName))
                 .Concat(dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_VERSION", SharedFrameworkBuildInfoName)));
 
             if (cliDependencyHelper.CliMajorVersion > 1)
             {
-                updators = updators.Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
+                updaters = updaters.Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
             }
             else if (s_config.CliReleasePrefix.StartsWith("1.1"))
             {
                 dockerfiles = GetDockerfiles("1.0");
-                updators = updators.Concat(dockerfiles.Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName)));
+                updaters = updaters.Concat(dockerfiles.Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName)));
             }
 
-            return updators;
+            return updaters;
         }
 
         private static string[] GetDockerfiles(string version)
