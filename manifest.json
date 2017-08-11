@@ -273,9 +273,6 @@
                 "2.0.0-runtime-deps-stretch-arm32v7": {},
                 "2.0-runtime-deps-stretch-arm32v7": {
                   "isUndocumented": true
-                },
-                "2-runtime-deps-stretch-arm32v7": {
-                  "isUndocumented": true
                 }
               },
               "variant": "armv7"
@@ -303,9 +300,6 @@
               "tags": {
                 "2.0.0-runtime-stretch-arm32v7": {},
                 "2.0-runtime-stretch-arm32v7": {
-                  "isUndocumented": true
-                },
-                "2-runtime-stretch-arm32v7": {
                   "isUndocumented": true
                 }
               },
