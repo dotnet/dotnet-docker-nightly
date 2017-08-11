@@ -45,7 +45,7 @@ $testFilesPath = "$PSScriptRoot$dirSeparator"
 $activeOS = docker version -f "{{ .Server.Os }}"
 
 # update as appropriate (e.g. "2.0-sdk") whenever pre-release packages are referenced prior to being available on NuGet.org.
-$includePrereleasePackageSourceForSdkTag = "2.0*-sdk*"
+$includePrereleasePackageSourceForSdkTag = "2.1*-sdk*"
 
 if ($activeOS -eq "windows") {
     $containerRoot = "C:\"
@@ -67,7 +67,15 @@ Get-ActivePlatformImages $manifestRepo $activeOS |
         $timeStamp = Get-Date -Format FileDateTime
         $appName = "app$timeStamp".ToLower()
         $buildImage = "sdk-build-$appName"
-        $dotnetNewParam = "console --framework netcoreapp$($sdkTag.Split('-')[0].Substring(0,3))"
+
+        $netcoreappVersion = $sdkTag.Split('-')[0].Substring(0,3)
+        if ($sdkTag -like "2.1*-sdk*")
+        {
+            # TODO: Remove once 2.1 SDK templates support netcoreapp2.1
+            $netcoreappVersion="2.0"
+        }
+
+        $dotnetNewParam = "console --framework netcoreapp$netcoreappVersion"
 
         $optionalRestoreParams = ""
         if ($sdkTag -like $includePrereleasePackageSourceForSdkTag) {
