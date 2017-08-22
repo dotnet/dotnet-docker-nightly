@@ -572,7 +572,7 @@
               "os": "windows",
               "tags": {
                 "2.0.0-runtime-nanoserver": {},
-                "2.0.0-runtime-nanoserver-10.0.16237.1001": {
+                "2.0.0-runtime-nanoserver-10.0.16267.1001": {
                   "isUndocumented": true
                 }
               }
@@ -593,7 +593,7 @@
               "os": "windows",
               "tags": {
                 "2.0.0-sdk-nanoserver": {},
-                "2.0.0-sdk-nanoserver-10.0.16237.1001": {
+                "2.0.0-sdk-nanoserver-10.0.16267.1001": {
                   "isUndocumented": true
                 }
               }
