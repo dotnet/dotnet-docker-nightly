@@ -194,7 +194,7 @@
     }
   },
   "demands": [
-    "Agent.Name -equals DDVSOWIN10AGE01"
+    "VSTS_OS -equals Windows_10_Enterprise"
   ],
   "retentionRules": [
     {
