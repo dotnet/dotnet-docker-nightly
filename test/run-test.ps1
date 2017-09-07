@@ -45,7 +45,7 @@ $testFilesPath = "$PSScriptRoot$dirSeparator"
 $activeOS = docker version -f "{{ .Server.Os }}"
 
 # update as appropriate (e.g. "2.0-sdk") whenever pre-release packages are referenced prior to being available on NuGet.org.
-$includePrereleasePackageSourceForSdkTag = "2.1*-sdk*"
+$includePrereleasePackageSourceForSdkTag = "2.*-sdk*"
 
 if ($activeOS -eq "windows") {
     $containerRoot = "C:\"
@@ -72,7 +72,7 @@ Get-ActivePlatformImages $manifestRepo $activeOS |
         if ($sdkTag -like "2.1*-sdk*")
         {
             # TODO: Remove once 2.1 SDK templates support netcoreapp2.1
-            $netcoreappVersion="2.0"
+            $netcoreappVersion = "2.0"
         }
 
         $dotnetNewParam = "console --framework netcoreapp$netcoreappVersion"
@@ -119,6 +119,12 @@ Get-ActivePlatformImages $manifestRepo $activeOS |
                 $selfContainedImage = "self-contained-build-${buildImage}"
                 Write-Host "----- Creating publish-image for self-contained app built on $fullSdkTag -----"
                 Try {
+                    if ($sdkTag -like "2.0-sdk*")
+                    {
+                        # Workaround for https://github.com/dotnet/sdk/issues/1570
+                        $optionalRestoreParams = " /p:runtimeidentifier=debian.8-x64"
+                    }
+
                     exec { (Get-Content ${testFilesPath}Dockerfile.linux.publish).
                                 Replace("{image}", $buildImage).
                                 Replace("{optionalRestoreParams}", $optionalRestoreParams) `
@@ -128,10 +134,16 @@ Get-ActivePlatformImages $manifestRepo $activeOS |
                     $selfContainedVol = "self-contained-publish-$appName"
                     Write-Host "----- Publishing self-contained published app built on $fullSdkTag to volume $selfContainedVol using image $selfContainedImage -----"
                     Try {
+                        $optionalPublishParams = "--no-restore"
+                        if ($sdkTag -like "1.*-sdk*")
+                        {
+                            $optionalPublishParams=""
+                        }
+
                         exec { docker run --rm `
                             -v ${selfContainedVol}":${containerRoot}volume" `
                             $selfContainedImage `
-                            dotnet publish -r debian.8-x64 -o ${containerRoot}volume
+                            dotnet publish -r debian.8-x64 -o ${containerRoot}volume $optionalPublishParams
                         }
 
                         $fullRuntimeDepsTag = Get-RuntimeTag $_.Dockerfile "runtime-deps" $activeOS $manifestRepo
