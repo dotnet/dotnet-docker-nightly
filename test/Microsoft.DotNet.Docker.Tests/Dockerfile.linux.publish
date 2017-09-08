@@ -1,0 +1,6 @@
+FROM $base_image
+
+ARG rid
+ARG optional_restore_feeds
+ARG optional_restore_args
+RUN dotnet restore -r $rid $optional_restore_feeds $optional_restore_args
