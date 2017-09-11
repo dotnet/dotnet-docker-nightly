@@ -1,4 +1,4 @@
-FROM $base_image
+FROM {base_image}
 
 ARG netcoreapp_version
 ARG optional_restore_args

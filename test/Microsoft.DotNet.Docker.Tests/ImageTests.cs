@@ -82,7 +82,7 @@ namespace Microsoft.DotNet.Docker.Tests
         {
             string sdkImage = GetDotNetImage(sdkImageVersion, DotNetImageType.SDK);
             string buildArgs = GetBuildArgs(usePreReleasePackageFeed, $"netcoreapp_version={netcoreappVersion}");
-            DockerHelper.Build("Dockerfile.test", sdkImage, appSdkImage, buildArgs);
+            DockerHelper.Build($"Dockerfile.{DockerHelper.DockerOS.ToLower()}.test", sdkImage, appSdkImage, buildArgs);
 
             DockerHelper.Run(appSdkImage, "dotnet run", appSdkImage);
         }
@@ -151,7 +151,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
             if (usePreReleasePackageFeed)
             {
-                buildArgs += " --build-arg optional_restore_feeds=\"-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json\"";
+                buildArgs = "--build-arg optional_restore_feeds=\"-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json\"";
             }
 
             if (additionalArgs != null && additionalArgs.Any())

@@ -11,7 +11,7 @@ namespace Microsoft.DotNet.Docker.Tests
 {
     public class DockerHelper
     {
-        private string DockerOS => GetDockerOS();
+        public string DockerOS => GetDockerOS();
         public string ContainerWorkDir => IsLinuxContainerModeEnabled ? "/sandbox" : "c:\\sandbox";
         public bool IsLinuxContainerModeEnabled => string.Equals(DockerOS, "linux", StringComparison.OrdinalIgnoreCase);
         private ITestOutputHelper Output { get; set; }
@@ -24,13 +24,13 @@ namespace Microsoft.DotNet.Docker.Tests
         public void Build(string dockerfilePath, string fromImage, string tag, string buildArgs)
         {
             string dockerfileContents = File.ReadAllText(dockerfilePath);
-            dockerfileContents = dockerfileContents.Replace("$base_image", fromImage);
+            dockerfileContents = dockerfileContents.Replace("{base_image}", fromImage);
             string tempDockerfilePath = dockerfilePath + ".temp";
             File.WriteAllText(tempDockerfilePath, dockerfileContents);
 
             try
             {
-                Execute($"build -t {tag} {buildArgs} -f {dockerfilePath} .");
+                Execute($"build -t {tag} {buildArgs} -f {tempDockerfilePath} .");
             }
             finally
             {
