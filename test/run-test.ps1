@@ -9,6 +9,9 @@ param(
     [string]$Architecture
 )
 
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
+
 $DotnetInstallDir = "$PSScriptRoot/../.dotnet"
 
 if (!(Test-Path "$DotnetInstallDir")) {
