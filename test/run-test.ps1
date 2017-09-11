@@ -5,7 +5,6 @@
 
 [cmdletbinding()]
 param(
-    [string]$DotnetInstallDir,
     [string]$Filter,
     [string]$Architecture
 )

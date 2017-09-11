@@ -25,8 +25,8 @@ namespace Microsoft.DotNet.Docker.Tests
         {
             string dockerfileContents = File.ReadAllText(dockerfilePath);
             dockerfileContents = dockerfileContents.Replace("$base_image", fromImage);
-            dockerfilePath = dockerfilePath + ".temp";
-            File.WriteAllText(dockerfilePath, dockerfileContents);
+            string tempDockerfilePath = dockerfilePath + ".temp";
+            File.WriteAllText(tempDockerfilePath, dockerfileContents);
 
             try
             {
@@ -34,7 +34,7 @@ namespace Microsoft.DotNet.Docker.Tests
             }
             finally
             {
-                File.Delete(dockerfilePath);
+                File.Delete(tempDockerfilePath);
             }
         }
 
