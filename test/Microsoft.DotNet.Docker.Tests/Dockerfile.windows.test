@@ -1,9 +1,8 @@
-FROM {base_image}
+FROM microsoft/dotnet-nightly:2.0-sdk
 
-ARG netcoreapp_version
-ARG optional_restore_feeds
+ARG netcoreapp_version=2.0
 
 WORKDIR test
 RUN dotnet new console --framework netcoreapp$env:netcoreapp_version
-RUN dotnet restore $env:optional_restore_feeds
+RUN dotnet restore -s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json
 RUN dotnet build

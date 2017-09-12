@@ -40,7 +40,7 @@ namespace Microsoft.DotNet.Docker.Tests
         [Trait("Architecture", "amd64")]
         public void VerifyImages_2_0()
         {
-            VerifyImages("2.0", usePreReleasePackageFeed: true);
+            VerifyImages("2.0");
         }
 
         [Fact]
@@ -48,11 +48,10 @@ namespace Microsoft.DotNet.Docker.Tests
         [Trait("Architecture", "amd64")]
         public void VerifyImages_2_1()
         {
-            VerifyImages("2.1", "2.0", true);
+            VerifyImages("2.1", "2.0");
         }
 
-        private void VerifyImages(
-            string dotNetCoreImageVersion, string netcoreappVersion = null, bool usePreReleasePackageFeed = false)
+        private void VerifyImages(string dotNetCoreImageVersion, string netcoreappVersion = null)
         {
             if (netcoreappVersion == null)
             {
@@ -63,12 +62,12 @@ namespace Microsoft.DotNet.Docker.Tests
 
             try
             {
-                VerifySdkImage_NewRestoreRun(appSdkImage, dotNetCoreImageVersion, netcoreappVersion, usePreReleasePackageFeed);
+                VerifySdkImage_NewRestoreRun(appSdkImage, dotNetCoreImageVersion, netcoreappVersion);
                 VerifyRuntimeImage_FrameworkDependentApp(dotNetCoreImageVersion, appSdkImage);
 
                 if (DockerHelper.IsLinuxContainerModeEnabled)
                 {
-                    VerifyRuntimeDepsImage_SelfContainedApp(dotNetCoreImageVersion, appSdkImage, usePreReleasePackageFeed);
+                    VerifyRuntimeDepsImage_SelfContainedApp(dotNetCoreImageVersion, appSdkImage);
                 }
             }
             finally
@@ -78,10 +77,10 @@ namespace Microsoft.DotNet.Docker.Tests
         }
 
         private void VerifySdkImage_NewRestoreRun(
-            string appSdkImage, string sdkImageVersion, string netcoreappVersion, bool usePreReleasePackageFeed)
+            string appSdkImage, string sdkImageVersion, string netcoreappVersion)
         {
             string sdkImage = GetDotNetImage(sdkImageVersion, DotNetImageType.SDK);
-            string buildArgs = GetBuildArgs(usePreReleasePackageFeed, $"netcoreapp_version={netcoreappVersion}");
+            string buildArgs = GetBuildArgs($"netcoreapp_version={netcoreappVersion}");
             DockerHelper.Build($"Dockerfile.{DockerHelper.DockerOS.ToLower()}.test", sdkImage, appSdkImage, buildArgs);
 
             DockerHelper.Run(appSdkImage, "dotnet run", appSdkImage);
@@ -106,22 +105,21 @@ namespace Microsoft.DotNet.Docker.Tests
             }
         }
 
-        private void VerifyRuntimeDepsImage_SelfContainedApp(
-            string runtimeDepsImageVersion, string appSdkImage, bool usePreReleasePackageFeed)
+        private void VerifyRuntimeDepsImage_SelfContainedApp(string runtimeDepsImageVersion, string appSdkImage)
         {
             string selfContainedAppId = GetIdentifier(runtimeDepsImageVersion, "self-contained-app");
             string rid = "debian.8-x64";
 
             try
             {
-                List<string> additionalArgs = new List<string>();
-                additionalArgs.Add($"rid={rid}");
+                List<string> args = new List<string>();
+                args.Add($"rid={rid}");
                 if (runtimeDepsImageVersion == "2.0")
                 {
-                    additionalArgs.Add($"optional_restore_args=/p:runtimeidentifier={rid}");
+                    args.Add($"optional_restore_args=/p:runtimeidentifier={rid}");
                 }
 
-                string buildArgs = GetBuildArgs(usePreReleasePackageFeed, additionalArgs.ToArray());
+                string buildArgs = GetBuildArgs(args.ToArray());
                 DockerHelper.Build("Dockerfile.linux.publish", appSdkImage, selfContainedAppId, buildArgs);
 
                 try
@@ -145,18 +143,13 @@ namespace Microsoft.DotNet.Docker.Tests
             }
         }
 
-        private static string GetBuildArgs(bool usePreReleasePackageFeed, params string[] additionalArgs)
+        private static string GetBuildArgs(params string[] args)
         {
             string buildArgs = string.Empty;
 
-            if (usePreReleasePackageFeed)
+            if (args != null && args.Any())
             {
-                buildArgs = "--build-arg optional_restore_feeds=\"-s https://dotnet.myget.org/F/dotnet-core/api/v3/index.json -s https://api.nuget.org/v3/index.json\"";
-            }
-
-            if (additionalArgs != null && additionalArgs.Any())
-            {
-                foreach (string arg in additionalArgs)
+                foreach (string arg in args)
                 {
                     buildArgs += $" --build-arg {arg}";
                 }
