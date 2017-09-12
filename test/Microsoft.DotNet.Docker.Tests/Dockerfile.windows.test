@@ -1,6 +1,6 @@
 FROM {base_image}
 
-ARG netcoreapp_version=2.0
+ARG netcoreapp_version
 
 WORKDIR test
 RUN dotnet new console --framework netcoreapp$env:netcoreapp_version
