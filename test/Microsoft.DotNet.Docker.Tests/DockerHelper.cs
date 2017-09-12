@@ -11,9 +11,9 @@ namespace Microsoft.DotNet.Docker.Tests
 {
     public class DockerHelper
     {
-        public string DockerOS => GetDockerOS();
-        public string ContainerWorkDir => IsLinuxContainerModeEnabled ? "/sandbox" : "c:\\sandbox";
-        public bool IsLinuxContainerModeEnabled => string.Equals(DockerOS, "linux", StringComparison.OrdinalIgnoreCase);
+        public static string DockerOS => GetDockerOS();
+        public static string ContainerWorkDir => IsLinuxContainerModeEnabled ? "/sandbox" : "c:\\sandbox";
+        public static bool IsLinuxContainerModeEnabled => string.Equals(DockerOS, "linux", StringComparison.OrdinalIgnoreCase);
         private ITestOutputHelper Output { get; set; }
 
         public DockerHelper(ITestOutputHelper output)
