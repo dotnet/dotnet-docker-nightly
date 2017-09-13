@@ -48,26 +48,32 @@ namespace Microsoft.DotNet.Docker.Tests
         [Trait("Architecture", "amd64")]
         public void VerifyImages_2_1()
         {
-            VerifyImages("2.1", "2.0");
+            VerifyImages(dotNetCoreVersion: "2.1", netcoreappVersion: "2.0", runtimeDepsVersion: "2.0");
         }
 
-        private void VerifyImages(string dotNetCoreImageVersion, string netcoreappVersion = null)
+        private void VerifyImages(
+            string dotNetCoreVersion, string netcoreappVersion = null, string runtimeDepsVersion = null)
         {
             if (netcoreappVersion == null)
             {
-                netcoreappVersion = dotNetCoreImageVersion;
+                netcoreappVersion = dotNetCoreVersion;
             }
 
-            string appSdkImage = GetIdentifier(dotNetCoreImageVersion, "app-sdk");
+            if (runtimeDepsVersion == null)
+            {
+                runtimeDepsVersion = dotNetCoreVersion;
+            }
+
+            string appSdkImage = GetIdentifier(dotNetCoreVersion, "app-sdk");
 
             try
             {
-                VerifySdkImage_NewRestoreRun(appSdkImage, dotNetCoreImageVersion, netcoreappVersion);
-                VerifyRuntimeImage_FrameworkDependentApp(dotNetCoreImageVersion, appSdkImage);
+                VerifySdkImage_NewRestoreRun(appSdkImage, dotNetCoreVersion, netcoreappVersion);
+                VerifyRuntimeImage_FrameworkDependentApp(dotNetCoreVersion, appSdkImage);
 
                 if (DockerHelper.IsLinuxContainerModeEnabled)
                 {
-                    VerifyRuntimeDepsImage_SelfContainedApp(dotNetCoreImageVersion, appSdkImage);
+                    VerifyRuntimeDepsImage_SelfContainedApp(dotNetCoreVersion, runtimeDepsVersion, appSdkImage);
                 }
             }
             finally
@@ -105,16 +111,16 @@ namespace Microsoft.DotNet.Docker.Tests
             }
         }
 
-        private void VerifyRuntimeDepsImage_SelfContainedApp(string runtimeDepsImageVersion, string appSdkImage)
+        private void VerifyRuntimeDepsImage_SelfContainedApp(string dotNetCoreVersion, string runtimeDepsImageVersion, string appSdkImage)
         {
-            string selfContainedAppId = GetIdentifier(runtimeDepsImageVersion, "self-contained-app");
+            string selfContainedAppId = GetIdentifier(dotNetCoreVersion, "self-contained-app");
             string rid = "debian.8-x64";
 
             try
             {
                 List<string> args = new List<string>();
                 args.Add($"rid={rid}");
-                if (runtimeDepsImageVersion == "2.0")
+                if (dotNetCoreVersion == "2.0")
                 {
                     args.Add($"optional_restore_args=/p:runtimeidentifier={rid}");
                 }
@@ -124,7 +130,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
                 try
                 {
-                    string optionalPublishArgs = runtimeDepsImageVersion.StartsWith("1.") ? "" : "--no-restore";
+                    string optionalPublishArgs = dotNetCoreVersion.StartsWith("1.") ? "" : "--no-restore";
                     string dotNetCmd = $"dotnet publish -r {rid} -o {DockerHelper.ContainerWorkDir} {optionalPublishArgs}";
                     DockerHelper.Run(selfContainedAppId, dotNetCmd, selfContainedAppId, selfContainedAppId);
 

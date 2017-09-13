@@ -18,8 +18,6 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`2.0.1-sdk-jessie`, `2.0-sdk-jessie`, `2-sdk-jessie` (*2.0/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/jessie/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-stretch`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/stretch/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-jessie`, `2.1-runtime-jessie` (*2.1/runtime/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/jessie/amd64/Dockerfile)
-- [`2.1.0-preview1-runtime-deps-stretch`, `2.1.0-preview1-runtime-deps`, `2.1-runtime-deps` (*2.1/runtime-deps/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime-deps/stretch/amd64/Dockerfile)
-- [`2.1.0-preview1-runtime-deps-jessie`, `2.1-runtime-deps-jessie` (*2.1/runtime-deps/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime-deps/jessie/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-stretch`, `2.1.0-preview1-sdk`, `2.1-sdk` (*2.1/sdk/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/stretch/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-jessie`, `2.1-sdk-jessie` (*2.1/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/jessie/amd64/Dockerfile)
 
@@ -39,7 +37,6 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`2.0.1-runtime-stretch-arm32v7`, `2.0.1-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/stretch/arm32v7/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/stretch/arm32v7/Dockerfile)
 - [`2.0.1-runtime-deps-stretch-arm32v7`, `2.0.1-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps`, `runtime-deps` (*2.0/runtime-deps/stretch/arm32v7/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/stretch/arm32v7/Dockerfile)
 - [`2.1.0-preview1-runtime-stretch-arm32v7`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/stretch/arm32v7/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/stretch/arm32v7/Dockerfile)
-- [`2.1.0-preview1-runtime-deps-stretch-arm32v7`, `2.1.0-preview1-runtime-deps`, `2.1-runtime-deps` (*2.1/runtime-deps/stretch/arm32v7/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime-deps/stretch/arm32v7/Dockerfile)
 
 >**Note:** The Docker images in this repo are supported by Microsoft. The `arm32v7` images are in preview and have "best effort" support only by the community and .NET Core Team.
 

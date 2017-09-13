@@ -28,13 +28,7 @@
         {
           "Name": "dotnet-docker-linux-amd64-images",
           "Parameters": {
-            "PB.image-builder.path": "2.0"
-          }
-        },
-        {
-          "Name": "dotnet-docker-linux-amd64-images",
-          "Parameters": {
-            "PB.image-builder.path": "2.1"
+            "PB.image-builder.path": "2."
           }
         }
       ]
@@ -48,13 +42,7 @@
         {
           "Name": "dotnet-docker-linux-arm32v7-images",
           "Parameters": {
-            "PB.image-builder.path": "2.0"
-          }
-        },
-        {
-          "Name": "dotnet-docker-linux-arm32v7-images",
-          "Parameters": {
-            "PB.image-builder.path": "2.1"
+            "PB.image-builder.path": "2."
           }
         }
       ]
