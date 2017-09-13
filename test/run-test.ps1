@@ -52,7 +52,7 @@ Try {
 
     $TestFilter = "Architecture=$Architecture"
     if (![string]::IsNullOrWhiteSpace($Filter)) {
-        $TestFilter += "&Version=$filter"
+        $TestFilter += "&Version~$filter"
     }
 
     & $DotnetInstallDir/dotnet test -v n --filter """$TestFilter"""
