@@ -24,7 +24,7 @@ namespace Microsoft.DotNet.Docker.Tests
         [Trait("Architecture", "amd64")]
         public void VerifyImages_1_0()
         {
-            VerifyImages("1.0");
+            VerifyImages(dotNetCoreVersion: "1.0", sdkVersion: "1.1");
         }
 
         [Fact]
@@ -52,11 +52,19 @@ namespace Microsoft.DotNet.Docker.Tests
         }
 
         private void VerifyImages(
-            string dotNetCoreVersion, string netcoreappVersion = null, string runtimeDepsVersion = null)
+            string dotNetCoreVersion,
+            string netcoreappVersion = null,
+            string sdkVersion = null,
+            string runtimeDepsVersion = null)
         {
             if (netcoreappVersion == null)
             {
                 netcoreappVersion = dotNetCoreVersion;
+            }
+
+            if (sdkVersion == null)
+            {
+                sdkVersion = dotNetCoreVersion;
             }
 
             if (runtimeDepsVersion == null)
@@ -68,7 +76,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
             try
             {
-                VerifySdkImage_NewRestoreRun(appSdkImage, dotNetCoreVersion, netcoreappVersion);
+                VerifySdkImage_NewRestoreRun(appSdkImage, sdkVersion, netcoreappVersion);
                 VerifyRuntimeImage_FrameworkDependentApp(dotNetCoreVersion, appSdkImage);
 
                 if (DockerHelper.IsLinuxContainerModeEnabled)
