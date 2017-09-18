@@ -7,7 +7,6 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`1.0.6-runtime-jessie`, `1.0.6-runtime`, `1.0-runtime` (*1.0/runtime/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/runtime/jessie/Dockerfile)
 - [`1.0.6-runtime-deps-jessie`, `1.0.6-runtime-deps`, `1.0-runtime-deps` (*1.0/runtime-deps/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/runtime-deps/jessie/Dockerfile)
 - [`1.1.3-runtime-jessie`, `1.1.3-runtime`, `1.1-runtime`, `1-runtime` (*1.1/runtime/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/runtime/jessie/Dockerfile)
-- [`1.1.3-runtime-deps-jessie`, `1.1.3-runtime-deps`, `1.1-runtime-deps`, `1-runtime-deps` (*1.1/runtime-deps/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/runtime-deps/jessie/Dockerfile)
 - [`1.1.3-sdk-jessie`, `1.1.3-sdk`, `1.1-sdk`, `1-sdk` (*1.1/sdk/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/sdk/jessie/Dockerfile)
 - [`2.0.1-runtime-stretch`, `2.0.1-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/stretch/amd64/Dockerfile)
 - [`2.0.1-runtime-jessie`, `2.0-runtime-jessie`, `2-runtime-jessie` (*2.0/runtime/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/jessie/amd64/Dockerfile)

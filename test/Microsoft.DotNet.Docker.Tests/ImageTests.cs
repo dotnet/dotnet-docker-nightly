@@ -32,7 +32,7 @@ namespace Microsoft.DotNet.Docker.Tests
         [Trait("Architecture", "amd64")]
         public void VerifyImages_1_1()
         {
-            VerifyImages("1.1");
+            VerifyImages("1.1", runtimeDepsVersion: "1.0");
         }
 
         [Fact]

@@ -20,7 +20,14 @@
           "readmeOrder": 1,
           "sharedTags": {
             "1.0.6-runtime-deps": {},
-            "1.0-runtime-deps": {}
+            "1.0-runtime-deps": {},
+            "1-runtime-deps": {},
+            "1.1.3-runtime-deps": {
+              "isUndocumented": true
+            },
+            "1.1-runtime-deps": {
+              "isUndocumented": true
+            }
           },
           "platforms": [
             {
@@ -32,6 +39,15 @@
                   "isUndocumented": true
                 },
                 "1.0-core-deps": {
+                  "isUndocumented": true
+                },
+                "1-core-deps": {
+                  "isUndocumented": true
+                },
+                "core-deps": {
+                  "isUndocumented": true
+                },
+                "1.1.3-runtime-deps-jessie": {
                   "isUndocumented": true
                 }
               }
@@ -70,29 +86,6 @@
                   "isUndocumented": true
                 },
                 "1.0-runtime-nanoserver-$(nanoServerVersion)": {
-                  "isUndocumented": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "readmeOrder": 3,
-          "sharedTags": {
-            "1.1.3-runtime-deps": {},
-            "1.1-runtime-deps": {},
-            "1-runtime-deps": {}
-          },
-          "platforms": [
-            {
-              "dockerfile": "1.1/runtime-deps/jessie",
-              "os": "linux",
-              "tags": {
-                "1.1.3-runtime-deps-jessie": {},
-                "1-core-deps": {
-                  "isUndocumented": true
-                },
-                "core-deps": {
                   "isUndocumented": true
                 }
               }
@@ -151,7 +144,7 @@
           ]
         },
         {
-          "readmeOrder": 4,
+          "readmeOrder": 3,
           "sharedTags": {
             "1.1.3-sdk": {},
             "1.1-sdk": {},
@@ -205,7 +198,7 @@
           ]
         },
         {
-          "readmeOrder": 7,
+          "readmeOrder": 6,
           "sharedTags": {
             "2.0.1-runtime-deps": {},
             "2.0-runtime-deps": {},
@@ -238,7 +231,7 @@
           ]
         },
         {
-          "readmeOrder": 5,
+          "readmeOrder": 4,
           "sharedTags": {
             "2.0.1-runtime": {},
             "2.0-runtime": {},
@@ -293,7 +286,7 @@
           ]
         },
         {
-          "readmeOrder": 9,
+          "readmeOrder": 8,
           "sharedTags": {
             "2.0.1-sdk": {},
             "2.0-sdk": {},
@@ -334,7 +327,7 @@
           ]
         },
         {
-          "readmeOrder": 8,
+          "readmeOrder": 7,
           "platforms": [
             {
               "dockerfile": "2.0/runtime-deps/jessie/amd64",
@@ -348,7 +341,7 @@
           ]
         },
         {
-          "readmeOrder": 6,
+          "readmeOrder": 5,
           "platforms": [
             {
               "dockerfile": "2.0/runtime/jessie/amd64",
@@ -362,7 +355,7 @@
           ]
         },
         {
-          "readmeOrder": 10,
+          "readmeOrder": 9,
           "platforms": [
             {
               "dockerfile": "2.0/sdk/jessie/amd64",
@@ -376,7 +369,7 @@
           ]
         },
         {
-          "readmeOrder": 11,
+          "readmeOrder": 10,
           "sharedTags": {
             "2.1.0-preview1-runtime": {},
             "2.1-runtime": {}
@@ -414,7 +407,7 @@
           ]
         },
         {
-          "readmeOrder": 13,
+          "readmeOrder": 12,
           "sharedTags": {
             "2.1.0-preview1-sdk": {},
             "2.1-sdk": {}
@@ -440,7 +433,7 @@
           ]
         },
         {
-          "readmeOrder": 12,
+          "readmeOrder": 11,
           "platforms": [
             {
               "dockerfile": "2.1/runtime/jessie/amd64",
@@ -453,7 +446,7 @@
           ]
         },
         {
-          "readmeOrder": 14,
+          "readmeOrder": 13,
           "platforms": [
             {
               "dockerfile": "2.1/sdk/jessie/amd64",
