@@ -48,7 +48,7 @@ namespace Microsoft.DotNet.Docker.Tests
         [Trait("Architecture", "amd64")]
         public void VerifyImages_2_1()
         {
-            VerifyImages(dotNetCoreVersion: "2.1", netcoreappVersion: "2.0", runtimeDepsVersion: "2.0");
+            VerifyImages(dotNetCoreVersion: "2.1", runtimeDepsVersion: "2.0");
         }
 
         private void VerifyImages(
