@@ -21,20 +21,20 @@ namespace Microsoft.DotNet.Docker.Tests
             Output = output;
         }
 
-        public void Build(string dockerfilePath, string fromImage, string tag, string buildArgs)
+        public void Build(string dockerfile, string fromImage, string tag, string buildArgs)
         {
-            string dockerfileContents = File.ReadAllText(dockerfilePath);
+            string dockerfileContents = File.ReadAllText(dockerfile);
             dockerfileContents = dockerfileContents.Replace("{base_image}", fromImage);
-            string tempDockerfilePath = dockerfilePath + ".temp";
-            File.WriteAllText(tempDockerfilePath, dockerfileContents);
+            string tempDockerfile = dockerfile + ".temp";
+            File.WriteAllText(tempDockerfile, dockerfileContents);
 
             try
             {
-                Execute($"build -t {tag} {buildArgs} -f {tempDockerfilePath} .");
+                Execute($"build -t {tag} {buildArgs} -f {tempDockerfile} .");
             }
             finally
             {
-                File.Delete(tempDockerfilePath);
+                File.Delete(tempDockerfile);
             }
         }
 
