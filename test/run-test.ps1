@@ -50,12 +50,10 @@ Try {
         $Architecture = "amd64"
     }
 
-    $TestFilter = "Architecture=$Architecture"
-    if (![string]::IsNullOrWhiteSpace($Filter)) {
-        $TestFilter += "&Version~$filter"
-    }
+    $env:IMAGE_ARCH_FILTER = $Architecture
+    $env:IMAGE_VERSION_FILTER = $Filter
 
-    & $DotnetInstallDir/dotnet test -v n --filter """$TestFilter"""
+    & $DotnetInstallDir/dotnet test -v n
 
     if ($LASTEXITCODE -ne 0) { throw "Tests Failed" }
 }
