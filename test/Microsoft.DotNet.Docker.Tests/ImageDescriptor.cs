@@ -4,7 +4,7 @@
 
 namespace Microsoft.DotNet.Docker.Tests
 {
-    public class VerifyImageDescriptor
+    public class ImageDescriptor
     {
         private string runtimeDepsVersion;
         private string sdkVersion;
