@@ -17,4 +17,3 @@ artifacts/
 # User-specific files
 *.suo
 *.user
-/test/Microsoft.DotNet.Docker.Tests/Microsoft.DotNet.Docker.Tests.sln
