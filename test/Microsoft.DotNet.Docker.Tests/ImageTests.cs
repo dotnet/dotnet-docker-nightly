@@ -29,9 +29,7 @@ namespace Microsoft.DotNet.Docker.Tests
                 new ImageDescriptor {DotNetCoreVersion = "1.0", SdkVersion = "1.1"},
                 new ImageDescriptor {DotNetCoreVersion = "1.1", RuntimeDepsVersion = "1.0"},
                 new ImageDescriptor {DotNetCoreVersion = "2.0"},
-                new ImageDescriptor {DotNetCoreVersion = "2.0", Architecture="arm", OsVariant="stretch"},
                 new ImageDescriptor {DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0"},
-                new ImageDescriptor {DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0", Architecture="arm", OsVariant="stretch"}
             };
 
             if (DockerHelper.IsLinuxContainerModeEnabled)
@@ -62,7 +60,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
             try
             {
-                PrepareImage(imageDescriptor, appSdkImage);
+                BuildTestApp(imageDescriptor, appSdkImage);
 
                 if (!String.Equals("arm", imageDescriptor.Architecture, StringComparison.OrdinalIgnoreCase))
                 {
@@ -82,8 +80,9 @@ namespace Microsoft.DotNet.Docker.Tests
             }
         }
 
-        private void PrepareImage(ImageDescriptor imageDescriptor, string appSdkImage)
+        private void BuildTestApp(ImageDescriptor imageDescriptor, string appSdkImage)
         {
+            // dotnet new, restore, build a new app using the sdk image
             string dockerFile = $"Dockerfile.{DockerHelper.DockerOS.ToLower()}.testapp";
 
             if (String.Equals("arm", imageDescriptor.Architecture, StringComparison.OrdinalIgnoreCase))
@@ -114,24 +113,6 @@ namespace Microsoft.DotNet.Docker.Tests
 
         private void VerifySdkImage_NewRestoreRun(ImageDescriptor imageDescriptor, string appSdkImage)
         {
-            // dotnet new, restore, build a new app using the sdk image
-            List<string> args = new List<string>();
-            args.Add($"netcoreapp_version={imageDescriptor.DotNetCoreVersion}");
-            if (!imageDescriptor.SdkVersion.StartsWith("1."))
-            {
-                args.Add($"optional_new_args=--no-restore");
-            }
-
-            string buildArgs = GetBuildArgs(args.ToArray());
-            string sdkImage = GetDotNetImage(
-                imageDescriptor.SdkVersion, DotNetImageType.SDK, imageDescriptor.OsVariant, imageDescriptor.Architecture);
-
-            DockerHelper.Build(
-                dockerfile: $"Dockerfile.{DockerHelper.DockerOS.ToLower()}.testapp",
-                fromImage: sdkImage,
-                tag: appSdkImage,
-                buildArgs: buildArgs);
-
             // dotnet run the new app using the sdk image
             DockerHelper.Run(
                 image: appSdkImage,
