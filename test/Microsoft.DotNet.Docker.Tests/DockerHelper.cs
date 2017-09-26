@@ -21,21 +21,18 @@ namespace Microsoft.DotNet.Docker.Tests
             Output = output;
         }
 
-        public void Build(string dockerfile, string fromImage, string tag, string buildArgs)
+        public void Build(string dockerfile, string tag, string fromImage, params string[] buildArgs)
         {
-            string dockerfileContents = File.ReadAllText(dockerfile);
-            dockerfileContents = dockerfileContents.Replace("{base_image}", fromImage);
-            string tempDockerfile = dockerfile + ".temp";
-            File.WriteAllText(tempDockerfile, dockerfileContents);
+            string buildArgsOption = $"--build-arg base_image={fromImage}";
+            if (buildArgs != null)
+            {
+                foreach (string arg in buildArgs)
+                {
+                    buildArgsOption += $" --build-arg {arg}";
+                }
+            }
 
-            try
-            {
-                Execute($"build -t {tag} {buildArgs} -f {tempDockerfile} .");
-            }
-            finally
-            {
-                File.Delete(tempDockerfile);
-            }
+            Execute($"build -t {tag} {buildArgsOption} -f {dockerfile} .");
         }
 
         public void DeleteImage(string name)
