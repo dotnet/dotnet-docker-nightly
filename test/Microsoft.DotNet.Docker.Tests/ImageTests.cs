@@ -41,8 +41,8 @@ namespace Microsoft.DotNet.Docker.Tests
                         {
                             DotNetCoreVersion = "2.0",
                             OsVariant = "stretch",
-                            Architecture = "arm",
-                            SdkOsVariant = ""
+                            SdkOsVariant = "",
+                            Architecture = "arm"
                         },
                         new ImageDescriptor
                         {
@@ -55,8 +55,8 @@ namespace Microsoft.DotNet.Docker.Tests
                             DotNetCoreVersion = "2.1",
                             RuntimeDepsVersion = "2.0",
                             OsVariant = "stretch",
-                            Architecture ="arm",
-                            SdkOsVariant = ""
+                            SdkOsVariant = "",
+                            Architecture ="arm"
                         },
                     });
             }
@@ -80,7 +80,7 @@ namespace Microsoft.DotNet.Docker.Tests
             {
                 CreateTestAppWithSdkImage(imageDescriptor, appSdkImage);
 
-                if (imageDescriptor.IsArm)
+                if (!imageDescriptor.IsArm)
                 {
                     VerifySdkImage_RunApp(imageDescriptor, appSdkImage);
                 }
