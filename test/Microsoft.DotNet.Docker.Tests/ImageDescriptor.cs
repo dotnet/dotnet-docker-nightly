@@ -14,8 +14,8 @@ namespace Microsoft.DotNet.Docker.Tests
 
         public string Architecture { get; set; } = "amd64";
         public string DotNetCoreVersion { get; set; }
-        public string OsVariant { get; set; }
         public bool IsArm { get => String.Equals("arm", Architecture, StringComparison.OrdinalIgnoreCase); }
+        public string OsVariant { get; set; }
 
         public string RuntimeDepsVersion
         {

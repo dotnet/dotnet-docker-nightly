@@ -37,9 +37,27 @@ namespace Microsoft.DotNet.Docker.Tests
                 testData.AddRange(new List<ImageDescriptor>
                     {
                         new ImageDescriptor {DotNetCoreVersion = "2.0", OsVariant = "jessie"},
-                        new ImageDescriptor {DotNetCoreVersion = "2.0", OsVariant="stretch", Architecture="arm", SdkOsVariant=""},
-                        new ImageDescriptor {DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0", OsVariant = "jessie"},
-                        new ImageDescriptor {DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0", OsVariant="stretch", Architecture="arm", SdkOsVariant=""},
+                        new ImageDescriptor
+                        {
+                            DotNetCoreVersion = "2.0",
+                            OsVariant = "stretch",
+                            Architecture = "arm",
+                            SdkOsVariant = ""
+                        },
+                        new ImageDescriptor
+                        {
+                            DotNetCoreVersion = "2.1",
+                            RuntimeDepsVersion = "2.0",
+                            OsVariant = "jessie"
+                        },
+                        new ImageDescriptor
+                        {
+                            DotNetCoreVersion = "2.1",
+                            RuntimeDepsVersion = "2.0",
+                            OsVariant = "stretch",
+                            Architecture ="arm",
+                            SdkOsVariant = ""
+                        },
                     });
             }
 
@@ -62,7 +80,7 @@ namespace Microsoft.DotNet.Docker.Tests
             {
                 CreateTestAppWithSdkImage(imageDescriptor, appSdkImage);
 
-                if (!String.Equals("arm", imageDescriptor.Architecture, StringComparison.OrdinalIgnoreCase))
+                if (imageDescriptor.IsArm)
                 {
                     VerifySdkImage_RunApp(imageDescriptor, appSdkImage);
                 }
@@ -92,7 +110,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
             string buildArgs = GetBuildArgs(args.ToArray());
             string sdkImage = GetDotNetImage(
-                imageVersion: imageDescriptor.DotNetCoreVersion, imageType: DotNetImageType.SDK, osVariant: imageDescriptor.SdkOsVariant, isArm: false);
+                imageDescriptor.DotNetCoreVersion, DotNetImageType.SDK, imageDescriptor.SdkOsVariant);
 
             DockerHelper.Build(
                 dockerfile: $"Dockerfile.{DockerHelper.DockerOS.ToLower()}.testapp",
@@ -125,7 +143,10 @@ namespace Microsoft.DotNet.Docker.Tests
 
                 // Run the app in the Docker volume to verify the runtime image
                 string runtimeImage = GetDotNetImage(
-                    imageDescriptor.DotNetCoreVersion, DotNetImageType.Runtime, imageDescriptor.OsVariant, imageDescriptor.IsArm);
+                    imageDescriptor.DotNetCoreVersion,
+                    DotNetImageType.Runtime,
+                    imageDescriptor.OsVariant,
+                    imageDescriptor.IsArm);
                 string appDllPath = DockerHelper.GetContainerWorkPath("testApp.dll");
                 DockerHelper.Run(
                     image: runtimeImage,
@@ -167,7 +188,10 @@ namespace Microsoft.DotNet.Docker.Tests
 
                     // Run the self-contained app in the Docker volume to verify the runtime-deps image
                     string runtimeDepsImage = GetDotNetImage(
-                        imageDescriptor.RuntimeDepsVersion, DotNetImageType.Runtime_Deps, imageDescriptor.OsVariant, imageDescriptor.IsArm);
+                        imageDescriptor.RuntimeDepsVersion,
+                        DotNetImageType.Runtime_Deps,
+                        imageDescriptor.OsVariant,
+                        imageDescriptor.IsArm);
                     string appExePath = DockerHelper.GetContainerWorkPath("testApp");
                     DockerHelper.Run(
                         image: runtimeDepsImage,
@@ -201,7 +225,8 @@ namespace Microsoft.DotNet.Docker.Tests
             return buildArgs;
         }
 
-        public static string GetDotNetImage(string imageVersion, DotNetImageType imageType, string osVariant, bool isArm)
+        public static string GetDotNetImage(
+            string imageVersion, DotNetImageType imageType, string osVariant, bool isArm = false)
         {
             string variantName = Enum.GetName(typeof(DotNetImageType), imageType).ToLowerInvariant().Replace('_', '-');
             string imageName = $"microsoft/dotnet-nightly:{imageVersion}-{variantName}";
