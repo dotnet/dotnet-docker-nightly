@@ -5,15 +5,15 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 # Supported Linux amd64 tags
 
 - [`1.0.7-runtime-jessie`, `1.0.7-runtime`, `1.0-runtime` (*1.0/runtime/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/runtime/jessie/Dockerfile)
-- [`1.0.7-runtime-deps-jessie`, `1.0.7-runtime-deps`, `1.0-runtime-deps` (*1.0/runtime-deps/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/runtime-deps/jessie/Dockerfile)
+- [`1.0.7-runtime-deps-jessie`, `1.0.7-runtime-deps`, `1.0-runtime-deps`, `1-runtime-deps` (*1.0/runtime-deps/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/runtime-deps/jessie/Dockerfile)
 - [`1.1.4-runtime-jessie`, `1.1.4-runtime`, `1.1-runtime`, `1-runtime` (*1.1/runtime/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/runtime/jessie/Dockerfile)
 - [`1.1.4-sdk-jessie`, `1.1.4-sdk`, `1.1-sdk`, `1-sdk` (*1.1/sdk/jessie/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/sdk/jessie/Dockerfile)
 - [`2.0.1-runtime-stretch`, `2.0.1-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/stretch/amd64/Dockerfile)
 - [`2.0.1-runtime-jessie`, `2.0-runtime-jessie`, `2-runtime-jessie` (*2.0/runtime/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/jessie/amd64/Dockerfile)
 - [`2.0.1-runtime-deps-stretch`, `2.0.1-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps`, `runtime-deps` (*2.0/runtime-deps/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/stretch/amd64/Dockerfile)
 - [`2.0.1-runtime-deps-jessie`, `2.0-runtime-deps-jessie`, `2-runtime-deps-jessie` (*2.0/runtime-deps/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/jessie/amd64/Dockerfile)
-- [`2.0.1-sdk-stretch`, `2.0.1-sdk`, `2.0-sdk`, `2-sdk`, `sdk`, `latest` (*2.0/sdk/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/stretch/amd64/Dockerfile)
-- [`2.0.1-sdk-jessie`, `2.0-sdk-jessie`, `2-sdk-jessie` (*2.0/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/jessie/amd64/Dockerfile)
+- [`2.0.1-sdk-2.0.3-stretch`, `2.0.1-sdk-2.0.3`, `2.0-sdk`, `2-sdk`, `sdk`, `latest` (*2.0/sdk/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/stretch/amd64/Dockerfile)
+- [`2.0.1-sdk-2.0.3-jessie`, `2.0-sdk-jessie`, `2-sdk-jessie` (*2.0/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/jessie/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-stretch`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/stretch/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-jessie`, `2.1-runtime-jessie` (*2.1/runtime/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/jessie/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-stretch`, `2.1.0-preview1-sdk`, `2.1-sdk` (*2.1/sdk/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/stretch/amd64/Dockerfile)
@@ -25,7 +25,7 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`1.1.4-runtime-nanoserver`, `1.1.4-runtime`, `1.1-runtime`, `1-runtime` (*1.1/runtime/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/runtime/nanoserver/Dockerfile)
 - [`1.1.4-sdk-nanoserver`, `1.1.4-sdk`, `1.1-sdk`, `1-sdk` (*1.1/sdk/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/sdk/nanoserver/Dockerfile)
 - [`2.0.1-runtime-nanoserver`, `2.0.1-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/nanoserver/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/nanoserver/amd64/Dockerfile)
-- [`2.0.1-sdk-nanoserver`, `2.0.1-sdk`, `2.0-sdk`, `2-sdk`, `sdk`, `latest` (*2.0/sdk/nanoserver/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver/amd64/Dockerfile)
+- [`2.0.1-sdk-2.0.3-nanoserver`, `2.0.1-sdk-2.0.3`, `2.0-sdk`, `2-sdk`, `sdk`, `latest` (*2.0/sdk/nanoserver/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-nanoserver`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/nanoserver/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/nanoserver/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-nanoserver`, `2.1.0-preview1-sdk`, `2.1-sdk` (*2.1/sdk/nanoserver/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/nanoserver/amd64/Dockerfile)
 
