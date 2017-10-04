@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -61,12 +62,18 @@ namespace Microsoft.DotNet.Docker.Tests
                     });
             }
 
+            string versionFilterPattern = null;
+            if (VersionFilter != null)
+            {
+                versionFilterPattern = Regex.Escape(VersionFilter).Replace(@"\*", ".*").Replace(@"\?", ".");
+            }
+
             // Filter out test data that does not match the active architecture and version filters.
             return testData
                 .Where(imageDescriptor => ArchFilter == null
                     || string.Equals(imageDescriptor.Architecture, ArchFilter, StringComparison.OrdinalIgnoreCase))
                 .Where(imageDescriptor => VersionFilter == null
-                    || imageDescriptor.DotNetCoreVersion.StartsWith(VersionFilter))
+                    || Regex.IsMatch(imageDescriptor.DotNetCoreVersion, versionFilterPattern, RegexOptions.IgnoreCase))
                 .Select(imageDescriptor => new object[] { imageDescriptor });
         }
 
