@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -24,41 +25,37 @@ namespace Microsoft.DotNet.Docker.Tests
 
         public static IEnumerable<object[]> GetVerifyImagesData()
         {
-            List<ImageDescriptor> testData = new List<ImageDescriptor>
-            {
-                new ImageDescriptor {DotNetCoreVersion = "1.0", SdkVersion = "1.1"},
-                new ImageDescriptor {DotNetCoreVersion = "1.1", RuntimeDepsVersion = "1.0"},
-                new ImageDescriptor {DotNetCoreVersion = "2.0"},
-                new ImageDescriptor {DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0"},
-            };
+            List<ImageDescriptor> testData;
 
             if (DockerHelper.IsLinuxContainerModeEnabled)
             {
-                testData.AddRange(new List<ImageDescriptor>
-                    {
-                        new ImageDescriptor {DotNetCoreVersion = "2.0", OsVariant = "jessie"},
-                        new ImageDescriptor
-                        {
-                            DotNetCoreVersion = "2.0",
-                            OsVariant = "stretch",
-                            SdkOsVariant = "",
-                            Architecture = "arm"
-                        },
-                        new ImageDescriptor
-                        {
-                            DotNetCoreVersion = "2.1",
-                            RuntimeDepsVersion = "2.0",
-                            OsVariant = "jessie"
-                        },
-                        new ImageDescriptor
-                        {
-                            DotNetCoreVersion = "2.1",
-                            RuntimeDepsVersion = "2.0",
-                            OsVariant = "stretch",
-                            SdkOsVariant = "",
-                            Architecture ="arm"
-                        },
-                    });
+                testData = new List<ImageDescriptor>
+                {
+                    new ImageDescriptor { DotNetVersion = "1.0.7", OsVariant = "jessie", SdkVersion = "1.1.0" },
+                    new ImageDescriptor { DotNetVersion = "1.1.4", OsVariant = "jessie", RuntimeDepsVersion = "1.0.7" },
+                    new ImageDescriptor { DotNetVersion = "2.0.0", OsVariant = "stretch" },
+                    new ImageDescriptor { DotNetVersion = "2.0.0", OsVariant = "jessie" },
+                    new ImageDescriptor { DotNetVersion = "2.0.0", OsVariant = "stretch", Architecture = "arm" },
+                    new ImageDescriptor { DotNetVersion = "2.1.0", OsVariant = "stretch", RuntimeDepsVersion = "2.0.0" },
+                    new ImageDescriptor { DotNetVersion = "2.1.0", OsVariant = "jessie", RuntimeDepsVersion = "2.0.0" },
+                    new ImageDescriptor { DotNetVersion = "2.1.0", OsVariant = "stretch", RuntimeDepsVersion = "2.0.0", Architecture = "arm" },
+                };
+            }
+            else
+            {
+                testData = new List<ImageDescriptor>
+                {
+                    new ImageDescriptor { DotNetVersion = "1.0.7", OsVariant = "nanoserver", SdkVersion = "1.1.0" },
+                    new ImageDescriptor { DotNetVersion = "1.1.4", OsVariant = "nanoserver", RuntimeDepsVersion = "1.0.7" },
+                    new ImageDescriptor { DotNetVersion = "2.0.0", OsVariant = "nanoserver" },
+                    new ImageDescriptor { DotNetVersion = "2.1.0", OsVariant = "nanoserver", RuntimeDepsVersion = "2.0.0" },
+                };
+            }
+
+            string versionFilterPattern = null;
+            if (VersionFilter != null)
+            {
+                versionFilterPattern = $"^{Regex.Escape(VersionFilter).Replace(@"\*", ".*").Replace(@"\?", ".")}$";
             }
 
             // Filter out test data that does not match the active architecture and version filters.
@@ -66,7 +63,7 @@ namespace Microsoft.DotNet.Docker.Tests
                 .Where(imageDescriptor => ArchFilter == null
                     || string.Equals(imageDescriptor.Architecture, ArchFilter, StringComparison.OrdinalIgnoreCase))
                 .Where(imageDescriptor => VersionFilter == null
-                    || imageDescriptor.DotNetCoreVersion.StartsWith(VersionFilter))
+                    || Regex.IsMatch(imageDescriptor.DotNetVersion, versionFilterPattern, RegexOptions.IgnoreCase))
                 .Select(imageDescriptor => new object[] { imageDescriptor });
         }
 
@@ -74,7 +71,7 @@ namespace Microsoft.DotNet.Docker.Tests
         [MemberData(nameof(GetVerifyImagesData))]
         public void VerifyImages(ImageDescriptor imageDescriptor)
         {
-            string appSdkImage = GetIdentifier(imageDescriptor.DotNetCoreVersion, "app-sdk");
+            string appSdkImage = GetIdentifier(imageDescriptor.DotNetVersion, "app-sdk");
 
             try
             {
@@ -102,14 +99,14 @@ namespace Microsoft.DotNet.Docker.Tests
         {
             // dotnet new, restore, build a new app using the sdk image
             List<string> buildArgs = new List<string>();
-            buildArgs.Add($"netcoreapp_version={imageDescriptor.DotNetCoreVersion}");
+            buildArgs.Add($"netcoreapp_version={imageDescriptor.DotNetVersion}");
             if (!imageDescriptor.SdkVersion.StartsWith("1."))
             {
                 buildArgs.Add($"optional_new_args=--no-restore");
             }
 
             string sdkImage = GetDotNetImage(
-                imageDescriptor.DotNetCoreVersion, DotNetImageType.SDK, imageDescriptor.SdkOsVariant);
+                imageDescriptor.DotNetVersion, DotNetImageType.SDK, imageDescriptor.OsVariant);
 
             DockerHelper.Build(
                 dockerfile: $"Dockerfile.{DockerHelper.DockerOS.ToLower()}.testapp",
@@ -129,7 +126,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
         private void VerifyRuntimeImage_FrameworkDependentApp(ImageDescriptor imageDescriptor, string appSdkImage)
         {
-            string frameworkDepAppId = GetIdentifier(imageDescriptor.DotNetCoreVersion, "framework-dependent-app");
+            string frameworkDepAppId = GetIdentifier(imageDescriptor.DotNetVersion, "framework-dependent-app");
 
             try
             {
@@ -142,7 +139,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
                 // Run the app in the Docker volume to verify the runtime image
                 string runtimeImage = GetDotNetImage(
-                    imageDescriptor.DotNetCoreVersion,
+                    imageDescriptor.DotNetVersion,
                     DotNetImageType.Runtime,
                     imageDescriptor.OsVariant,
                     imageDescriptor.IsArm);
@@ -161,7 +158,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
         private void VerifyRuntimeDepsImage_SelfContainedApp(ImageDescriptor imageDescriptor, string appSdkImage)
         {
-            string selfContainedAppId = GetIdentifier(imageDescriptor.DotNetCoreVersion, "self-contained-app");
+            string selfContainedAppId = GetIdentifier(imageDescriptor.DotNetVersion, "self-contained-app");
             string rid = imageDescriptor.IsArm ? "linux-arm" : "debian.8-x64";
 
             try
@@ -176,7 +173,7 @@ namespace Microsoft.DotNet.Docker.Tests
                 try
                 {
                     // Publish the self-contained app to a Docker volume using the app's sdk image
-                    string optionalPublishArgs = imageDescriptor.DotNetCoreVersion.StartsWith("1.") ? "" : "--no-restore";
+                    string optionalPublishArgs = imageDescriptor.DotNetVersion.StartsWith("1.") ? "" : "--no-restore";
                     string dotNetCmd = $"dotnet publish -r {rid} -o {DockerHelper.ContainerWorkDir} {optionalPublishArgs}";
                     DockerHelper.Run(
                         image: selfContainedAppId,
@@ -222,6 +219,8 @@ namespace Microsoft.DotNet.Docker.Tests
             {
                 imageName += $"-arm32v7";
             }
+
+            Assert.True(DockerHelper.ImageExists(imageName), $"`{imageName}` could not be found on disk.");
 
             return imageName;
         }
