@@ -94,7 +94,7 @@
       },
       "inputs": {
         "filename": "docker",
-        "arguments": "$(docker.runArgs) $(image-builder.sdkArgs)",
+        "arguments": "$(docker.runImageBuilder) $(image-builder.sdkBuildArgs)",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
@@ -113,7 +113,7 @@
       },
       "inputs": {
         "filename": "docker",
-        "arguments": "$(docker.runArgs) $(image-builder.args)",
+        "arguments": "$(docker.runImageBuilder) $(image-builder.armBuildArgs)",
         "workingFolder": "",
         "failOnStandardError": "false"
       }
@@ -185,7 +185,7 @@
     "docker.commonRunArgs": {
       "value": "--rm -v $(docker.volumeName):/repo -w /repo --name $(docker.containerName)"
     },
-    "docker.runArgs": {
+    "docker.runImageBuilder": {
       "value": "run  $(docker.commonRunArgs) -v /var/run/docker.sock:/var/run/docker.sock $(image-builder.imageName)"
     },
     "docker.containerName": {
@@ -204,11 +204,11 @@
       "value": "build --manifest manifest.json --repo microsoft/dotnet-nightly $(PB.image-builder.customCommonArgs)",
       "allowOverride": true
     },
-    "image-builder.args": {
+    "image-builder.armBuildArgs": {
       "value": "$(image-builder.commonArgs) --path $(PB.image-builder.path) --architecture arm --test-var Filter=$(PB.image-builder.path) --test-var Architecture=arm --push --username $(PB.docker.username) --password $(PB.docker.password)",
       "allowOverride": true
     },
-    "image-builder.sdkArgs": {
+    "image-builder.sdkBuildArgs": {
       "value": "$(image-builder.commonArgs) --path $(PB.image-builder.path)/sdk/stretch/amd64 --architecture amd64 --skip-test",
       "allowOverride": true
     },

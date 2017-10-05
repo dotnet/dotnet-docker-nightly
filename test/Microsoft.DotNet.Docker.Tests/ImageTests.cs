@@ -65,7 +65,7 @@ namespace Microsoft.DotNet.Docker.Tests
             string versionFilterPattern = null;
             if (VersionFilter != null)
             {
-                versionFilterPattern = Regex.Escape(VersionFilter).Replace(@"\*", ".*").Replace(@"\?", ".");
+                versionFilterPattern = "^" + Regex.Escape(VersionFilter).Replace(@"\*", ".*").Replace(@"\?", ".");
             }
 
             // Filter out test data that does not match the active architecture and version filters.
