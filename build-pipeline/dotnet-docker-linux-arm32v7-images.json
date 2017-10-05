@@ -198,7 +198,7 @@
       "value": "$(Build.DefinitionName)-$(Build.BuildId)"
     },
     "image-builder.imageName": {
-      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20171004130549"
+      "value": "microsoft/dotnet-buildtools-prereqs:image-builder-jessie-20171005132855"
     },
     "image-builder.commonArgs": {
       "value": "build --manifest manifest.json --repo microsoft/dotnet-nightly $(PB.image-builder.customCommonArgs)",
