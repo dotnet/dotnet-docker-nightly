@@ -230,6 +230,8 @@ namespace Microsoft.DotNet.Docker.Tests
                 imageName += $"-arm32v7";
             }
 
+            Assert.True(DockerHelper.ImageExists(imageName), $"`{imageName}` could not be found on disk.");
+
             return imageName;
         }
 
