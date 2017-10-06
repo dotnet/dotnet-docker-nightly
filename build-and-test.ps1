@@ -8,6 +8,7 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+Write-Host "Building and testing with -Filter $Filter -Architecture $Architecture"
 $(docker version) | % { Write-Host "$_" }
 
 if ($UseImageCache) {
