@@ -116,7 +116,7 @@ namespace Microsoft.DotNet.Docker.Tests
             }
 
             string sdkImage = GetDotNetImage(
-                imageDescriptor.DotNetCoreVersion, DotNetImageType.SDK, imageDescriptor.SdkOsVariant);
+                imageDescriptor.SdkVersion, DotNetImageType.SDK, imageDescriptor.SdkOsVariant);
 
             DockerHelper.Build(
                 dockerfile: $"Dockerfile.{DockerHelper.DockerOS.ToLower()}.testapp",
