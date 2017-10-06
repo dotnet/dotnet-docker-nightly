@@ -81,7 +81,7 @@
       }
     },
     {
-      "enabled": true,
+      "enabled": false,
       "continueOnError": false,
       "alwaysRun": false,
       "displayName": "Build SDK images (needed for testing)",
@@ -205,7 +205,7 @@
       "allowOverride": true
     },
     "image-builder.armBuildArgs": {
-      "value": "$(image-builder.commonArgs) --path $(PB.image-builder.path) --architecture arm --test-var Filter=$(PB.image-builder.path) --test-var Architecture=arm --push --username $(PB.docker.username) --password $(PB.docker.password)",
+      "value": "$(image-builder.commonArgs) --path $(PB.image-builder.path) --architecture arm --skip-test --test-var Filter=$(PB.image-builder.path) --test-var Architecture=arm --push --username $(PB.docker.username) --password $(PB.docker.password)",
       "allowOverride": true
     },
     "image-builder.sdkBuildArgs": {
@@ -244,7 +244,7 @@
     }
   ],
   "jobAuthorizationScope": "projectCollection",
-  "jobTimeoutInMinutes": 90,
+  "jobTimeoutInMinutes": 60,
   "jobCancelTimeoutInMinutes": 5,
   "repository": {
     "properties": {
