@@ -10,29 +10,22 @@ namespace Microsoft.DotNet.Docker.Tests
     {
         private string runtimeDepsVersion;
         private string sdkVersion;
-        private string sdkOsVariant;
 
         public string Architecture { get; set; } = "amd64";
-        public string DotNetCoreVersion { get; set; }
+        public string DotNetVersion { get; set; }
         public bool IsArm { get => String.Equals("arm", Architecture, StringComparison.OrdinalIgnoreCase); }
         public string OsVariant { get; set; }
 
         public string RuntimeDepsVersion
         {
-            get { return runtimeDepsVersion ?? DotNetCoreVersion; }
+            get { return runtimeDepsVersion ?? DotNetVersion; }
             set { runtimeDepsVersion = value; }
         }
 
         public string SdkVersion
         {
-            get { return sdkVersion ?? DotNetCoreVersion; }
+            get { return sdkVersion ?? DotNetVersion; }
             set { sdkVersion = value; }
-        }
-
-        public string SdkOsVariant
-        {
-            get { return sdkOsVariant ?? OsVariant; }
-            set { sdkOsVariant = value; }
         }
     }
 }
