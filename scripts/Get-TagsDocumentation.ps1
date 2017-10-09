@@ -9,7 +9,7 @@ $repoRoot = Split-Path -Path "$PSScriptRoot" -Parent
 
 if ([String]::IsNullOrWhiteSpace($RepoName))
 {
-    [Uri]$remoteUrl = New-Object -TypeName System.Uri -ArgumentList "https://github.com/dotnet/dotnet-docker-nightly.git"
+    $remoteUrl = $null
     if ([Uri]::TryCreate(((git config --get remote.origin.url) | Out-String), [UriKind]::Absolute, [ref]$remoteUrl))
     {
         $RepoName = [System.IO.Path]::GetFileNameWithoutExtension($remoteUrl.ToString())
@@ -18,8 +18,7 @@ if ([String]::IsNullOrWhiteSpace($RepoName))
 
 if ([String]::IsNullOrWhiteSpace($RepoName))
 {
-    Write-Warning 'Could not automatically determine repository name. Falling back to "dotnet-docker-nightly". Add -RepoName <REPO> to override.'
-    $RepoName = "dotnet-docker-nightly"
+    Write-Error 'Could not automatically determine repository name. Add -RepoName <REPO> to override.'
 }
 
 & docker pull $ImageBuilderImageName
