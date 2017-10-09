@@ -14,11 +14,10 @@ if ([String]::IsNullOrWhiteSpace($RepoName))
     {
         $RepoName = [System.IO.Path]::GetFileNameWithoutExtension($remoteUrl.ToString())
     }
-}
-
-if ([String]::IsNullOrWhiteSpace($RepoName))
-{
-    Write-Error 'Could not automatically determine repository name. Add -RepoName <REPO> to override.'
+    if ([String]::IsNullOrWhiteSpace($RepoName))
+    {
+        Write-Error 'Could not automatically determine repository name. Add -RepoName <REPO> to override.'
+    }
 }
 
 & docker pull $ImageBuilderImageName
