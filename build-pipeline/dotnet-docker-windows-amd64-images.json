@@ -227,7 +227,7 @@
   "jobCancelTimeoutInMinutes": 5,
   "repository": {
     "properties": {
-      "cleanOptions": "1",
+      "cleanOptions": "3",
       "gitLfsSupport": "false",
       "skipSyncSource": "false",
       "reportBuildStatus": "true",
