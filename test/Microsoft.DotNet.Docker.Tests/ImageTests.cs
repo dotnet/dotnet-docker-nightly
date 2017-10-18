@@ -81,13 +81,13 @@ namespace Microsoft.DotNet.Docker.Tests
             string versionFilterPattern = null;
             if (VersionFilter != null)
             {
-                versionFilterPattern = "^" + Regex.Escape(VersionFilter).Replace(@"\*", ".*").Replace(@"\?", ".") + "$";
+                versionFilterPattern = GetFilterRegexPattern(VersionFilter);
             }
 
             string osFilterPattern = null;
             if (OsFilter != null)
             {
-                osFilterPattern = "^" + Regex.Escape(OsFilter).Replace(@"\*", ".*").Replace(@"\?", ".") + "$";
+                osFilterPattern = GetFilterRegexPattern(OsFilter);
             }
 
             // Filter out test data that does not match the active architecture and version filters.
@@ -100,6 +100,11 @@ namespace Microsoft.DotNet.Docker.Tests
                 .Where(imageDescriptor => VersionFilter == null
                     || Regex.IsMatch(imageDescriptor.DotNetCoreVersion, versionFilterPattern, RegexOptions.IgnoreCase))
                 .Select(imageDescriptor => new object[] { imageDescriptor });
+        }
+
+        private static string GetFilterRegexPattern(string filter)
+        {
+            return $"^{Regex.Escape(filter).Replace(@"\*", ".*").Replace(@"\?", ".")}$";
         }
 
         [Theory]
