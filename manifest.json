@@ -8,7 +8,7 @@
       "docker run -v /var/run/docker.sock:/var/run/docker.sock testrunner powershell -File ./test/run-test.ps1 -Filter $(Filter) -Architecture $(Architecture)"
     ],
     "windows": [
-      "powershell -NoProfile -Command .\\test\\run-test.ps1 -Filter $(Filter)"
+      "powershell -NoProfile -Command .\\test\\run-test.ps1 -Filter $(Filter) -OS $(OS)"
     ]
   },
   "repos": [
@@ -240,6 +240,13 @@
                   "isUndocumented": true
                 }
               }
+            },
+            {
+              "dockerfile": "2.0/runtime/nanoserver-1709/amd64",
+              "os": "windows",
+              "tags": {
+                "2.0.1-runtime-nanoserver-1709": {}
+              }
             }
           ]
         },
@@ -274,6 +281,13 @@
                 "2-sdk-nanoserver": {
                   "isUndocumented": true
                 }
+              }
+            },
+            {
+              "dockerfile": "2.0/sdk/nanoserver-1709/amd64",
+              "os": "windows",
+              "tags": {
+                "2.0.1-sdk-2.0.3-nanoserver-1709": {}
               }
             }
           ]
@@ -355,6 +369,13 @@
                   "isUndocumented": true
                 }
               }
+            },
+            {
+              "dockerfile": "2.1/runtime/nanoserver-1709/amd64",
+              "os": "windows",
+              "tags": {
+                "2.1.0-preview1-runtime-nanoserver-1709": {}
+              }
             }
           ]
         },
@@ -381,6 +402,13 @@
                   "isUndocumented": true
                 }
               }
+            },
+            {
+              "dockerfile": "2.1/sdk/nanoserver-1709/amd64",
+              "os": "windows",
+              "tags": {
+                "2.1.0-preview1-sdk-nanoserver-1709": {}
+              }
             }
           ]
         },
@@ -406,53 +434,6 @@
               "tags": {
                 "2.1.0-preview1-sdk-jessie": {},
                 "2.1-sdk-jessie": {}
-              }
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "name": "microsoft/nanoserver-insider-dotnet",
-      "readmePath": "2.0/runtime/nanoserver-insider/README.md",
-      "images": [
-        {
-          "sharedTags": {
-            "2.0.1-runtime": {},
-            "2.0-runtime": {},
-            "2-runtime": {},
-            "runtime": {}
-          },
-          "platforms": [
-            {
-              "dockerfile": "2.0/runtime/nanoserver-insider/amd64",
-              "os": "windows",
-              "tags": {
-                "2.0.1-runtime-nanoserver": {},
-                "2.0.1-runtime-nanoserver-10.0.16267.1001": {
-                  "isUndocumented": true
-                }
-              }
-            }
-          ]
-        },
-        {
-          "sharedTags": {
-            "2.0.1-sdk": {},
-            "2.0-sdk": {},
-            "2-sdk": {},
-            "sdk": {},
-            "latest": {}
-          },
-          "platforms": [
-            {
-              "dockerfile": "2.0/sdk/nanoserver-insider/amd64",
-              "os": "windows",
-              "tags": {
-                "2.0.1-sdk-nanoserver": {},
-                "2.0.1-sdk-nanoserver-10.0.16267.1001": {
-                  "isUndocumented": true
-                }
               }
             }
           ]

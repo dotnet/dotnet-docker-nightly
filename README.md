@@ -19,7 +19,14 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`2.1.0-preview1-sdk-stretch`, `2.1.0-preview1-sdk`, `2.1-sdk` (*2.1/sdk/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/stretch/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-jessie`, `2.1-sdk-jessie` (*2.1/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/jessie/amd64/Dockerfile)
 
-# Supported Windows amd64 tags
+# Supported Windows Server 2016 Version 1709 (Fall Creators Update) amd64 tags
+
+- [`2.0.1-runtime-nanoserver-1709`, `2.0.1-runtime`, `2.0-runtime`, `2-runtime`, `runtime` (*2.0/runtime/nanoserver-1709/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime/nanoserver-1709/amd64/Dockerfile)
+- [`2.0.1-sdk-2.0.3-nanoserver-1709`, `2.0.1-sdk-2.0.3`, `2.0-sdk`, `2-sdk`, `sdk`, `latest` (*2.0/sdk/nanoserver-1709/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/nanoserver-1709/amd64/Dockerfile)
+- [`2.1.0-preview1-runtime-nanoserver-1709`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/nanoserver-1709/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/nanoserver-1709/amd64/Dockerfile)
+- [`2.1.0-preview1-sdk-nanoserver-1709`, `2.1.0-preview1-sdk`, `2.1-sdk` (*2.1/sdk/nanoserver-1709/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/nanoserver-1709/amd64/Dockerfile)
+
+# Supported Windows Server 2016 amd64 tags
 
 - [`1.0.7-runtime-nanoserver`, `1.0.7-runtime`, `1.0-runtime` (*1.0/runtime/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.0/runtime/nanoserver/Dockerfile)
 - [`1.1.4-runtime-nanoserver`, `1.1.4-runtime`, `1.1-runtime`, `1-runtime` (*1.1/runtime/nanoserver/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/1.1/runtime/nanoserver/Dockerfile)
