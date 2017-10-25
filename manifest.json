@@ -174,7 +174,8 @@
               "dockerfile": "2.0/runtime-deps/stretch/amd64",
               "os": "linux",
               "tags": {
-                "2.0.1-runtime-deps-stretch": {}
+                "2.0.1-runtime-deps-stretch": {},
+                "2.0-runtime-deps-stretch": {}
               }
             },
             {
@@ -183,9 +184,7 @@
               "os": "linux",
               "tags": {
                 "2.0.1-runtime-deps-stretch-arm32v7": {},
-                "2.0-runtime-deps-stretch-arm32v7": {
-                  "isUndocumented": true
-                },
+                "2.0-runtime-deps-stretch-arm32v7": {},
                 "2-runtime-deps-stretch-arm32v7": {
                   "isUndocumented": true
                 }
@@ -207,7 +206,8 @@
               "dockerfile": "2.0/runtime/stretch/amd64",
               "os": "linux",
               "tags": {
-                "2.0.1-runtime-stretch": {}
+                "2.0.1-runtime-stretch": {},
+                "2.0-runtime-stretch": {}
               }
             },
             {
@@ -216,9 +216,7 @@
               "os": "linux",
               "tags": {
                 "2.0.1-runtime-stretch-arm32v7": {},
-                "2.0-runtime-stretch-arm32v7": {
-                  "isUndocumented": true
-                },
+                "2.0-runtime-stretch-arm32v7": {},
                 "2-runtime-stretch-arm32v7": {
                   "isUndocumented": true
                 }
@@ -233,9 +231,7 @@
                 "2.0.1-runtime-nanoserver-$(nanoServerVersion)": {
                   "isUndocumented": true
                 },
-                "2.0-runtime-nanoserver": {
-                  "isUndocumented": true
-                },
+                "2.0-runtime-nanoserver": {},
                 "2-runtime-nanoserver": {
                   "isUndocumented": true
                 }
@@ -245,7 +241,8 @@
               "dockerfile": "2.0/runtime/nanoserver-1709/amd64",
               "os": "windows",
               "tags": {
-                "2.0.1-runtime-nanoserver-1709": {}
+                "2.0.1-runtime-nanoserver-1709": {},
+                "2.0-runtime-nanoserver-1709": {}
               }
             }
           ]
@@ -264,7 +261,8 @@
               "dockerfile": "2.0/sdk/stretch/amd64",
               "os": "linux",
               "tags": {
-                "2.0.1-sdk-2.0.3-stretch": {}
+                "2.0.1-sdk-2.0.3-stretch": {},
+                "2.0-sdk-stretch": {}
               }
             },
             {
@@ -275,9 +273,7 @@
                 "2.0.1-sdk-2.0.3-nanoserver-$(nanoServerVersion)": {
                   "isUndocumented": true
                 },
-                "2.0-sdk-nanoserver": {
-                  "isUndocumented": true
-                },
+                "2.0-sdk-nanoserver": {},
                 "2-sdk-nanoserver": {
                   "isUndocumented": true
                 }
@@ -287,7 +283,8 @@
               "dockerfile": "2.0/sdk/nanoserver-1709/amd64",
               "os": "windows",
               "tags": {
-                "2.0.1-sdk-2.0.3-nanoserver-1709": {}
+                "2.0.1-sdk-2.0.3-nanoserver-1709": {},
+                "2.0-sdk-nanoserver-1709": {}
               }
             }
           ]
@@ -345,7 +342,8 @@
               "dockerfile": "2.1/runtime/stretch/amd64",
               "os": "linux",
               "tags": {
-                "2.1.0-preview1-runtime-stretch": {}
+                "2.1.0-preview1-runtime-stretch": {},
+                "2.1-runtime-stretch": {}
               }
             },
             {
@@ -354,9 +352,7 @@
               "os": "linux",
               "tags": {
                 "2.1.0-preview1-runtime-stretch-arm32v7": {},
-                "2.1-runtime-stretch-arm32v7": {
-                  "isUndocumented": true
-                }
+                "2.1-runtime-stretch-arm32v7": {}
               },
               "variant": "armv7"
             },
@@ -365,6 +361,7 @@
               "os": "windows",
               "tags": {
                 "2.1.0-preview1-runtime-nanoserver": {},
+                "2.1-runtime-nanoserver": {},
                 "2.1.0-preview1-runtime-nanoserver-$(nanoServerVersion)": {
                   "isUndocumented": true
                 }
@@ -374,7 +371,8 @@
               "dockerfile": "2.1/runtime/nanoserver-1709/amd64",
               "os": "windows",
               "tags": {
-                "2.1.0-preview1-runtime-nanoserver-1709": {}
+                "2.1.0-preview1-runtime-nanoserver-1709": {},
+                "2.1-runtime-nanoserver-1709": {}
               }
             }
           ]
@@ -390,7 +388,8 @@
               "dockerfile": "2.1/sdk/stretch/amd64",
               "os": "linux",
               "tags": {
-                "2.1.0-preview1-sdk-stretch": {}
+                "2.1.0-preview1-sdk-stretch": {},
+                "2.1-sdk-stretch": {}
               }
             },
             {
@@ -398,6 +397,7 @@
               "os": "windows",
               "tags": {
                 "2.1.0-preview1-sdk-nanoserver": {},
+                "2.1-sdk-nanoserver": {},
                 "2.1.0-preview1-sdk-nanoserver-$(nanoServerVersion)": {
                   "isUndocumented": true
                 }
@@ -407,7 +407,8 @@
               "dockerfile": "2.1/sdk/nanoserver-1709/amd64",
               "os": "windows",
               "tags": {
-                "2.1.0-preview1-sdk-nanoserver-1709": {}
+                "2.1.0-preview1-sdk-nanoserver-1709": {},
+                "2.1-sdk-nanoserver-1709": {}
               }
             }
           ]
