@@ -16,6 +16,8 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`2.0.1-sdk-2.0.3-jessie`, `2.0-sdk-jessie`, `2-sdk-jessie` (*2.0/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/sdk/jessie/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-stretch`, `2.1-runtime-stretch`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/stretch/amd64/Dockerfile)
 - [`2.1.0-preview1-runtime-jessie`, `2.1-runtime-jessie` (*2.1/runtime/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/jessie/amd64/Dockerfile)
+- [`2.1.0-preview1-runtime-alpine`, `2.1-runtime-alpine` (*2.1/runtime/alpine/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/alpine/amd64/Dockerfile)
+- [`2.1.0-preview1-runtime-deps-alpine`, `2.1-runtime-deps-alpine` (*2.1/runtime-deps/alpine/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime-deps/alpine/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-stretch`, `2.1-sdk-stretch`, `2.1.0-preview1-sdk`, `2.1-sdk` (*2.1/sdk/stretch/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/stretch/amd64/Dockerfile)
 - [`2.1.0-preview1-sdk-jessie`, `2.1-sdk-jessie` (*2.1/sdk/jessie/amd64/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/sdk/jessie/amd64/Dockerfile)
 

@@ -399,7 +399,7 @@
           ]
         },
         {
-          "readmeOrder": 12,
+          "readmeOrder": 14,
           "sharedTags": {
             "2.1.0-preview1-sdk": {},
             "2.1-sdk": {}
@@ -446,7 +446,7 @@
           ]
         },
         {
-          "readmeOrder": 13,
+          "readmeOrder": 15,
           "platforms": [
             {
               "dockerfile": "2.1/sdk/jessie/amd64",
@@ -454,6 +454,32 @@
               "tags": {
                 "2.1.0-preview1-sdk-jessie": {},
                 "2.1-sdk-jessie": {}
+              }
+            }
+          ]
+        },
+        {
+          "readmeOrder": 13,
+          "platforms": [
+            {
+              "dockerfile": "2.1/runtime-deps/alpine/amd64",
+              "os": "linux",
+              "tags": {
+                "2.1.0-preview1-runtime-deps-alpine": {},
+                "2.1-runtime-deps-alpine": {}
+              }
+            }
+          ]
+        },
+        {
+          "readmeOrder": 12,
+          "platforms": [
+            {
+              "dockerfile": "2.1/runtime/alpine/amd64",
+              "os": "linux",
+              "tags": {
+                "2.1.0-preview1-runtime-alpine": {},
+                "2.1-runtime-alpine": {}
               }
             }
           ]

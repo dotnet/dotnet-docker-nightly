@@ -44,12 +44,8 @@ namespace Microsoft.DotNet.Docker.Tests
                         Architecture = "arm"
                     },
                     new ImageDescriptor { DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0" },
-                    new ImageDescriptor
-                    {
-                        DotNetCoreVersion = "2.1",
-                        RuntimeDepsVersion = "2.0",
-                        OsVariant = "jessie"
-                    },
+                    new ImageDescriptor { DotNetCoreVersion = "2.1", RuntimeDepsVersion = "2.0", OsVariant = "jessie" },
+                    new ImageDescriptor { DotNetCoreVersion = "2.1", OsVariant = "alpine", SdkOsVariant = "", },
                     new ImageDescriptor
                     {
                         DotNetCoreVersion = "2.1",
@@ -117,14 +113,15 @@ namespace Microsoft.DotNet.Docker.Tests
             {
                 CreateTestAppWithSdkImage(imageDescriptor, appSdkImage);
 
-                if (!imageDescriptor.IsArm)
+                if (!string.IsNullOrEmpty(imageDescriptor.SdkOsVariant))
                 {
                     VerifySdkImage_RunApp(imageDescriptor, appSdkImage);
                 }
 
                 VerifyRuntimeImage_FrameworkDependentApp(imageDescriptor, appSdkImage);
 
-                if (DockerHelper.IsLinuxContainerModeEnabled)
+                if (DockerHelper.IsLinuxContainerModeEnabled
+                    && !string.Equals(imageDescriptor.OsVariant, "alpine", StringComparison.OrdinalIgnoreCase))
                 {
                     VerifyRuntimeDepsImage_SelfContainedApp(imageDescriptor, appSdkImage);
                 }
@@ -199,7 +196,7 @@ namespace Microsoft.DotNet.Docker.Tests
         private void VerifyRuntimeDepsImage_SelfContainedApp(ImageDescriptor imageDescriptor, string appSdkImage)
         {
             string selfContainedAppId = GetIdentifier(imageDescriptor.DotNetCoreVersion, "self-contained-app");
-            string rid = imageDescriptor.IsArm ? "linux-arm" : "debian.8-x64";
+            string rid = GetRid(imageDescriptor);
 
             try
             {
@@ -268,6 +265,25 @@ namespace Microsoft.DotNet.Docker.Tests
         private static string GetIdentifier(string version, string type)
         {
             return $"{version}-{type}-{DateTime.Now.ToFileTime()}";
+        }
+
+        private static string GetRid(ImageDescriptor imageDescriptor)
+        {
+            string rid;
+            if (imageDescriptor.IsArm)
+            {
+                rid = "linux-arm";
+            }
+            else if (string.Equals(imageDescriptor.OsVariant, "alpine", StringComparison.OrdinalIgnoreCase))
+            {
+                rid = "alpine.3.6-x64";
+            }
+            else
+            {
+                rid = "debian.8-x64";
+            }
+
+            return rid;
         }
     }
 }
