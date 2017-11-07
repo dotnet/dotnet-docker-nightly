@@ -120,7 +120,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
                 VerifyRuntimeImage_FrameworkDependentApp(imageDescriptor, appSdkImage);
 
-                if (DockerHelper.IsLinuxContainerModeEnabled && !imageDescriptor.IsAlpine)
+                if (DockerHelper.IsLinuxContainerModeEnabled)
                 {
                     VerifyRuntimeDepsImage_SelfContainedApp(imageDescriptor, appSdkImage);
                 }
@@ -144,8 +144,10 @@ namespace Microsoft.DotNet.Docker.Tests
             string sdkImage = GetDotNetImage(
                 imageDescriptor.SdkVersion, DotNetImageType.SDK, imageDescriptor.SdkOsVariant);
 
+            // TODO:  Remove Alpine specialization once SDK is updated to depend on a Runtime version with Alpine support
+            string dockerfileOS = imageDescriptor.IsAlpine ? imageDescriptor.OsVariant : DockerHelper.DockerOS.ToLower();
             DockerHelper.Build(
-                dockerfile: $"Dockerfile.{DockerHelper.DockerOS.ToLower()}.testapp",
+                dockerfile: $"Dockerfile.{dockerfileOS}.testapp",
                 tag: appSdkImage,
                 fromImage: sdkImage,
                 buildArgs: buildArgs.ToArray());
