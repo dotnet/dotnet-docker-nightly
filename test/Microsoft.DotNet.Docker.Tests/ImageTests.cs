@@ -120,8 +120,7 @@ namespace Microsoft.DotNet.Docker.Tests
 
                 VerifyRuntimeImage_FrameworkDependentApp(imageDescriptor, appSdkImage);
 
-                if (DockerHelper.IsLinuxContainerModeEnabled
-                    && !string.Equals(imageDescriptor.OsVariant, "alpine", StringComparison.OrdinalIgnoreCase))
+                if (DockerHelper.IsLinuxContainerModeEnabled && !imageDescriptor.IsAlpine)
                 {
                     VerifyRuntimeDepsImage_SelfContainedApp(imageDescriptor, appSdkImage);
                 }
@@ -274,7 +273,7 @@ namespace Microsoft.DotNet.Docker.Tests
             {
                 rid = "linux-arm";
             }
-            else if (string.Equals(imageDescriptor.OsVariant, "alpine", StringComparison.OrdinalIgnoreCase))
+            else if (imageDescriptor.IsAlpine)
             {
                 rid = "alpine.3.6-x64";
             }
