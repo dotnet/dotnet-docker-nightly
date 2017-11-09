@@ -63,7 +63,7 @@
               }
             },
             {
-              "dockerfile": "1.0/runtime/nanoserver",
+              "dockerfile": "1.0/runtime/nanoserver-sac2016",
               "os": "windows",
               "tags": {
                 "1.0.7-runtime-nanoserver-sac2016": {},
@@ -102,7 +102,7 @@
               }
             },
             {
-              "dockerfile": "1.1/runtime/nanoserver",
+              "dockerfile": "1.1/runtime/nanoserver-sac2016",
               "os": "windows",
               "tags": {
                 "1.1.4-runtime-nanoserver-sac2016": {},
@@ -144,7 +144,7 @@
               }
             },
             {
-              "dockerfile": "1.1/sdk/nanoserver",
+              "dockerfile": "1.1/sdk/nanoserver-sac2016",
               "os": "windows",
               "tags": {
                 "1.1.4-sdk-nanoserver-sac2016": {},
@@ -233,7 +233,7 @@
               "variant": "armv7"
             },
             {
-              "dockerfile": "2.0/runtime/nanoserver/amd64",
+              "dockerfile": "2.0/runtime/nanoserver-sac2016/amd64",
               "os": "windows",
               "tags": {
                 "2.0.1-runtime-nanoserver-sac2016": {},
@@ -282,7 +282,7 @@
               }
             },
             {
-              "dockerfile": "2.0/sdk/nanoserver/amd64",
+              "dockerfile": "2.0/sdk/nanoserver-sac2016/amd64",
               "os": "windows",
               "tags": {
                 "2.0.1-sdk-2.0.3-nanoserver-sac2016": {},
@@ -380,7 +380,7 @@
               "variant": "armv7"
             },
             {
-              "dockerfile": "2.1/runtime/nanoserver/amd64",
+              "dockerfile": "2.1/runtime/nanoserver-sac2016/amd64",
               "os": "windows",
               "tags": {
                 "2.1.0-preview1-runtime-nanoserver-sac2016": {},
@@ -414,7 +414,7 @@
               }
             },
             {
-              "dockerfile": "2.1/sdk/nanoserver/amd64",
+              "dockerfile": "2.1/sdk/nanoserver-sac2016/amd64",
               "os": "windows",
               "tags": {
                 "2.1.0-preview1-sdk-nanoserver-sac2016": {},
