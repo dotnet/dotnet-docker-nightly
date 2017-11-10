@@ -25,7 +25,7 @@ $builtTags = @()
 
 $buildFilter = $Filter
 if ($activeOS -eq "windows" -and $buildFilter -like "2.*") {
-    $buildFilter = "$buildFilter/nanoserver/*"
+    $buildFilter = "$buildFilter/nanoserver-sac2016/*"
 }
 
 $manifestRepo.Images |
