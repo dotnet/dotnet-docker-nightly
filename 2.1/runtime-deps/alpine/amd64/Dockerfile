@@ -1,7 +1,6 @@
 FROM alpine:3.6
 
-RUN apk update \
-    && apk add --no-cache \
+RUN apk add --no-cache \
         ca-certificates \
         \
         # .NET Core dependencies
@@ -12,6 +11,7 @@ RUN apk update \
         libssl1.0 \
         libunwind \
         libuuid \
+        tzdata \
         userspace-rcu \
         zlib \
     && apk -X https://dl-cdn.alpinelinux.org/alpine/edge/main add --no-cache \
