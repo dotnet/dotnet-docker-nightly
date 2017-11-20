@@ -403,7 +403,7 @@
           ]
         },
         {
-          "readmeOrder": 11,
+          "readmeOrder": 12,
           "platforms": [
             {
               "dockerfile": "2.1/runtime/jessie/amd64",
@@ -442,7 +442,7 @@
           ]
         },
         {
-          "readmeOrder": 12,
+          "readmeOrder": 11,
           "platforms": [
             {
               "dockerfile": "2.1/runtime/alpine/amd64",
