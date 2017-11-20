@@ -42,6 +42,8 @@ See [dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker) for images w
 - [`2.0.3-runtime-deps-stretch-arm32v7`, `2.0-runtime-deps-stretch-arm32v7`, `2.0.3-runtime-deps`, `2.0-runtime-deps`, `2-runtime-deps`, `runtime-deps` (*2.0/runtime-deps/stretch/arm32v7/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.0/runtime-deps/stretch/arm32v7/Dockerfile)
 - [`2.1.0-preview1-runtime-stretch-arm32v7`, `2.1-runtime-stretch-arm32v7`, `2.1.0-preview1-runtime`, `2.1-runtime` (*2.1/runtime/stretch/arm32v7/Dockerfile*)](https://github.com/dotnet/dotnet-docker-nightly/blob/master/2.1/runtime/stretch/arm32v7/Dockerfile)
 
+>**Note:** .NET Core multi-arch tags, such as 2.0-runtime, have been updated to use nanoserver-1709 images if your host is Windows Server 1709 or higher or Windows 10 Fall Creators Update (Version 1709) or higher. You need Docker 17.10 or later to take advantage of these updated tags.
+
 >**Note:** The Docker images in this repo are supported by Microsoft. The `arm32v7` images are in preview and have "best effort" support only by the community and .NET Core Team. Please see the [arm32 announcement](https://github.com/dotnet/announcements/issues/29) for more details.
 
 >**Note:** Watch [dotnet/announcements](https://github.com/dotnet/announcements/issues?q=is%3Aissue+is%3Aopen+label%3ADocker) for Docker-related .NET Core announcements.
