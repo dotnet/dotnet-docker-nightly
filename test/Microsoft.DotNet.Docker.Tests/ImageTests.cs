@@ -61,7 +61,7 @@ namespace Microsoft.DotNet.Docker.Tests
                 testData = new List<ImageDescriptor>
                 {
                     new ImageDescriptor { DotNetCoreVersion = "1.0", PlatformOS = "nanoserver-sac2016", SdkVersion = "1.1" },
-                    new ImageDescriptor { DotNetCoreVersion = "1.1", PlatformOS = "nanoserver-sac2016", RuntimeDepsVersion = "1.0" },
+                    new ImageDescriptor { DotNetCoreVersion = "1.1", PlatformOS = "nanoserver-sac2016" },
                     new ImageDescriptor { DotNetCoreVersion = "2.0", PlatformOS = "nanoserver-sac2016" },
                     new ImageDescriptor { DotNetCoreVersion = "2.0", PlatformOS = "nanoserver-1709" },
                     new ImageDescriptor { DotNetCoreVersion = "2.1", PlatformOS = "nanoserver-sac2016" },
@@ -190,7 +190,7 @@ namespace Microsoft.DotNet.Docker.Tests
         private void VerifyRuntimeDepsImage_SelfContainedApp(ImageDescriptor imageDescriptor, string appSdkImage)
         {
             string selfContainedAppId = GetIdentifier(imageDescriptor.DotNetCoreVersion, "self-contained-app");
-            string rid = GetRid(imageDescriptor);
+            string rid = GetRuntimeIdentifier(imageDescriptor);
 
             try
             {
@@ -261,9 +261,10 @@ namespace Microsoft.DotNet.Docker.Tests
             return $"{version}-{type}-{DateTime.Now.ToFileTime()}";
         }
 
-        private static string GetRid(ImageDescriptor imageDescriptor)
+        private static string GetRuntimeIdentifier(ImageDescriptor imageDescriptor)
         {
             string rid;
+
             if (imageDescriptor.IsArm)
             {
                 rid = "linux-arm";
@@ -272,9 +273,13 @@ namespace Microsoft.DotNet.Docker.Tests
             {
                 rid = "alpine.3.6-x64";
             }
-            else
+            else if (imageDescriptor.DotNetCoreVersion.StartsWith("1."))
             {
                 rid = "debian.8-x64";
+            }
+            else
+            {
+                rid = "linux-x64";
             }
 
             return rid;
