@@ -6,11 +6,10 @@ SHELL ["powershell", "-Command", "$ErrorActionPreference = 'Stop'; $ProgressPref
 
 # Install .NET Core
 ENV DOTNET_VERSION 2.1.0-preview1-25919-02
-ENV DOTNET_DOWNLOAD_URL https://dotnetcli.blob.core.windows.net/dotnet/Runtime/$DOTNET_VERSION/dotnet-runtime-$DOTNET_VERSION-win-x64.zip
-ENV DOTNET_DOWNLOAD_SHA 61A69458A5A881E184C0D63B251EC678B4A728BB05011E5B3B264D49D9EDDF8196CC20EC9590C56BF17AC50A703D84513D85E9A428D6269D35DE021F8C34A07A
 
-RUN Invoke-WebRequest $Env:DOTNET_DOWNLOAD_URL -OutFile dotnet.zip; `
-    if ((Get-FileHash dotnet.zip -Algorithm sha512).Hash -ne $Env:DOTNET_DOWNLOAD_SHA) { `
+RUN Invoke-WebRequest -OutFile dotnet.zip https://dotnetcli.blob.core.windows.net/dotnet/Runtime/$Env:DOTNET_VERSION/dotnet-runtime-$Env:DOTNET_VERSION-win-x64.zip; `
+    $dotnet_sha512 = '61a69458a5a881e184c0d63b251ec678b4a728bb05011e5b3b264d49d9eddf8196cc20ec9590c56bf17ac50a703d84513d85e9a428d6269d35de021f8c34a07a'; `
+    if ((Get-FileHash dotnet.zip -Algorithm sha512).Hash -ne $dotnet_sha512) { `
         Write-Host 'CHECKSUM VERIFICATION FAILED!'; `
         exit 1; `
     }; `

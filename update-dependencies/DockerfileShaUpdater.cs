@@ -22,7 +22,9 @@ namespace Dotnet.Docker.Nightly
         public DockerfileShaUpdater(string dockerfilePath) : base()
         {
             Path = dockerfilePath;
-            Regex = new Regex($"ENV (?<name>DOTNET_[^\r\n]*DOWNLOAD_SHA) (?<value>[^\r\n]*)");
+            string envShaPattern = "ENV (?<name>DOTNET_[\\S]*DOWNLOAD_SHA) (?<value>[\\S]*)";
+            string varShaPattern = "[ \\$](?<name>dotnet_sha512)( )*=( )*'(?<value>[^'\\s]*)'";
+            Regex = new Regex($"({envShaPattern})|({varShaPattern})");
             VersionGroupName = "value";
         }
 
@@ -36,14 +38,16 @@ namespace Dotnet.Docker.Nightly
             Trace.TraceInformation($"DockerfileShaUpdater is processing '{Path}'.");
             string dockerfile = File.ReadAllText(Path);
 
-            Regex versionRegex = new Regex($"ENV (?<name>DOTNET_[^\r\n]*VERSION) (?<value>[^\r\n]*)");
+            Regex versionRegex = new Regex($"ENV (?<name>DOTNET_[\\S]*VERSION) (?<value>[\\S]*)");
             Match versionMatch = versionRegex.Match(dockerfile);
             if (versionMatch.Success)
             {
                 string versionEnvName = versionMatch.Groups["name"].Value;
                 string version = versionMatch.Groups["value"].Value;
 
-                Regex shaRegex = new Regex($"ENV (DOTNET_[^\r\n]*DOWNLOAD_URL) (?<value>[^\r\n]*)");
+                string envUrlPattern = "ENV (DOTNET_[\\S]*DOWNLOAD_URL) (?<value>[\\S]*)";
+                string inlineUrlPattern = "(?<value>https://dotnetcli.blob.core.windows.net/[^;\\s]*)";
+                Regex shaRegex = new Regex($"({envUrlPattern})|{inlineUrlPattern}");
                 Match shaMatch = shaRegex.Match(dockerfile);
                 if (shaMatch.Success)
                 {
@@ -58,7 +62,7 @@ namespace Dotnet.Docker.Nightly
                     using (Stream shaStream = new HttpClient().GetStreamAsync(shaUrl).Result)
                     using (StreamReader reader = new StreamReader(shaStream))
                     {
-                        sha = reader.ReadToEnd();
+                        sha = reader.ReadToEnd().ToLowerInvariant();
                     }
                 }
                 else
