@@ -24,4 +24,7 @@ FROM microsoft/nanoserver:1709
 
 COPY --from=installer-env ["dotnet", "C:\\Program Files\\dotnet"]
 
-RUN setx PATH "%PATH%;C:\Program Files\dotnet"
+# In order to set system PATH, ContainerAdministrator must be used
+USER ContainerAdministrator
+RUN setx /M PATH "%PATH%;C:\Program Files\dotnet"
+USER ContainerUser
