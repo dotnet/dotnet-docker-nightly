@@ -17,7 +17,7 @@ namespace Microsoft.DotNet.Docker.Tests
         private static string OsFilter => Environment.GetEnvironmentVariable("IMAGE_OS_FILTER");
         private static string VersionFilter => Environment.GetEnvironmentVariable("IMAGE_VERSION_FILTER");
 
-        private static List<ImageDescriptor> LinuxTestData = new List<ImageDescriptor>
+        private static ImageDescriptor[] LinuxTestData = new ImageDescriptor[]
             {
                 new ImageDescriptor { DotNetCoreVersion = "1.0", SdkVersion = "1.1" },
                 new ImageDescriptor { DotNetCoreVersion = "1.1", RuntimeDepsVersion = "1.0" },
@@ -36,7 +36,7 @@ namespace Microsoft.DotNet.Docker.Tests
                     Architecture = "arm"
                 },
             };
-        private static List<ImageDescriptor> WindowsTestData = new List<ImageDescriptor>
+        private static ImageDescriptor[] WindowsTestData = new ImageDescriptor[]
             {
                 new ImageDescriptor { DotNetCoreVersion = "1.0", PlatformOS = OS.NanoServerSac2016, SdkVersion = "1.1" },
                 new ImageDescriptor { DotNetCoreVersion = "1.1", PlatformOS = OS.NanoServerSac2016 },
@@ -55,8 +55,6 @@ namespace Microsoft.DotNet.Docker.Tests
 
         public static IEnumerable<object[]> GetVerifyImagesData()
         {
-            List<ImageDescriptor> testData = DockerHelper.IsLinuxContainerModeEnabled ? LinuxTestData : WindowsTestData;
-
             string versionFilterPattern = null;
             if (VersionFilter != null)
             {
@@ -70,7 +68,7 @@ namespace Microsoft.DotNet.Docker.Tests
             }
 
             // Filter out test data that does not match the active architecture and version filters.
-            return testData
+            return (DockerHelper.IsLinuxContainerModeEnabled ? LinuxTestData : WindowsTestData)
                 .Where(imageDescriptor => ArchFilter == null
                     || string.Equals(imageDescriptor.Architecture, ArchFilter, StringComparison.OrdinalIgnoreCase))
                 .Where(imageDescriptor => OsFilter == null
