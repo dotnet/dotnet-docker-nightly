@@ -55,7 +55,8 @@ namespace Dotnet.Docker.Nightly
                     string shaExt = versionEnvName.Contains("SDK") ? ".sha" : ".sha512";
                     string shaUrl = shaMatch.Groups["value"].Value
                         .Replace("dotnetcli", "dotnetclichecksums")
-                        .Replace($"${versionEnvName}", version)
+                        .Replace($"${versionEnvName}", version)     // *nix ENV var reference format
+                        .Replace($"$Env:{versionEnvName}", version) // Windows ENV var reference format
                         + shaExt;
 
                     Trace.TraceInformation($"Downloading '{shaUrl}'.");

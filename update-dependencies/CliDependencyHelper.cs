@@ -38,11 +38,11 @@ namespace Dotnet.Docker.Nightly
             XNamespace msbuildNamespace = depVersions.Document.Root.GetDefaultNamespace();
             string sharedFrameworkVersion = depVersions.Document.Root
                 .Element(msbuildNamespace + "PropertyGroup")
-                ?.Element(msbuildNamespace + "CLI_SharedFrameworkVersion")
+                ?.Element(msbuildNamespace + "MicrosoftNETCoreAppPackageVersion")
                 ?.Value;
             if (sharedFrameworkVersion == null)
             {
-                throw new InvalidOperationException("Can't find CLI_SharedFrameworkVersion in DependencyVersions.props.");
+                throw new InvalidOperationException("Can't find Shared Framework version in DependencyVersions.props.");
             }
 
             Trace.TraceInformation($"Detected Shared Framework version '{sharedFrameworkVersion}'.");
