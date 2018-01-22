@@ -15,6 +15,7 @@ function Invoke-CleanupDocker()
     if ($CleanupDocker)
     {
         docker ps -a -q | ForEach-Object { docker rm -f $_ }
+        # Windows base images are large, preserve them to avoid the overhead of pulling each time.
         docker images |
             Where-Object { 
                 -Not ($_.StartsWith("microsoft/nanoserver ")`
@@ -27,6 +28,7 @@ function Invoke-CleanupDocker()
 }
 
 $(docker version) | % { Write-Host "$_" }
+Invoke-CleanupDocker
 
 if ($UseImageCache) {
     $optionalDockerBuildArgs = ""
@@ -39,7 +41,6 @@ $manifest = Get-Content "manifest.json" | ConvertFrom-Json
 $manifestRepo = $manifest.Repos[0]
 $activeOS = docker version -f "{{ .Server.Os }}"
 $builtTags = @()
-Invoke-CleanupDocker
 
 $buildFilter = "*"
 if (-not [string]::IsNullOrEmpty($versionFilter))
