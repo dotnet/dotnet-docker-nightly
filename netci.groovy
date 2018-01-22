@@ -26,7 +26,7 @@ platformList.each { platform ->
         def newJob = job(newJobName) {
             steps {
                 if (hostOS == 'Windows_2016') {
-                    batchFile("powershell -NoProfile -Command .\\build-and-test.ps1 -VersionFilter \"${versionFilter}\" -OSFilter \"${containerOS}\"")
+                    batchFile("powershell -NoProfile -Command .\\build-and-test.ps1 -VersionFilter \"${versionFilter}\" -OSFilter \"${containerOS}\" -CleanupDocker")
                 }
                 else {
                     shell("docker build --rm -t testrunner -f ./test/Dockerfile.linux.testrunner . && docker run -v /var/run/docker.sock:/var/run/docker.sock testrunner powershell -File build-and-test.ps1 -VersionFilter \"${versionFilter}\"")
