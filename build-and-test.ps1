@@ -31,6 +31,8 @@ function Invoke-CleanupDocker($ActiveOS)
 }
 
 $(docker version) | % { Write-Host "$_" }
+$activeOS = docker version -f "{{ .Server.Os }}"
+Invoke-CleanupDocker $activeOS
 
 if ($UseImageCache) {
     $optionalDockerBuildArgs = ""
@@ -41,8 +43,6 @@ else {
 
 $manifest = Get-Content "manifest.json" | ConvertFrom-Json
 $manifestRepo = $manifest.Repos[0]
-$activeOS = docker version -f "{{ .Server.Os }}"
-Invoke-CleanupDocker $activeOS
 $builtTags = @()
 
 $buildFilter = "*"
@@ -55,7 +55,8 @@ if (-not [string]::IsNullOrEmpty($OsFilter))
     $buildFilter = "$buildFilter/$OsFilter/*"
 }
 
-$manifestRepo.Images |
+try {
+    $manifestRepo.Images |
     ForEach-Object {
         $images = $_
         $_.Platforms |
@@ -81,7 +82,9 @@ $manifestRepo.Images |
             }
     }
 
-./test/run-test.ps1 -VersionFilter $VersionFilter -ArchitectureFilter $ArchitectureFilter -OSFilter $OSFilter
-Invoke-CleanupDocker
-
-Write-Host "Tags built and tested:`n$($builtTags | Out-String)"
+    ./test/run-test.ps1 -VersionFilter $VersionFilter -ArchitectureFilter $ArchitectureFilter -OSFilter $OSFilter
+    Write-Host "Tags built and tested:`n$($builtTags | Out-String)"
+}
+finally {
+    Invoke-CleanupDocker $activeOS
+}
