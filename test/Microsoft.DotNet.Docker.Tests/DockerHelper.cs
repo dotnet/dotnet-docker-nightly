@@ -54,11 +54,10 @@ namespace Microsoft.DotNet.Docker.Tests
         private void ExecuteWithLogging(string args)
         {
             OutputHelper.WriteLine($"Executing : docker {args}");
-            string output = Execute(args);
-            OutputHelper.WriteLine(output);
+            Execute(args, outputHelper:OutputHelper);
         }
 
-        private static string Execute(string args, bool ignoreErrors = false)
+        private static string Execute(string args, bool ignoreErrors = false, ITestOutputHelper outputHelper = null)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo("docker", args);
             startInfo.RedirectStandardOutput = true;
@@ -75,13 +74,19 @@ namespace Microsoft.DotNet.Docker.Tests
             process.BeginErrorReadLine();
             process.WaitForExit();
 
+            string output = stdOutput.ToString().Trim();
+            if (outputHelper != null && !string.IsNullOrWhiteSpace(output))
+            {
+                outputHelper.WriteLine(output);
+            }
+
             if (!ignoreErrors && process.ExitCode != 0)
             {
                 string msg = $"Failed to execute {startInfo.FileName} {startInfo.Arguments}{Environment.NewLine}{stdError}";
                 throw new InvalidOperationException(msg);
             }
 
-            return stdOutput.ToString().Trim();
+            return output;
         }
 
         private static string GetDockerOS()
