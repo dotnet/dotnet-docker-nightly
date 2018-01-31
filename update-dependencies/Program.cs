@@ -27,9 +27,8 @@ namespace Dotnet.Docker.Nightly
             {
                 Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-                Options = Options.Parse(args);
-
-                if (Options == null)
+                Options = new Options();
+                if (!Options.Parse(args))
                 {
                     Environment.Exit(1);
                 }
@@ -100,7 +99,7 @@ namespace Dotnet.Docker.Nightly
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters(CliDependencyHelper cliDependencyHelper)
         {
-            string majorMinorVersion = Options.DockerVersionedFolder.Substring(0, Options.DockerVersionedFolder.LastIndexOf('.'));
+            string majorMinorVersion = Options.DockerVersionFolder.Substring(0, Options.DockerVersionFolder.LastIndexOf('.'));
             string[] dockerfiles = GetDockerfiles(majorMinorVersion);
             Trace.TraceInformation("Updating the following Dockerfiles:");
             Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
@@ -112,7 +111,7 @@ namespace Dotnet.Docker.Nightly
             {
                 updaters = updaters.Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
             }
-            else if (Options.DockerVersionedFolder.StartsWith("1.1"))
+            else if (Options.DockerVersionFolder.StartsWith("1.1"))
             {
                 dockerfiles = GetDockerfiles("1.0");
                 updaters = updaters.Concat(dockerfiles.Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName)));

@@ -9,26 +9,27 @@ namespace Dotnet.Docker.Nightly
 {
     public class Options
     {
-        public string CliBranch { get; private set; }
         private Option CliBranchOption { get; set; }
-        public string CliVersionPrefix { get; private set; }
         private Option CliVersionPrefixOption { get; set; }
+        private Option DockerVersionFolderOption { get; set; }
+        private Option GitHubEmailOption { get; set; }
+        private Option GitHubPasswordOption { get; set; }
+        private Option GitHubUserOption { get; set; }
+
+        public string CliBranch { get; private set; }
+        public string CliVersionPrefix { get; private set; }
         public string CliVersionsUrl =>
             $"https://raw.githubusercontent.com/dotnet/versions/master/build-info/dotnet/cli/{CliBranch}";
         public string DockerVersionFolder { get; private set; }
-        private Option DockerVersionFolderOption { get; set; }
         public string GitHubEmail { get; private set; }
-        private Option GitHubEmailOption { get; set; }
         public string GitHubPassword { get; private set; }
-        private Option GitHubPasswordOption { get; set; }
         public string GitHubProject => "dotnet-docker-nightly";
         public string GitHubUpstreamBranch => "master";
         public string GitHubUpstreamOwner => "dotnet";
         public string GitHubUser { get; private set; }
-        private Option GitHubUserOption { get; set; }
         public bool UpdateOnly => GitHubEmail == null || GitHubPassword == null || GitHubUser == null;
 
-        private Command CreateCommand()
+        public Options()
         {
             CliBranchOption = Create.Option(
                 "--cli-branch",
@@ -55,8 +56,13 @@ namespace Dotnet.Docker.Nightly
                 "--user",
                 "GitHub user to use while making the PR.  If not specified, a PR is not made.",
                 Accept.ExactlyOneArgument());
+        }
 
-            return Create.Command(
+        public bool Parse(string[] args)
+        {
+            bool result;
+
+            Command command = Create.Command(
                 "update-dependencies",
                 "Updates the .NET Core components of the Dockerfiles to the latest versions.",
                 DockerVersionFolderOption,
@@ -65,33 +71,43 @@ namespace Dotnet.Docker.Nightly
                 GitHubUserOption,
                 GitHubEmailOption,
                 GitHubPasswordOption);
-    
+            ParseResult parseResult = command.Parse(args);
 
-        public static Options arse(string[] args)
-    {
-            Options options = new Otions();
-
-            Command command = options.CreateCommand();
-            ParseResult result = command.Parse(args);
-
-            if (result.Errors.Any())
+            if (parseResult.Errors.Any())
             {
-                string msg = string.Join(Environment.NewLine, result.Errors);
+                string msg = string.Join(Environment.NewLine, parseResult.Errors);
                 Console.WriteLine(msg);
-                return null;
+                Console.WriteLine(command.HelpView());
+                result = false;
+            }
+            else
+            {
+                AppliedOption appliedCommand = parseResult.AppliedCommand();
+
+                //appliedCommand.HasOption
+                CliBranch = GetOption(CliBranchOption, appliedCommand, true);
+                CliVersionPrefix = GetOption(CliVersionPrefixOption, appliedCommand, true);
+                DockerVersionFolder = GetOption(DockerVersionFolderOption, appliedCommand, true);
+                GitHubEmail = GetOption(GitHubEmailOption, appliedCommand);
+                GitHubPassword = GetOption(GitHubPasswordOption, appliedCommand);
+                GitHubUser = GetOption(GitHubUserOption, appliedCommand);
+                result = true;
             }
 
-            Console.WriteLine(command.HelpView());
-            AppliedOption appliedCommand = result.AppliedCommand();
-            //appliedCommand.HasOption
-            options.CliBranch = appliedCommand["cli-branch"].Value<string>();
-            options.CliVersionPrefix = appliedCommand["version"].Value<string>();
-            options.DockerVersionFolder = appliedCommand[nameof(DockerVersionFolder)].Value<string>();
-            options.GitHubEmail = appliedCommand[nameof(GitHubEmail)]?.Value<string>();
-            options.GitHubPassword = appliedCommand[nameof(GitHubPassword)]?.Value<string>();
-            options.GitHubUser = appliedCommand[nameof(GitHubUser)]?.Value<string>();
+            return result;
+        }
 
-            return options;
+        private string GetOption(Option option, AppliedOption appliedCommand, bool isRequired = false)
+        {
+            if (!appliedCommand.HasOption(option.Name) && isRequired)
+            {
+                Console.WriteLine($"Required option `{option.Name}` was not specified");
+                throw new Exception();
+            }
+            else
+            {
+                return appliedCommand[option.Name].Value<string>();
+            }
         }
     }
 }
