@@ -17,24 +17,22 @@ namespace Dotnet.Docker.Nightly
     public static class Program
     {
         private const string CliBuildInfoName = "Cli";
-        private static Options Options { get; set; }
-        private static string RepoRoot => Directory.GetCurrentDirectory();
+        private static Options Options { get; set; } = new Options();
+        private static string RepoRoot { get; set; } = Directory.GetCurrentDirectory();
         private const string SharedFrameworkBuildInfoName = "SharedFramework";
 
-        public static int Main(string[] args)
+        public static void Main(string[] args)
         {
             try
             {
                 Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-                Options = new Options();
                 if (!Options.Parse(args))
                 {
                     Environment.Exit(1);
                 }
 
                 DependencyUpdateResults updateResults = UpdateFiles();
-
                 if (!Options.UpdateOnly && updateResults.ChangesDetected())
                 {
                     CreatePullRequest(updateResults).Wait();
@@ -46,7 +44,7 @@ namespace Dotnet.Docker.Nightly
                 Environment.Exit(1);
             }
 
-            return 0;
+            Environment.Exit(0);
         }
 
         private static DependencyUpdateResults UpdateFiles()
