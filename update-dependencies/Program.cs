@@ -17,55 +17,37 @@ namespace Dotnet.Docker.Nightly
     public static class Program
     {
         private const string CliBuildInfoName = "Cli";
+        private static Options Options { get; set; }
+        private static string RepoRoot => Directory.GetCurrentDirectory();
         private const string SharedFrameworkBuildInfoName = "SharedFramework";
-        private static readonly string s_repoRoot = Directory.GetCurrentDirectory();
 
-        public static void Main(string[] args)
+        public static int Main(string[] args)
         {
             try
             {
                 Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-                if (ParseArgs(args))
-                {
-                    DependencyUpdateResults updateResults = UpdateFiles();
+                Options = Options.Parse(args);
 
-                    if (!s_updateOnly && updateResults.ChangesDetected())
-                    {
-                        CreatePullRequest(updateResults).Wait();
-                    }
+                if (Options == null)
+                {
+                    Environment.Exit(1);
+                }
+
+                DependencyUpdateResults updateResults = UpdateFiles();
+
+                if (!Options.UpdateOnly && updateResults.ChangesDetected())
+                {
+                    CreatePullRequest(updateResults).Wait();
                 }
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine($"Failed to update dependencies:{Environment.NewLine}{e.ToString()}");
-            }
-        }
-
-        private static bool ParseArgs(string[] args)
-        {
-            foreach (string arg in args)
-            {
-                if (string.Equals(arg, "--Update", StringComparison.OrdinalIgnoreCase))
-                {
-                    s_updateOnly = true;
-                }
-                else if (arg.Contains('='))
-                {
-                    int delimiterIndex = arg.IndexOf('=');
-                    string name = arg.Substring(0, delimiterIndex);
-                    string value = arg.Substring(delimiterIndex + 1);
-
-                    Environment.SetEnvironmentVariable(name, value);
-                }
-                else
-                {
-                    Console.Error.WriteLine($"Unrecognized argument '{arg}'");
-                    return false;
-                }
+                Environment.Exit(1);
             }
 
-            return true;
+            return 0;
         }
 
         private static DependencyUpdateResults UpdateFiles()
@@ -74,9 +56,9 @@ namespace Dotnet.Docker.Nightly
             // exist various version information is inspected to obtain the latest CLI version along with
             // the runtime (e.g. shared framework) it depends on.
 
-            BuildInfo cliBuildInfo = BuildInfo.Get(CliBuildInfoName, s_config.CliVersionUrl, fetchLatestReleaseFile: false);
+            BuildInfo cliBuildInfo = BuildInfo.Get(CliBuildInfoName, Options.CliVersionsUrl, fetchLatestReleaseFile: false);
             // Adjust the LatestReleaseVersion since it is not the full version and all consumers here need it to be.
-            cliBuildInfo.LatestReleaseVersion = $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}";
+            cliBuildInfo.LatestReleaseVersion = $"{Options.CliVersionPrefix}-{cliBuildInfo.LatestReleaseVersion}";
             CliDependencyHelper cliDependencyHelper = new CliDependencyHelper(cliBuildInfo.LatestReleaseVersion);
             string sharedFrameworkVersion = cliDependencyHelper.GetSharedFrameworkVersion();
 
@@ -101,16 +83,16 @@ namespace Dotnet.Docker.Nightly
         private static Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
             string cliVersion = updateResults.UsedBuildInfos.First(bi => bi.Name == CliBuildInfoName).LatestReleaseVersion;
-            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {cliVersion}";
+            string commitMessage = $"Update {Options.GitHubUpstreamBranch} SDK to {cliVersion}";
 
-            GitHubAuth gitHubAuth = new GitHubAuth(s_config.Password, s_config.UserName, s_config.Email);
+            GitHubAuth gitHubAuth = new GitHubAuth(Options.GitHubPassword, Options.GitHubUser, Options.GitHubEmail);
 
             PullRequestCreator prCreator = new PullRequestCreator(
                 gitHubAuth,
-                new GitHubProject(s_config.GitHubProject, gitHubAuth.User),
-                new GitHubBranch(s_config.GitHubUpstreamBranch, new GitHubProject(s_config.GitHubProject, s_config.GitHubUpstreamOwner)),
-                s_config.UserName,
-                new SingleBranchNamingStrategy($"UpdateDependencies-{s_config.BranchTagPrefix}")
+                new GitHubProject(Options.GitHubProject, gitHubAuth.User),
+                new GitHubBranch(Options.GitHubUpstreamBranch, new GitHubProject(Options.GitHubProject, Options.GitHubUpstreamOwner)),
+                Options.GitHubUser,
+                new SingleBranchNamingStrategy($"UpdateDependencies-{Options.GitHubUpstreamBranch}")
             );
 
             return prCreator.CreateOrUpdateAsync(commitMessage, commitMessage, string.Empty);
@@ -118,7 +100,7 @@ namespace Dotnet.Docker.Nightly
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters(CliDependencyHelper cliDependencyHelper)
         {
-            string majorMinorVersion = s_config.CliReleasePrefix.Substring(0, s_config.CliReleasePrefix.LastIndexOf('.'));
+            string majorMinorVersion = Options.DockerVersionedFolder.Substring(0, Options.DockerVersionedFolder.LastIndexOf('.'));
             string[] dockerfiles = GetDockerfiles(majorMinorVersion);
             Trace.TraceInformation("Updating the following Dockerfiles:");
             Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
@@ -130,7 +112,7 @@ namespace Dotnet.Docker.Nightly
             {
                 updaters = updaters.Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
             }
-            else if (s_config.CliReleasePrefix.StartsWith("1.1"))
+            else if (Options.DockerVersionedFolder.StartsWith("1.1"))
             {
                 dockerfiles = GetDockerfiles("1.0");
                 updaters = updaters.Concat(dockerfiles.Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName)));
@@ -141,7 +123,7 @@ namespace Dotnet.Docker.Nightly
 
         private static string[] GetDockerfiles(string version)
         {
-            string searchFolder = Path.Combine(s_repoRoot, version);
+            string searchFolder = Path.Combine(RepoRoot, version);
             return Directory.GetFiles(searchFolder, "Dockerfile", SearchOption.AllDirectories);
         }
 
