@@ -19,8 +19,6 @@ namespace Dotnet.Docker.Nightly
         private const string CliBuildInfoName = "Cli";
         private const string SharedFrameworkBuildInfoName = "SharedFramework";
         private static readonly string s_repoRoot = Directory.GetCurrentDirectory();
-        private static readonly Config s_config = Config.s_Instance;
-        private static bool s_updateOnly = false;
 
         public static void Main(string[] args)
         {
