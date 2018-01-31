@@ -29,11 +29,11 @@ namespace Dotnet.Docker.Nightly
         }
 
         protected override string TryGetDesiredValue(
-            IEnumerable<DependencyBuildInfo> dependencyBuildInfos,
-            out IEnumerable<BuildInfo> usedBuildInfos)
+            IEnumerable<IDependencyInfo> dependencyBuildInfos,
+            out IEnumerable<IDependencyInfo> usedBuildInfos)
         {
             string sha = null;
-            usedBuildInfos = Enumerable.Empty<BuildInfo>();
+            usedBuildInfos = Enumerable.Empty<IDependencyInfo>();
 
             Trace.TraceInformation($"DockerfileShaUpdater is processing '{Path}'.");
             string dockerfile = File.ReadAllText(Path);

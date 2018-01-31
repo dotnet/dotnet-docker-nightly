@@ -3,152 +3,138 @@
 
 using Microsoft.DotNet.VersionTools;
 using Microsoft.DotNet.VersionTools.Automation;
+using Microsoft.DotNet.VersionTools.BuildManifest.Model;
 using Microsoft.DotNet.VersionTools.Dependencies;
+using Microsoft.DotNet.VersionTools.Dependencies.BuildOutput;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace Dotnet.Docker.Nightly
 {
     public static class Program
     {
-        private const string CliBuildInfoName = "Cli";
-        private const string SharedFrameworkBuildInfoName = "SharedFramework";
-        private static readonly string s_repoRoot = Directory.GetCurrentDirectory();
-        private static readonly Config s_config = Config.s_Instance;
-        private static bool s_updateOnly = false;
+        private static Options Options { get; set; } = new Options();
+        private static string RepoRoot { get; set; } = Directory.GetCurrentDirectory();
+        private const string RuntimeBuildInfoName = "Runtime";
+        private const string SdkBuildInfoName = "Sdk";
 
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             try
             {
                 Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-                if (ParseArgs(args))
-                {
-                    DependencyUpdateResults updateResults = UpdateFiles();
+                Options.Parse(args);
 
-                    if (!s_updateOnly && updateResults.ChangesDetected())
+                DependencyUpdateResults updateResults = await UpdateFiles();
+                if (updateResults.ChangesDetected())
+                {
+                    if (Options.UpdateOnly)
                     {
-                        CreatePullRequest(updateResults).Wait();
+                        Trace.TraceInformation($"Changes made but no GitHub credentials specified, skipping PR creation");
+                    }
+                    else
+                    {
+                        await CreatePullRequest(updateResults);
                     }
                 }
             }
             catch (Exception e)
             {
                 Console.Error.WriteLine($"Failed to update dependencies:{Environment.NewLine}{e.ToString()}");
-            }
-        }
-
-        private static bool ParseArgs(string[] args)
-        {
-            foreach (string arg in args)
-            {
-                if (string.Equals(arg, "--Update", StringComparison.OrdinalIgnoreCase))
-                {
-                    s_updateOnly = true;
-                }
-                else if (arg.Contains('='))
-                {
-                    int delimiterIndex = arg.IndexOf('=');
-                    string name = arg.Substring(0, delimiterIndex);
-                    string value = arg.Substring(delimiterIndex + 1);
-
-                    Environment.SetEnvironmentVariable(name, value);
-                }
-                else
-                {
-                    Console.Error.WriteLine($"Unrecognized argument '{arg}'");
-                    return false;
-                }
+                Environment.Exit(1);
             }
 
-            return true;
+            Environment.Exit(0);
         }
 
-        private static DependencyUpdateResults UpdateFiles()
+        private static async Task<DependencyUpdateResults> UpdateFiles()
         {
-            // Ideally this logic would depend on the CLI produces and consumes metadata.  Since it doesn't
-            // exist various version information is inspected to obtain the latest CLI version along with
-            // the runtime (e.g. shared framework) it depends on.
+            Trace.TraceInformation($"Retrieving build info from '{Options.BuildInfoUrl}'");
+            Stream stream = await (new HttpClient().GetStreamAsync(Options.BuildInfoUrl));
+            XDocument buildInfoXml = XDocument.Load(stream);
+            OrchestratedBuildModel buildInfo = OrchestratedBuildModel.Parse(buildInfoXml.Root);
+            BuildIdentity sdkBuild = buildInfo.Builds
+                .First(build => string.Equals(build.Name, "cli", StringComparison.OrdinalIgnoreCase));
+            BuildIdentity coreSetupBuild = buildInfo.Builds
+                .First(build => string.Equals(build.Name, "core-setup", StringComparison.OrdinalIgnoreCase));
 
-            BuildInfo cliBuildInfo = BuildInfo.Get(CliBuildInfoName, s_config.CliVersionUrl, fetchLatestReleaseFile: false);
-            // Adjust the LatestReleaseVersion since it is not the full version and all consumers here need it to be.
-            cliBuildInfo.LatestReleaseVersion = $"{s_config.RuntimeReleasePrefix}-{cliBuildInfo.LatestReleaseVersion}";
-            CliDependencyHelper cliDependencyHelper = new CliDependencyHelper(cliBuildInfo.LatestReleaseVersion);
-            string sharedFrameworkVersion = cliDependencyHelper.GetSharedFrameworkVersion();
+            // TODO:  Remove once ProductVersion is written to build-info
+            EndpointModel endpointInfo = buildInfo.Endpoints
+                .First(endpoint => string.Equals(endpoint.Id, "dotnetcli", StringComparison.OrdinalIgnoreCase));
+            BlobArtifactModel blobInfo = endpointInfo.Artifacts.Blobs
+                .First(artifact => artifact.Id.StartsWith("Runtime", StringComparison.OrdinalIgnoreCase));
 
-            IEnumerable<DependencyBuildInfo> buildInfos = new[]
+            IEnumerable<IDependencyInfo> buildInfos = new[]
             {
-                new DependencyBuildInfo(cliBuildInfo, false, Enumerable.Empty<string>()),
-                new DependencyBuildInfo(
-                    new BuildInfo()
-                    {
-                        Name = SharedFrameworkBuildInfoName,
-                        LatestReleaseVersion = sharedFrameworkVersion,
-                        LatestPackages = new Dictionary<string, string>()
-                    },
-                    false,
-                    Enumerable.Empty<string>()),
+                CreateDependencyBuildInfo(SdkBuildInfoName, sdkBuild.BuildId), // TODO use sdkBuild.ProductVersion
+                CreateDependencyBuildInfo(RuntimeBuildInfoName, blobInfo.Id.Split('/')[1]), // TODO use coreSetupBuild.ProductVersion
             };
-            IEnumerable<IDependencyUpdater> updaters = GetUpdaters(cliDependencyHelper);
+
+            string dockerfileVersion = sdkBuild.BuildId.Substring(0, sdkBuild.BuildId.LastIndexOf('.'));
+            IEnumerable<IDependencyUpdater> updaters = GetUpdaters(dockerfileVersion);
 
             return DependencyUpdateUtils.Update(updaters, buildInfos);
         }
 
-        private static Task CreatePullRequest(DependencyUpdateResults updateResults)
+        private static IDependencyInfo CreateDependencyBuildInfo(string name, string latestReleaseVersion)
         {
-            string cliVersion = updateResults.UsedBuildInfos.First(bi => bi.Name == CliBuildInfoName).LatestReleaseVersion;
-            string commitMessage = $"Update {s_config.BranchTagPrefix} SDK to {cliVersion}";
-
-            GitHubAuth gitHubAuth = new GitHubAuth(s_config.Password, s_config.UserName, s_config.Email);
-
-            PullRequestCreator prCreator = new PullRequestCreator(
-                gitHubAuth,
-                new GitHubProject(s_config.GitHubProject, gitHubAuth.User),
-                new GitHubBranch(s_config.GitHubUpstreamBranch, new GitHubProject(s_config.GitHubProject, s_config.GitHubUpstreamOwner)),
-                s_config.UserName,
-                new SingleBranchNamingStrategy($"UpdateDependencies-{s_config.BranchTagPrefix}")
-            );
-
-            return prCreator.CreateOrUpdateAsync(commitMessage, commitMessage, string.Empty);
+            return new BuildDependencyInfo(
+                new BuildInfo()
+                {
+                    Name = name,
+                    LatestReleaseVersion = latestReleaseVersion,
+                    LatestPackages = new Dictionary<string, string>()
+                },
+                false,
+                Enumerable.Empty<string>());
         }
 
-        private static IEnumerable<IDependencyUpdater> GetUpdaters(CliDependencyHelper cliDependencyHelper)
+        private static async Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
-            string majorMinorVersion = s_config.CliReleasePrefix.Substring(0, s_config.CliReleasePrefix.LastIndexOf('.'));
-            string[] dockerfiles = GetDockerfiles(majorMinorVersion);
+            GitHubAuth gitHubAuth = new GitHubAuth(Options.GitHubPassword, Options.GitHubUser, Options.GitHubEmail);
+            PullRequestCreator prCreator = new PullRequestCreator(gitHubAuth, Options.GitHubUser);
+            PullRequestOptions prOptions = new PullRequestOptions()
+            {
+                BranchNamingStrategy = new SingleBranchNamingStrategy($"UpdateDependencies-{Options.GitHubUpstreamBranch}")
+            };
+
+            string sdkVersion = updateResults.UsedInfos.First(bi => bi.SimpleName == SdkBuildInfoName).SimpleVersion;
+            string commitMessage = $"Update {Options.GitHubUpstreamBranch} SDK to {sdkVersion}";
+
+            await prCreator.CreateOrUpdateAsync(
+                commitMessage,
+                commitMessage,
+                string.Empty,
+                new GitHubBranch(Options.GitHubUpstreamBranch, new GitHubProject(Options.GitHubProject, Options.GitHubUpstreamOwner)),
+                new GitHubProject(Options.GitHubProject, gitHubAuth.User),
+                prOptions);
+        }
+
+        private static IEnumerable<IDependencyUpdater> GetUpdaters(string dockerfileVersion)
+        {
+            string[] dockerfiles = Directory.GetFiles(
+                Path.Combine(RepoRoot, dockerfileVersion),
+                "Dockerfile",
+                SearchOption.AllDirectories);
+
             Trace.TraceInformation("Updating the following Dockerfiles:");
-            Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
-            IEnumerable<IDependencyUpdater> updaters = dockerfiles
-                .Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName))
-                .Concat(dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_VERSION", SharedFrameworkBuildInfoName)));
+            Trace.TraceInformation(string.Join(Environment.NewLine, dockerfiles));
 
-            if (cliDependencyHelper.CliMajorVersion > 1)
-            {
-                updaters = updaters.Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
-            }
-            else if (s_config.CliReleasePrefix.StartsWith("1.1"))
-            {
-                dockerfiles = GetDockerfiles("1.0");
-                updaters = updaters.Concat(dockerfiles.Select(path => CreateSDKDockerfileEnvUpdater(path, CliBuildInfoName)));
-            }
-
-            return updaters;
+            return dockerfiles
+                .Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_SDK_VERSION", SdkBuildInfoName))
+                .Concat(dockerfiles.Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_VERSION", RuntimeBuildInfoName)))
+                .Concat(dockerfiles.Select(path => new DockerfileShaUpdater(path)));
         }
 
-        private static string[] GetDockerfiles(string version)
-        {
-            string searchFolder = Path.Combine(s_repoRoot, version);
-            return Directory.GetFiles(searchFolder, "Dockerfile", SearchOption.AllDirectories);
-        }
-
-        private static IDependencyUpdater CreateDockerfileEnvUpdater(
-            string path, string envName, string buildInfoName)
+        private static IDependencyUpdater CreateDockerfileEnvUpdater(string path, string envName, string buildInfoName)
         {
             return new FileRegexReleaseUpdater()
             {
@@ -157,11 +143,6 @@ namespace Dotnet.Docker.Nightly
                 Regex = new Regex($"ENV {envName} (?<envValue>[^\r\n]*)"),
                 VersionGroupName = "envValue"
             };
-        }
-
-        private static IDependencyUpdater CreateSDKDockerfileEnvUpdater(string path, string buildInfoName)
-        {
-            return CreateDockerfileEnvUpdater(path, "DOTNET_SDK_VERSION", CliBuildInfoName);
         }
     }
 }
