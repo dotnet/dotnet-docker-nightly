@@ -16,7 +16,7 @@ RUN apk add --no-cache \
         userspace-rcu \
         zlib \
     && apk -X https://dl-cdn.alpinelinux.org/alpine/edge/main add --no-cache \
-        lttng-ust
+        lttng-ust libuv
 
 # Set the invariant mode since icu_libs isn't included (see https://github.com/dotnet/announcements/issues/20)
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT true
