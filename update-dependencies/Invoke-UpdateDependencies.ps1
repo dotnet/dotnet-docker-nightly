@@ -6,16 +6,21 @@
 [cmdletbinding()]
 param(
     [string]$UpdateDependenciesParams,
-    [switch]$CleanupDocker
+    [switch]$CleanupDocker,
+    [switch]$UseImageCache
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
 try {
-    & docker build -t update-dependencies -f $PSScriptRoot\Dockerfile $PSScriptRoot\..
-    if ($LastExitCode -ne 0) {
-        throw "Failed building update-dependencies"
+    $image = & docker image ls update-dependencies -q
+    if (!$UseImageCache -or [string]::IsNullOrEmpty($image))
+    {
+        & docker build -t update-dependencies -f $PSScriptRoot\Dockerfile --pull $PSScriptRoot\..
+        if ($LastExitCode -ne 0) {
+            throw "Failed building update-dependencies"
+        }
     }
 
     Invoke-Expression "docker run --rm update-dependencies $UpdateDependenciesParams"

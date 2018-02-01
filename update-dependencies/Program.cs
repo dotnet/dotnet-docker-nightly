@@ -27,10 +27,7 @@ namespace Dotnet.Docker.Nightly
             {
                 Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 
-                if (!Options.Parse(args))
-                {
-                    Environment.Exit(1);
-                }
+                Options.Parse(args);
 
                 DependencyUpdateResults updateResults = UpdateFiles();
                 if (!Options.UpdateOnly && updateResults.ChangesDetected())

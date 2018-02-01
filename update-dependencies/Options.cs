@@ -11,7 +11,7 @@ namespace Dotnet.Docker.Nightly
     {
         public string CliBranch { get; private set; }
         public string CliVersionPrefix { get; private set; }
-        public string CliVersionsUrl =>
+        public string CliVersionsUrl  =>
             $"https://raw.githubusercontent.com/dotnet/versions/master/build-info/dotnet/cli/{CliBranch}";
         public string DockerVersionFolder { get; private set; }
         public string GitHubEmail { get; private set; }
@@ -22,7 +22,7 @@ namespace Dotnet.Docker.Nightly
         public string GitHubUser { get; private set; }
         public bool UpdateOnly => GitHubEmail == null || GitHubPassword == null || GitHubUser == null;
 
-        public bool Parse(string[] args)
+        public void Parse(string[] args)
         {
             bool result = true;
 
@@ -77,11 +77,9 @@ namespace Dotnet.Docker.Nightly
                 if (arg.IsParameter && !arg.IsSpecified)
                 {
                     Console.Error.WriteLine($"error: `{arg.Name}` must be specified.");
-                    result = false;
+                    Environment.Exit(1);
                 }
             }
-
-            return result;
         }
     }
 }
