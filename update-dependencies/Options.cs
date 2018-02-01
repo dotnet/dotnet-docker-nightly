@@ -2,20 +2,13 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
 using System;
+using System.CommandLine;
 using System.Linq;
-using Microsoft.DotNet.Cli.CommandLine;
 
 namespace Dotnet.Docker.Nightly
 {
     public class Options
     {
-        private Option CliBranchOption { get; set; }
-        private Option CliVersionPrefixOption { get; set; }
-        private Option DockerVersionFolderOption { get; set; }
-        private Option GitHubEmailOption { get; set; }
-        private Option GitHubPasswordOption { get; set; }
-        private Option GitHubUserOption { get; set; }
-
         public string CliBranch { get; private set; }
         public string CliVersionPrefix { get; private set; }
         public string CliVersionsUrl =>
@@ -29,85 +22,66 @@ namespace Dotnet.Docker.Nightly
         public string GitHubUser { get; private set; }
         public bool UpdateOnly => GitHubEmail == null || GitHubPassword == null || GitHubUser == null;
 
-        public Options()
-        {
-            CliBranchOption = Create.Option(
-                "--cli-branch",
-                "The CLI branch to retrieve the SDK to update the Dockerfiles with (Default is master).",
-                Accept.ExactlyOneArgument()
-                    .With(defaultValue: () => "master"));
-            CliVersionPrefixOption = Create.Option(
-                "--cli-prefix",
-                "The CLI version prefix associated with the CliBranch.",
-                Accept.ExactlyOneArgument());
-            DockerVersionFolderOption = Create.Option(
-                "--version",
-                "The version folder of this repo to update (e.g. 2.1).",
-                Accept.ExactlyOneArgument());
-            GitHubEmailOption = Create.Option(
-                "--email",
-                "GitHub email to use while making the PR.  If not specified, a PR is not made.",
-                Accept.ExactlyOneArgument());
-            GitHubPasswordOption = Create.Option(
-                "--password",
-                "GitHub password to use while making the PR.  If not specified, a PR is not made.",
-                Accept.ExactlyOneArgument());
-            GitHubUserOption = Create.Option(
-                "--user",
-                "GitHub user to use while making the PR.  If not specified, a PR is not made.",
-                Accept.ExactlyOneArgument());
-        }
-
         public bool Parse(string[] args)
         {
-            bool result;
+            bool result = true;
 
-            Command command = Create.Command(
-                "update-dependencies",
-                "Updates the .NET Core components of the Dockerfiles to the latest versions.",
-                DockerVersionFolderOption,
-                CliBranchOption,
-                CliVersionPrefixOption,
-                GitHubUserOption,
-                GitHubEmailOption,
-                GitHubPasswordOption);
-            ParseResult parseResult = command.Parse(args);
-
-            if (parseResult.Errors.Any())
+            ArgumentSyntax argSyntax = ArgumentSyntax.Parse(args, syntax =>
             {
-                string msg = string.Join(Environment.NewLine, parseResult.Errors);
-                Console.WriteLine(msg);
-                Console.WriteLine(command.HelpView());
-                result = false;
-            }
-            else
-            {
-                AppliedOption appliedCommand = parseResult.AppliedCommand();
+                string cliBranch = "master";
+                syntax.DefineOption(
+                    "cli-branch",
+                    ref cliBranch,
+                    "CLI branch to retrieve the SDK from to update the Dockerfiles with (default is master)");
+                CliBranch = cliBranch;
 
-                //appliedCommand.HasOption
-                CliBranch = GetOption(CliBranchOption, appliedCommand, true);
-                CliVersionPrefix = GetOption(CliVersionPrefixOption, appliedCommand, true);
-                DockerVersionFolder = GetOption(DockerVersionFolderOption, appliedCommand, true);
-                GitHubEmail = GetOption(GitHubEmailOption, appliedCommand);
-                GitHubPassword = GetOption(GitHubPasswordOption, appliedCommand);
-                GitHubUser = GetOption(GitHubUserOption, appliedCommand);
-                result = true;
+                string gitHubEmail = null;
+                syntax.DefineOption(
+                    "email",
+                    ref gitHubEmail,
+                    "GitHub email used to make PR (if not specified, a PR will not be created)");
+                GitHubEmail = gitHubEmail;
+
+                string gitHubPassword = null;
+                syntax.DefineOption(
+                    "password",
+                    ref gitHubPassword,
+                    "GitHub password used to make PR (if not specified, a PR will not be created)");
+                GitHubEmail = gitHubPassword;
+
+                string gitHubUser = null;
+                syntax.DefineOption(
+                    "user",
+                    ref gitHubUser,
+                    "GitHub user used to make PR (if not specified, a PR will not be created)");
+                GitHubUser = gitHubUser;
+
+                string cliVersionPrefix = null;
+                syntax.DefineParameter(
+                    "cli-prefix",
+                    ref cliVersionPrefix,
+                    "CLI version prefix associated with the cli-branch");
+                CliVersionPrefix = cliVersionPrefix;
+
+                string dockerVersionFolder = null;
+                syntax.DefineParameter(
+                    "version",
+                    ref dockerVersionFolder,
+                    "Version folder of this repo to update (e.g. 2.1)");
+                DockerVersionFolder = dockerVersionFolder;
+            });
+
+            // Workaround for https://github.com/dotnet/corefxlab/issues/1689
+            foreach (Argument arg in argSyntax.GetActiveArguments())
+            {
+                if (arg.IsParameter && !arg.IsSpecified)
+                {
+                    Console.Error.WriteLine($"error: `{arg.Name}` must be specified.");
+                    result = false;
+                }
             }
 
             return result;
-        }
-
-        private string GetOption(Option option, AppliedOption appliedCommand, bool isRequired = false)
-        {
-            if (!appliedCommand.HasOption(option.Name) && isRequired)
-            {
-                Console.WriteLine($"Required option `{option.Name}` was not specified");
-                throw new Exception();
-            }
-            else
-            {
-                return appliedCommand[option.Name].Value<string>();
-            }
         }
     }
 }
