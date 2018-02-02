@@ -104,7 +104,7 @@ namespace Dotnet.Docker.Nightly
             string[] dockerfiles = Directory.GetFiles(searchFolder, "Dockerfile", SearchOption.AllDirectories);
 
             Trace.TraceInformation("Updating the following Dockerfiles:");
-            Trace.TraceInformation($"{string.Join(Environment.NewLine, dockerfiles)}");
+            Trace.TraceInformation(string.Join(Environment.NewLine, dockerfiles));
 
             return dockerfiles
                 .Select(path => CreateDockerfileEnvUpdater(path, "DOTNET_SDK_VERSION", SdkBuildInfoName))
