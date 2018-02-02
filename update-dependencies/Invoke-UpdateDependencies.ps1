@@ -13,24 +13,26 @@ param(
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
+$imageName = "update-dependencies"
+
 try {
-    $image = & docker image ls update-dependencies -q
+    $image = & docker image ls $imageName -q
     if (!$UseImageCache -or [string]::IsNullOrEmpty($image))
     {
-        & docker build -t update-dependencies -f $PSScriptRoot\Dockerfile --pull $PSScriptRoot\..
+        & docker build -t $imageName -f $PSScriptRoot\Dockerfile --pull $PSScriptRoot\..
         if ($LastExitCode -ne 0) {
-            throw "Failed building update-dependencies"
+            throw "Failed to build the update dependencies tool"
         }
     }
 
-    Invoke-Expression "docker run --rm update-dependencies $UpdateDependenciesParams"
+    Invoke-Expression "docker run --rm $imageName $UpdateDependenciesParams"
     if ($LastExitCode -ne 0) {
         throw "Failed to update dependencies"
     }
 }
 finally {
     if ($CleanupDocker){
-        & docker rmi -f update-dependencies
+        & docker rmi -f $imageName
         & docker system prune -f
     }
 }

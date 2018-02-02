@@ -67,8 +67,8 @@ namespace Dotnet.Docker.Nightly
 
             IEnumerable<IDependencyInfo> buildInfos = new[]
             {
-                CreateDependencyBuildInfo(SdkBuildInfoName, sdkBuild.BuildId), // TODO replace with ProductVersion once produced
-                CreateDependencyBuildInfo(RuntimeBuildInfoName, blobInfo.Id.Split('/')[1]), // TODO replace with coreSetupBuild.ProductVersion once produced
+                CreateDependencyBuildInfo(SdkBuildInfoName, sdkBuild.BuildId), // TODO use sdkBuild.ProductVersion once produced
+                CreateDependencyBuildInfo(RuntimeBuildInfoName, blobInfo.Id.Split('/')[1]), // TODO use coreSetupBuild.ProductVersion once produced
             };
 
             string dockerfileVersion = sdkBuild.BuildId.Substring(0, sdkBuild.BuildId.LastIndexOf('.'));
