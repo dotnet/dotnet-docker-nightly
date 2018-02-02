@@ -33,7 +33,7 @@ namespace Dotnet.Docker.Nightly
                     "password",
                     ref gitHubPassword,
                     "GitHub password used to make PR (if not specified, a PR will not be created)");
-                GitHubEmail = gitHubPassword;
+                GitHubPassword = gitHubPassword;
 
                 string gitHubUser = null;
                 syntax.DefineOption(
