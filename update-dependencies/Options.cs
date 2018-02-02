@@ -3,17 +3,12 @@
 
 using System;
 using System.CommandLine;
-using System.Linq;
 
 namespace Dotnet.Docker.Nightly
 {
     public class Options
     {
-        public string CliBranch { get; private set; }
-        public string CliVersionPrefix { get; private set; }
-        public string CliVersionsUrl  =>
-            $"https://raw.githubusercontent.com/dotnet/versions/master/build-info/dotnet/cli/{CliBranch}";
-        public string DockerVersionFolder { get; private set; }
+        public string BuildInfoUrl { get; private set; }
         public string GitHubEmail { get; private set; }
         public string GitHubPassword { get; private set; }
         public string GitHubProject => "dotnet-docker-nightly";
@@ -24,17 +19,8 @@ namespace Dotnet.Docker.Nightly
 
         public void Parse(string[] args)
         {
-            bool result = true;
-
             ArgumentSyntax argSyntax = ArgumentSyntax.Parse(args, syntax =>
             {
-                string cliBranch = "master";
-                syntax.DefineOption(
-                    "cli-branch",
-                    ref cliBranch,
-                    "CLI branch to retrieve the SDK from to update the Dockerfiles with (default is master)");
-                CliBranch = cliBranch;
-
                 string gitHubEmail = null;
                 syntax.DefineOption(
                     "email",
@@ -56,19 +42,12 @@ namespace Dotnet.Docker.Nightly
                     "GitHub user used to make PR (if not specified, a PR will not be created)");
                 GitHubUser = gitHubUser;
 
-                string cliVersionPrefix = null;
+                string buildInfoUrl = null;
                 syntax.DefineParameter(
-                    "cli-prefix",
-                    ref cliVersionPrefix,
-                    "CLI version prefix associated with the cli-branch");
-                CliVersionPrefix = cliVersionPrefix;
-
-                string dockerVersionFolder = null;
-                syntax.DefineParameter(
-                    "version",
-                    ref dockerVersionFolder,
-                    "Version folder of this repo to update (e.g. 2.1)");
-                DockerVersionFolder = dockerVersionFolder;
+                    "build-info",
+                    ref buildInfoUrl,
+                    "URL of the build info to update the Dockerfiles with");
+                BuildInfoUrl = buildInfoUrl;
             });
 
             // Workaround for https://github.com/dotnet/corefxlab/issues/1689
