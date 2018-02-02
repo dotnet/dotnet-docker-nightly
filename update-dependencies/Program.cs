@@ -4,6 +4,7 @@
 using Microsoft.DotNet.VersionTools;
 using Microsoft.DotNet.VersionTools.Automation;
 using Microsoft.DotNet.VersionTools.Dependencies;
+using Microsoft.DotNet.VersionTools.Dependencies.BuildOutput;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,11 +48,13 @@ namespace Dotnet.Docker.Nightly
         private static DependencyUpdateResults UpdateFiles()
         {
             // TODO:  Read from build-info
+            // https://github.com/dotnet/buildtools/blob/master/src/Microsoft.DotNet.VersionTools/BuildManifest/Model/OrchestratedBuildModel.cs
+            // https://github.com/dotnet/versions/blob/master/build-info/dotnet/product/cli/release/2.1/build.xml
             string sdkVersion = "2.1.300-preview1-008009";
             string runtimeVersion = "2.1.0-preview1-26126-02";
-            string dockerfileVersion = "2.1";
+            string dockerfileVersion = sdkVersion.Substring(0, sdkVersion.LastIndexOf('.'));
 
-            IEnumerable<DependencyBuildInfo> buildInfos = new[]
+            IEnumerable<IDependencyInfo> buildInfos = new[]
             {
                 CreateDependencyBuildInfo(SdkBuildInfoName, sdkVersion),
                 CreateDependencyBuildInfo(RuntimeBuildInfoName, runtimeVersion),
@@ -61,9 +64,9 @@ namespace Dotnet.Docker.Nightly
             return DependencyUpdateUtils.Update(updaters, buildInfos);
         }
 
-        private static DependencyBuildInfo CreateDependencyBuildInfo(string name, string latestReleaseVersion)
+        private static IDependencyInfo CreateDependencyBuildInfo(string name, string latestReleaseVersion)
         {
-            return new DependencyBuildInfo(
+            return new BuildDependencyInfo(
                 new BuildInfo()
                 {
                     Name = name,
@@ -76,20 +79,23 @@ namespace Dotnet.Docker.Nightly
 
         private static Task CreatePullRequest(DependencyUpdateResults updateResults)
         {
-            string cliVersion = updateResults.UsedBuildInfos.First(bi => bi.Name == SdkBuildInfoName).LatestReleaseVersion;
+            GitHubAuth gitHubAuth = new GitHubAuth(Options.GitHubPassword, Options.GitHubUser, Options.GitHubEmail);
+            PullRequestCreator prCreator = new PullRequestCreator(gitHubAuth, Options.GitHubUser);
+            PullRequestOptions prOptions = new PullRequestOptions()
+            {
+                BranchNamingStrategy = new SingleBranchNamingStrategy($"UpdateDependencies-{Options.GitHubUpstreamBranch}")
+            };
+
+            string cliVersion = updateResults.UsedInfos.First(bi => bi.SimpleName == SdkBuildInfoName).SimpleVersion;
             string commitMessage = $"Update {Options.GitHubUpstreamBranch} SDK to {cliVersion}";
 
-            GitHubAuth gitHubAuth = new GitHubAuth(Options.GitHubPassword, Options.GitHubUser, Options.GitHubEmail);
-
-            PullRequestCreator prCreator = new PullRequestCreator(
-                gitHubAuth,
-                new GitHubProject(Options.GitHubProject, gitHubAuth.User),
+            return prCreator.CreateOrUpdateAsync(
+                commitMessage,
+                commitMessage,
+                string.Empty,
                 new GitHubBranch(Options.GitHubUpstreamBranch, new GitHubProject(Options.GitHubProject, Options.GitHubUpstreamOwner)),
-                Options.GitHubUser,
-                new SingleBranchNamingStrategy($"UpdateDependencies-{Options.GitHubUpstreamBranch}")
-            );
-
-            return prCreator.CreateOrUpdateAsync(commitMessage, commitMessage, string.Empty);
+                new GitHubProject(Options.GitHubProject, gitHubAuth.User),
+                prOptions);
         }
 
         private static IEnumerable<IDependencyUpdater> GetUpdaters(string dockerfileVersion)
