@@ -19,7 +19,7 @@ try {
     }
 
     $repoRoot = Split-Path -Path "$PSScriptRoot" -Parent
-    Invoke-Expression "docker run --rm -v ${repoRoot}:C:\repo -w /repo $imageName $UpdateDependenciesParams"
+    Invoke-Expression "docker run --rm -v ${repoRoot}:C:\repo -w /repo --user ContainerAdministrator $imageName $UpdateDependenciesParams"
     if ($LastExitCode -ne 0) {
         throw "Failed to update dependencies"
     }
