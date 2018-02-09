@@ -13,15 +13,15 @@ RUN Invoke-WebRequest -UseBasicParsing -outfile git.zip https://github.com/git-f
 
 # build image
 FROM microsoft/dotnet:2.0-sdk-nanoserver-1709 AS build-env
-WORKDIR /app
+WORKDIR /update-dependencies
 
 # copy csproj and restore as distinct layers
-COPY *.csproj ./
-COPY NuGet.config ./
+COPY update-dependencies/*.csproj ./
+COPY update-dependencies/NuGet.config ./
 RUN dotnet restore
 
 # copy everything else and build
-COPY . ./
+COPY update-dependencies/. ./
 RUN dotnet publish -c Release -o out --no-restore
 
 
@@ -35,7 +35,11 @@ RUN setx /M PATH "%PATH%;C:\Program Files\git\cmd"
 USER ContainerUser
 
 # copy update-dependencies
-WORKDIR /app
-COPY --from=build-env /app/out ./
+WORKDIR /update-dependencies
+COPY --from=build-env /update-dependencies/out ./
 
-ENTRYPOINT ["dotnet", "/app/update-dependencies.dll"]
+# copy repo
+WORKDIR /repo
+COPY . ./
+
+ENTRYPOINT ["dotnet", "/update-dependencies/update-dependencies.dll"]
