@@ -1,12 +1,12 @@
 FROM microsoft/dotnet-nightly:2.1-runtime-deps-alpine
 
 # Install .NET Core
-ENV DOTNET_VERSION 2.1.0-preview1-26207-04
+ENV DOTNET_VERSION 2.1.0-preview1-26208-06
 
 RUN apk add --no-cache --virtual .build-deps \
         openssl \
     && wget -O dotnet.tar.gz https://dotnetcli.blob.core.windows.net/dotnet/Runtime/$DOTNET_VERSION/dotnet-runtime-$DOTNET_VERSION-alpine.3.6-x64.tar.gz \
-    && dotnet_sha512='d5dfc9cd9090eaba50f3a74ded035445814cb82b5d69423dfa64953d9e410615e960b5672011a7fbb7356f00fa32a8ccfd8723e99e68904595fab684b8e4bec2' \
+    && dotnet_sha512='6be0963fc6bcab3e6e6b3661ba1215ff017056d7dfb4639276616c226c1b446b5283e72d7ec3c72ef481b15ce1d7ec8a449b76e9afd263af03c5ac47a25b00a9' \
     && echo "$dotnet_sha512  dotnet.tar.gz" | sha512sum -c - \
     && mkdir -p /usr/share/dotnet \
     && tar -C /usr/share/dotnet -xzf dotnet.tar.gz \
