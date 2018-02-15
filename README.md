@@ -1,1 +1,1 @@
-This repo has moved to the [nightly branch of dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker/tree/nightly).
+This repository has moved to the [nightly branch of dotnet/dotnet-docker](https://github.com/dotnet/dotnet-docker/tree/nightly).
